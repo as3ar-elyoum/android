@@ -25,13 +25,12 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:contentDescription="@string/category_icon"
-            tools:src="@drawable/ic_launcher_round" />
+            tools:src="@mipmap/ic_launcher_round" />
 
         <TextView
             android:id="@+id/category_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#B5B5B5"
             android:textSize="12sp"
             android:textStyle="bold"
             tools:text="Category Name" />
