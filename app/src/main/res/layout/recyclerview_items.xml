@@ -31,7 +31,7 @@
             android:id="@+id/category_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#192732"
+            android:textColor="#B5B5B5"
             android:textSize="12sp"
             android:textStyle="bold"
             tools:text="Category Name" />
