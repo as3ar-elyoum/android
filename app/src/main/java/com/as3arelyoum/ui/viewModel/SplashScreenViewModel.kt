@@ -1,4 +1,4 @@
-package com.as3arelyoum
+package com.as3arelyoum.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

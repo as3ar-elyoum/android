@@ -1,4 +1,4 @@
-package com.as3arelyoum
+package com.as3arelyoum.ui.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -6,7 +6,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.GridLayoutManager
+import com.as3arelyoum.data.model.ItemsModel
+import com.as3arelyoum.R
 import com.as3arelyoum.databinding.ActivityMainBinding
+import com.as3arelyoum.ui.adapter.CustomAdapter
+import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
 import com.hugocastelani.waterfalltoolbar.Dp
 import java.util.*
 import kotlin.collections.ArrayList
