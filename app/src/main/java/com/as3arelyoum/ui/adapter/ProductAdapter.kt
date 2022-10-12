@@ -3,6 +3,7 @@ package com.as3arelyoum.ui.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils.loadAnimation
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product

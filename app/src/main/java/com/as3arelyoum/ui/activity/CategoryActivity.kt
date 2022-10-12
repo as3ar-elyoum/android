@@ -6,11 +6,13 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.data.model.Category
 import com.as3arelyoum.R
 import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
+import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
 import com.hugocastelani.waterfalltoolbar.Dp
 import java.util.*
@@ -22,6 +24,8 @@ class CategoryActivity : AppCompatActivity() {
     private val binding get() = _binding!!
     private var items: ArrayList<Category> = ArrayList()
     private val viewModel: SplashScreenViewModel by viewModels()
+    private val categoryViewModel: CategoryViewModel by viewModels()
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
@@ -33,17 +37,25 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUpViewModel()
         setUpRecyclerview()
         setUpToolbar()
     }
 
+    private fun setUpViewModel() {
+        categoryViewModel.fakeData()
+        categoryViewModel.categoryLiveData.observe(this) {
+            items = it as ArrayList<Category>
+            categoryAdapter = CategoryAdapter(this, items)
+            { position -> onCategoryClicked(position) }
+            binding.recyclerview.adapter = categoryAdapter
+        }
+    }
+
     private fun setUpRecyclerview() {
-        val categoryAdapter = CategoryAdapter(this, items)
-        { position -> onCategoryClicked(position) }
-        fakeData()
         binding.recyclerview.apply {
+            setHasFixedSize(true)
             layoutManager = GridLayoutManager(this@CategoryActivity, 2)
-            adapter = categoryAdapter
         }
     }
 
@@ -69,12 +81,8 @@ class CategoryActivity : AppCompatActivity() {
 
     private fun fakeData() {
         for (i in 1..20) {
-            items.add(Category(randomId(), "أمازون", R.mipmap.light_logo))
+            items.add(Category(1, "أمازون", R.mipmap.light_logo))
         }
-    }
-
-    private fun randomId(): Int {
-        return (1..100).random()
     }
 
     private fun onCategoryClicked(position: Int) {
