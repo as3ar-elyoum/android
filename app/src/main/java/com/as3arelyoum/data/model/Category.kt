@@ -1,7 +1,8 @@
 package com.as3arelyoum.data.model
 
 data class Category(
-    val id: Int,
-    var name: String,
-    var icon: Int
+    var userId: Int,
+    var id: Int,
+    var title: String,
+    var body: String
 )

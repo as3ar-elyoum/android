@@ -1,24 +1,17 @@
 package com.as3arelyoum.ui.viewModel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.as3arelyoum.R
-import com.as3arelyoum.data.model.Category
+import androidx.lifecycle.liveData
+import com.as3arelyoum.data.resources.category.Repo
+import com.as3arelyoum.data.resources.status.Resource
 
-class CategoryViewModel : ViewModel() {
-    val categoryLiveData = MutableLiveData<List<Category>>()
-    private var items: ArrayList<Category> = ArrayList()
-
-
-    fun fakeData() {
-        for (i in 1..20) {
-            categoryLiveData.value = items.apply {
-                add(Category(randomId(), "أمازون", R.mipmap.light_logo))
-            }
+class CategoryViewModel(private val postsRepo: Repo) : ViewModel(){
+    fun getAllPosts() = liveData {
+        emit(Resource.loading(null))
+        try{
+            emit(Resource.success(postsRepo.getAllPosts()))
+        } catch (e:Exception){
+            emit(Resource.error(null,e.message.toString()))
         }
-    }
-
-    private fun randomId(): Int {
-        return (1..100).random()
     }
 }
