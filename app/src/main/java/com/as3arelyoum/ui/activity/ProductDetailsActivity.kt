@@ -32,7 +32,6 @@ class ProductDetailsActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun obtainListFromServer() {
         val productId = intent.getIntExtra("product_id", 0)
-        val productSource = intent.getStringExtra("product_source")
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
@@ -42,9 +41,9 @@ class ProductDetailsActivity : AppCompatActivity() {
                     it.data?.let { it1 ->
                         Glide.with(this).load(it1.image_url).into(binding.productImage)
                         binding.nameTv.text = it1.name
-                        binding.productSource.text = " من $productSource"
+                        binding.productSource.text = "من ${ it1.source }"
                         binding.priceTv.text = "$productPrice جنيه مصري "
-                        binding.productBtn.text = "اشتري من $productSource"
+                        binding.productBtn.text = "اشتري من ${ it1.source }"
                         binding.productBtn.setOnClickListener {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(it1.url))

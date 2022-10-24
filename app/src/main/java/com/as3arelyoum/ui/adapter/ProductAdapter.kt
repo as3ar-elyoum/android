@@ -28,7 +28,7 @@ class ProductAdapter(
                 .load(productItems.image_url)
                 .into(productImage)
             nameTv.text = productItems.name
-            priceTv.text =  productItems.price + " " + "جنية مصري"
+            priceTv.text =  productItems.price + " " + "جنيه مصري"
             sourceTv.text = "من" + " " + productItems.source
         }
     }
