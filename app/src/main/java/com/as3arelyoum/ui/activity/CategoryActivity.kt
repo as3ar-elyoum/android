@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +54,7 @@ class CategoryActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     it.data?.let { it1 -> items.addAll(it1) }
                     binding.recyclerview.adapter?.notifyDataSetChanged()
+                    Log.d("TAG", "obtainListFromServer: ${items.size}")
                 }
                 Status.FAILURE -> {
                     Toast.makeText(
@@ -110,9 +112,10 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     private fun onCategoryClicked(position: Int) {
-        val postId = items[position].userId
-        val intent = Intent(this@CategoryActivity, ProductsActivity::class.java)
-        intent.putExtra("postId", postId)
+        val categoryId = items[position].id
+        val intent = Intent(this, ProductsActivity::class.java)
+        intent.putExtra("category_id", categoryId)
+        Log.d("TAG", "onCategoryClicked: $categoryId")
         startActivity(intent)
     }
 

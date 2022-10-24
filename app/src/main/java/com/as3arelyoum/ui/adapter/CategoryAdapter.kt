@@ -21,9 +21,7 @@ class CategoryAdapter(
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val categoryItems = list[position]
         holder.binding.apply {
-            categoryIdTv.text = categoryItems.userId.toString()
-            categoryTitleTv.text = categoryItems.title
-            categoryBodyTv.text = categoryItems.body
+            categoryName.text = categoryItems.name
         }
     }
 

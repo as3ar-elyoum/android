@@ -45,8 +45,8 @@ class ProductsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun obtainListFromServer() {
-        val postId = intent.extras?.getInt("postId")
-        productViewModel.getAllComments(postId!!).observe(this) {
+        val categoryId = intent.getIntExtra("category_id", 0)
+        productViewModel.getAllComments(categoryId).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { it1 -> items.addAll(it1) }

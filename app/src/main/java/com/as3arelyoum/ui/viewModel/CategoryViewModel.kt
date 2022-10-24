@@ -9,7 +9,7 @@ class CategoryViewModel(private val postsRepo: Repo) : ViewModel(){
     fun getAllPosts() = liveData {
         emit(Resource.loading(null))
         try{
-            emit(Resource.success(postsRepo.getAllPosts()))
+            emit(Resource.success(postsRepo.getAllCategories()))
         } catch (e:Exception){
             emit(Resource.error(null,e.message.toString()))
         }

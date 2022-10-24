@@ -6,10 +6,10 @@ import com.as3arelyoum.data.resources.product.Repo
 import com.as3arelyoum.data.resources.status.Resource
 
 class ProductViewModel(private val commentsRepo: Repo) : ViewModel() {
-    fun getAllComments(postId: Int) = liveData {
+    fun getAllComments(category_id: Int) = liveData {
         emit(Resource.loading(null))
         try {
-            emit(Resource.success(commentsRepo.getAllComments(postId)))
+            emit(Resource.success(commentsRepo.getAllProducts(category_id)))
         } catch (e: Exception) {
             emit(Resource.error(null, e.message.toString()))
         }

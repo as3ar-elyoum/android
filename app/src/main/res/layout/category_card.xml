@@ -20,23 +20,7 @@
         tools:ignore="UseCompoundDrawables">
 
         <TextView
-            android:id="@+id/category_id_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Category Name" />
-
-        <TextView
-            android:id="@+id/category_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Category Name" />
-
-        <TextView
-            android:id="@+id/category_body_tv"
+            android:id="@+id/category_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
