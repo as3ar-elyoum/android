@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/category_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardElevation="@dimen/_6sdp"
-    app:cardUseCompatPadding="true">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.hugocastelani.waterfalltoolbar.WaterfallToolbar
+        android:id="@+id/waterfall_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/toolbar" />
+
+    </com.hugocastelani.waterfalltoolbar.WaterfallToolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,16 +31,23 @@
         <ImageView
             android:id="@+id/product_image"
             android:layout_width="match_parent"
-            android:padding="@dimen/_4sdp"
-            android:layout_height="@dimen/_120sdp"/>
+            android:layout_height="@dimen/_100sdp" />
 
         <TextView
             android:id="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#4CAF50"
             android:textSize="12sp"
-            android:maxLines="2"
-            android:layout_marginTop="@dimen/_4sdp"
+            android:textStyle="bold"
+            tools:text="Product Name" />
+
+        <TextView
+            android:id="@+id/product_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="12sp"
             android:textStyle="bold"
             tools:text="Product Name" />
 
@@ -39,19 +55,11 @@
             android:id="@+id/price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
             android:textColor="#E91E63"
-            tools:text="Product Name" />
-
-        <TextView
-            android:id="@+id/source_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:textColor="#1384B6"
             android:textStyle="bold"
             tools:text="Product Name" />
 
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

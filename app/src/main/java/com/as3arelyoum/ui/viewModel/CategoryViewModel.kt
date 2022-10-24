@@ -5,11 +5,11 @@ import androidx.lifecycle.liveData
 import com.as3arelyoum.data.resources.category.Repo
 import com.as3arelyoum.data.resources.status.Resource
 
-class CategoryViewModel(private val postsRepo: Repo) : ViewModel(){
+class CategoryViewModel(private val categoriesRepo: Repo) : ViewModel(){
     fun getAllPosts() = liveData {
         emit(Resource.loading(null))
         try{
-            emit(Resource.success(postsRepo.getAllPosts()))
+            emit(Resource.success(categoriesRepo.getAllCategories()))
         } catch (e:Exception){
             emit(Resource.error(null,e.message.toString()))
         }

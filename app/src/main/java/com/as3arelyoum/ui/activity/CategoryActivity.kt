@@ -1,7 +1,6 @@
 package com.as3arelyoum.ui.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -19,8 +18,8 @@ import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
+import com.as3arelyoum.utils.Constants.setAppLocale
 import com.hugocastelani.waterfalltoolbar.Dp
-import java.util.*
 
 
 class CategoryActivity : AppCompatActivity() {
@@ -100,19 +99,10 @@ class CategoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun Context.setAppLocale(language: String): Context {
-        val locale = Locale(language)
-        Locale.setDefault(locale)
-        val config = resources.configuration
-        config.setLocale(locale)
-        config.setLayoutDirection(locale)
-        return createConfigurationContext(config)
-    }
-
     private fun onCategoryClicked(position: Int) {
-        val postId = items[position].userId
+        val categoryId = items[position].id
         val intent = Intent(this@CategoryActivity, ProductsActivity::class.java)
-        intent.putExtra("postId", postId)
+        intent.putExtra("category_id", categoryId)
         startActivity(intent)
     }
 

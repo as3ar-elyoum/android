@@ -19,28 +19,20 @@
         android:padding="10dp"
         tools:ignore="UseCompoundDrawables">
 
+        <ImageView
+            android:id="@+id/category_image"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"/>
+
         <TextView
-            android:id="@+id/category_id_tv"
+            android:id="@+id/category_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="@dimen/_10sdp"
+            android:padding="@dimen/_4sdp"
+            android:textColor="#000000"
             android:textStyle="bold"
             tools:text="Category Name" />
 
-        <TextView
-            android:id="@+id/category_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Category Name" />
-
-        <TextView
-            android:id="@+id/category_body_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Category Name" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
