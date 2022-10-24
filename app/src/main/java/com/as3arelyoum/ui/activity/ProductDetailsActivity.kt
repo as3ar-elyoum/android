@@ -1,6 +1,8 @@
 package com.as3arelyoum.ui.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -12,6 +14,7 @@ import com.as3arelyoum.databinding.ActivityDetailsProductBinding
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.bumptech.glide.Glide
+
 
 class ProductDetailsActivity : AppCompatActivity() {
     private var _binding: ActivityDetailsProductBinding? = null
@@ -41,6 +44,11 @@ class ProductDetailsActivity : AppCompatActivity() {
                         binding.nameTv.text = it1.name
                         binding.productSource.text = " من $productSource"
                         binding.priceTv.text = "$productPrice جنيه مصري "
+                        binding.productBtn.text = "اشتري من $productSource"
+                        binding.productBtn.setOnClickListener {
+                            val browserIntent =
+                                Intent(Intent.ACTION_VIEW, Uri.parse(it1.url))
+                            startActivity(browserIntent)                        }
                         Log.d("TAG", "obtainListFromServer: ${it1.name}")
                     }
                 }
