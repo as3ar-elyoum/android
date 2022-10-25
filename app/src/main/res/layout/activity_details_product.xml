@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.hugocastelani.waterfalltoolbar.WaterfallToolbar
@@ -65,8 +65,8 @@
             android:id="@+id/product_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
             android:backgroundTint="#BA3E3E"
+            android:textColor="#FFFFFF"
             android:textSize="@dimen/_10sdp"
             android:textStyle="bold"
             tools:text="إشتري من أمازون" />
@@ -77,12 +77,10 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/getTheGraph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="52dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:layout_height="300dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

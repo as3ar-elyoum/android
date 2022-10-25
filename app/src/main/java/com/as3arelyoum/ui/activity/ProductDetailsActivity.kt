@@ -16,6 +16,7 @@ import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -38,7 +39,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun obtainListFromServer() {
-        val productId = intent.getIntExtra("product_id", 0)
+        val productId = 95 // intent.getIntExtra("product_id", 0)
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
@@ -89,27 +90,39 @@ class ProductDetailsActivity : AppCompatActivity() {
         )[ProductDetailsViewModel::class.java]
     }
 
-    fun displayChart(prices: Array<Array<String>>) {
+    private fun displayChart(prices: Array<Array<String>>) {
         binding.getTheGraph.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM;
-
             val stringFormatter = object : ValueFormatter1() {
                 override fun getAxisLabel(value: Float, axis: AxisBase?): String {
                     return value.toInt().toString()
                 }
             }
-
+            labelRotationAngle = 90f;
             valueFormatter = stringFormatter
+            position = XAxis.XAxisPosition.BOTTOM
+            setDrawGridLines(false)
         }
+
+        binding.getTheGraph.axisLeft.isEnabled = false
+
+        val legend: Legend = binding.getTheGraph.legend
+        legend.form = Legend.LegendForm.LINE;
+        legend.textSize = 11f;
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT;
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL;
+        legend.setDrawInside(false);
 
         val xAxisData = ArrayList<String>()
 
         val entries = ArrayList<Entry>()
 
         prices.forEachIndexed { index, price ->
-            xAxisData.add(price.first())
+            if (index == 0 || index == (prices.count() - 2)) { // first and last only
+                xAxisData.add(price.first())
+            } else {
+                xAxisData.add("")
+            }
             entries.add(Entry(index.toFloat(), price.last().toFloat()))
-            Log.d(price.first(), price.last())
         }
 
 
@@ -120,9 +133,10 @@ class ProductDetailsActivity : AppCompatActivity() {
             }
         }
 
-        var data = LineDataSet(entries, "Price Over Data")
-        binding.getTheGraph.data = LineData(data)
+        var set1 = LineDataSet(entries, "Price Over Time")
 
-        binding.getTheGraph.animateXY(2000, 2000, Easing.EaseInCubic)
+        binding.getTheGraph.data = LineData(set1)
+        binding.getTheGraph.animateXY(0, 0, Easing.EaseInCubic)
+//        binding.getTheGraph.rotationX = Legend.LegendHorizontalAlignment.LEFT
     }
 }
