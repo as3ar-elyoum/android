@@ -5,11 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.as3arelyoum.data.resources.productDetails.Creator
-import com.as3arelyoum.data.resources.status.Status
+import com.as3arelyoum.utils.status.Status
 import com.as3arelyoum.databinding.ActivityDetailsProductBinding
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
@@ -21,7 +19,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter as ValueFormatter1
-
 
 class ProductDetailsActivity : AppCompatActivity() {
     private var _binding: ActivityDetailsProductBinding? = null
@@ -42,7 +39,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
-        productDetailsViewModel.getProduct(productId).observe(this) {
+        productDetailsViewModel.getProductDetails(productId).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { product ->
@@ -64,20 +61,8 @@ class ProductDetailsActivity : AppCompatActivity() {
                         displayChart(product.prices)
                     }
                 }
-                Status.LOADING -> {
-                    Toast.makeText(
-                        this,
-                        "Loading...",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                Status.FAILURE -> {
-                    Toast.makeText(
-                        this,
-                        "Failed to load the data ${it.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                Status.LOADING -> {}
+                Status.FAILURE -> {}
             }
         }
     }
@@ -85,7 +70,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private fun setUpViewModel() {
         productDetailsViewModel = ViewModelProvider(
             this,
-            ProductDetailsViewModelFactory(Creator.getApiHelperInstance())
+            ProductDetailsViewModelFactory()
         )[ProductDetailsViewModel::class.java]
     }
 
