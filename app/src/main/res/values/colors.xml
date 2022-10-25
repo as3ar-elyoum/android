@@ -2,4 +2,7 @@
 <resources>
     <color name="toolbar">#FFFFFF</color>
     <color name="splashScreenBg">#FFFFFF</color>
+    <color name="green">#FF3B8A1B</color>
+    <color name="purple_200">#881414</color>
+    <color name="white">#ffffff</color>
 </resources>

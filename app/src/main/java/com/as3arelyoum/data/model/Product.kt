@@ -10,4 +10,5 @@ data class Product(
     var source_page: String,
     var created_at: String,
     var updated_at: String,
+    var prices: Array<Array<String>>
 )
