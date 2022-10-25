@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Category
-import com.as3arelyoum.data.resources.category.Creator
-import com.as3arelyoum.data.resources.status.Status
+import com.as3arelyoum.utils.status.Status
 import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
+import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
 import com.as3arelyoum.utils.Constants.setAppLocale
@@ -47,7 +47,7 @@ class CategoryActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun obtainListFromServer() {
-        categoryViewModel.getAllPosts().observe(this) {
+        categoryViewModel.getAllCategories().observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { it1 -> items.addAll(it1) }
@@ -72,9 +72,10 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        val categoryRepository = CategoryRepository()
         categoryViewModel = ViewModelProvider(
             this,
-            CategoryViewModelFactory(Creator.getApiHelperInstance())
+            CategoryViewModelFactory(categoryRepository)
         )[CategoryViewModel::class.java]
 
         binding.recyclerview.adapter =

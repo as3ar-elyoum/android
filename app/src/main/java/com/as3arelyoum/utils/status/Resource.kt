@@ -1,4 +1,4 @@
-package com.as3arelyoum.data.resources.status
+package com.as3arelyoum.utils.status
 
 data class Resource<out T>
     (val status: Status, val data:T?, val message:String?){

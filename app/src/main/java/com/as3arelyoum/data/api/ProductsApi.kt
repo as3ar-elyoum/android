@@ -5,7 +5,7 @@ import com.as3arelyoum.utils.Constants.PRODUCTS
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ProductApi {
+interface ProductsApi {
     @GET(PRODUCTS)
     suspend fun getAllProducts(@Query("category_id") category_id: Int): List<Product>
 }

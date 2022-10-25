@@ -1,4 +1,4 @@
-package com.as3arelyoum.data.resources.status
+package com.as3arelyoum.utils.status
 
 enum class Status {
     SUCCESS,
