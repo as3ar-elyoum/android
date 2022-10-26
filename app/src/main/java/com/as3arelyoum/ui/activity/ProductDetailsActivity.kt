@@ -36,7 +36,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun obtainListFromServer() {
-        val productId = 95 // intent.getIntExtra("product_id", 0)
+        val productId = intent.getIntExtra("product_id", 0)
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
