@@ -71,7 +71,9 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     private fun setLineChart(prices: Array<Array<String>>) {
-
+        if (prices.count() < 2) {
+            return
+        }
         val xAxisData = ArrayList<String>()
         val entries = ArrayList<Entry>()
         val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
