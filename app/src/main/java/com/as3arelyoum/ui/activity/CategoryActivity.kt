@@ -11,14 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Category
-import com.as3arelyoum.utils.status.Status
 import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
-import com.as3arelyoum.utils.Constants.setAppLocale
+import com.as3arelyoum.utils.status.Status
 import com.hugocastelani.waterfalltoolbar.Dp
 
 
@@ -35,7 +34,6 @@ class CategoryActivity : AppCompatActivity() {
                 viewModel.isLoading.value
             }
         }
-        setAppLocale("ar")
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -96,7 +94,6 @@ class CategoryActivity : AppCompatActivity() {
             recyclerView = binding.recyclerview
             initialElevation = Dp(0F).toPx()
             finalElevation = Dp(10F).toPx()
-
         }
     }
 

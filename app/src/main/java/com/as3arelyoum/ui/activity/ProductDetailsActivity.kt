@@ -26,6 +26,14 @@ class ProductDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailsProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //Navigation Up
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         setUpViewModel()
         obtainListFromServer()
     }
