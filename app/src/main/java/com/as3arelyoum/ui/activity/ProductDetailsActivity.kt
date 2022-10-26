@@ -7,19 +7,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.as3arelyoum.utils.status.Status
+import com.as3arelyoum.R
 import com.as3arelyoum.databinding.ActivityDetailsProductBinding
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
+import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter as ValueFormatter1
 
 class ProductDetailsActivity : AppCompatActivity() {
     private var _binding: ActivityDetailsProductBinding? = null
@@ -36,7 +32,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun obtainListFromServer() {
-        val productId = 95 // intent.getIntExtra("product_id", 0)
+        val productId = intent.getIntExtra("product_id", 0)
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
@@ -58,8 +54,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                             startActivity(browserIntent)
                         }
                         Log.d("TAG", "obtainListFromServer: ${product.name}")
-
-                        displayChart(product.prices)
+                        setLineChart(product.prices)
                     }
                 }
                 Status.LOADING -> {}
@@ -75,53 +70,28 @@ class ProductDetailsActivity : AppCompatActivity() {
         )[ProductDetailsViewModel::class.java]
     }
 
-    private fun displayChart(prices: Array<Array<String>>) {
-        binding.getTheGraph.xAxis.apply {
-            val stringFormatter = object : ValueFormatter1() {
-                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                    return value.toInt().toString()
-                }
-            }
-            labelRotationAngle = 90f;
-            valueFormatter = stringFormatter
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawGridLines(false)
+    private fun setLineChart(prices: Array<Array<String>>) {
+        if (prices.count() < 2) {
+            return
         }
-
-        binding.getTheGraph.axisLeft.isEnabled = false
-
-        val legend: Legend = binding.getTheGraph.legend
-        legend.form = Legend.LegendForm.LINE;
-        legend.textSize = 11f;
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT;
-        legend.orientation = Legend.LegendOrientation.HORIZONTAL;
-        legend.setDrawInside(false);
-
         val xAxisData = ArrayList<String>()
-
         val entries = ArrayList<Entry>()
-
+        val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
+        lineDataSet.color = resources.getColor(R.color.green)
+        lineDataSet.setDrawFilled(true)
+        lineDataSet.fillColor = resources.getColor(R.color.green)
+        lineDataSet.fillAlpha = 20
         prices.forEachIndexed { index, price ->
-            if (index == 0 || index == (prices.count() - 2)) { // first and last only
-                xAxisData.add(price.first())
-            } else {
-                xAxisData.add("")
-            }
-            entries.add(Entry(index.toFloat(), price.last().toFloat()))
+            xAxisData.add(price.first())
+            entries.add(Entry(price.last().toFloat(), index))
         }
 
-
-        //We connect our data to the UI Screen
-        binding.getTheGraph.xAxis.valueFormatter = object : ValueFormatter1() {
-            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                return xAxisData[value.toInt()]
-            }
+        val data = LineData(xAxisData, lineDataSet)
+        binding.getTheGraph.data = data
+        binding.getTheGraph.apply {
+            setBackgroundColor(resources.getColor(android.R.color.white))
+            animateXY(1000, 1000)
         }
-
-        var set1 = LineDataSet(entries, "Price Over Time")
-
-        binding.getTheGraph.data = LineData(set1)
-        binding.getTheGraph.animateXY(0, 0, Easing.EaseInCubic)
-//        binding.getTheGraph.rotationX = Legend.LegendHorizontalAlignment.LEFT
     }
 }
+
