@@ -81,7 +81,6 @@ class ProductsActivity : AppCompatActivity() {
     private fun onProductClicked(position: Int) {
         val productId = items[position].id
         val productPrice = items[position].price
-
         val intent = Intent(this@ProductsActivity, ProductDetailsActivity::class.java)
         intent.putExtra("product_id", productId)
         intent.putExtra("product_price", productPrice)

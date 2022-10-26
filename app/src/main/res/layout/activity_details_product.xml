@@ -6,108 +6,116 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/recycler_selector"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:ignore="UseCompoundDrawables">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:background="@color/toolbar"
-                app:layout_scrollFlags="scroll|enterAlways">
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/toolbarTitle"
+                <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
-                    android:textSize="@dimen/_14sdp"
-                    android:fontFamily="sans-serif-black"
-                    android:layout_marginEnd="@dimen/_4sdp"
-                    android:textColor="@color/black"
-                    android:padding="@dimen/_4sdp"
-                    android:text="@string/product"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
 
-            </com.google.android.material.appbar.MaterialToolbar>
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?actionBarSize"
+                        android:background="@color/toolbar"
+                        app:layout_scrollFlags="scroll|enterAlways">
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/toolbarTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_4sdp"
+                            android:fontFamily="sans-serif-black"
+                            android:padding="@dimen/_4sdp"
+                            android:text="@string/product"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+                    </com.google.android.material.appbar.MaterialToolbar>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/recycler_selector"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBar"
-        tools:ignore="UseCompoundDrawables">
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <ImageView
-            android:id="@+id/product_image"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#4CAF50"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Product Name" />
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_height="@dimen/_100sdp" />
 
-        <TextView
-            android:id="@+id/product_source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Product Name" />
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4CAF50"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Product Name" />
 
-        <TextView
-            android:id="@+id/price_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#E91E63"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="Product Name" />
+            <TextView
+                android:id="@+id/product_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Product Name" />
 
-        <Button
-            android:id="@+id/product_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#BA3E3E"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/_10sdp"
-            android:textStyle="bold"
-            tools:text="إشتري من أمازون" />
+            <TextView
+                android:id="@+id/price_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#E91E63"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Product Name" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/product_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#BA3E3E"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_10sdp"
+                android:textStyle="bold"
+                tools:text="إشتري من أمازون" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/getTheGraph"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/_5sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/getTheGraph"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:layout_margin="@dimen/_5sdp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/similar_products"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/product_card" />
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
