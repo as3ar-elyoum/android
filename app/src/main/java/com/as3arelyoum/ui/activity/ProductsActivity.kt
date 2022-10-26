@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
-import com.as3arelyoum.utils.status.Status
 import com.as3arelyoum.databinding.ActivityProductsBinding
 import com.as3arelyoum.ui.adapter.ProductAdapter
 import com.as3arelyoum.ui.factory.ProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.ProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductsViewModel
+import com.as3arelyoum.utils.status.Status
 import com.hugocastelani.waterfalltoolbar.Dp
 
 class ProductsActivity : AppCompatActivity() {
@@ -70,7 +70,7 @@ class ProductsActivity : AppCompatActivity() {
 
     private fun setUpToolbar() {
         setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = getString(R.string.products)
+        binding.toolbar.title = getString(R.string.categories)
         binding.waterfallToolbar.apply {
             recyclerView = binding.recyclerview
             initialElevation = Dp(0F).toPx()
