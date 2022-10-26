@@ -6,11 +6,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
+import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.ActivityDetailsProductBinding
+import com.as3arelyoum.ui.adapter.ProductAdapter
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
+import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
+import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
+import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.Entry
@@ -20,27 +27,30 @@ import com.github.mikephil.charting.data.LineDataSet
 class ProductDetailsActivity : AppCompatActivity() {
     private var _binding: ActivityDetailsProductBinding? = null
     private val binding get() = _binding!!
+    private var items: ArrayList<Product> = ArrayList()
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
+    private lateinit var similarProductsViewModel: SimilarProductsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailsProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //Navigation Up
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
+        val productId = intent.getIntExtra("product_id", 0)
         setUpViewModel()
-        obtainListFromServer()
+        setUpSimilarProductsViewModel()
+        setUpRecyclerview()
+        getProductDetails(productId)
+        getSimilarProducts(productId)
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-    private fun obtainListFromServer() {
-        val productId = intent.getIntExtra("product_id", 0)
+    private fun getProductDetails(productId: Int) {
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
@@ -49,8 +59,6 @@ class ProductDetailsActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     it.data?.let { product ->
                         Glide.with(this).load(product.image_url).into(binding.productImage)
-                        Log.d("Product", product.prices.first().first());
-                        Log.d("Product", product.prices.first().last());
 
                         binding.nameTv.text = product.name
                         binding.productSource.text = "من ${product.source}"
@@ -61,9 +69,25 @@ class ProductDetailsActivity : AppCompatActivity() {
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
                             startActivity(browserIntent)
                         }
-                        Log.d("TAG", "obtainListFromServer: ${product.name}")
                         setLineChart(product.prices)
                     }
+                }
+                Status.LOADING -> {}
+                Status.FAILURE -> {}
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun getSimilarProducts(productId: Int) {
+
+        similarProductsViewModel.getSimilarProducts(productId).observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data?.let { it1 -> items.addAll(it1) }
+                    binding.similarProducts.adapter?.notifyDataSetChanged()
+                    Log.d("Product", "getSimilarProducts: ${items.first().url}")
+
                 }
                 Status.LOADING -> {}
                 Status.FAILURE -> {}
@@ -78,8 +102,35 @@ class ProductDetailsActivity : AppCompatActivity() {
         )[ProductDetailsViewModel::class.java]
     }
 
+    private fun setUpSimilarProductsViewModel() {
+        val similarProductsRepository = SimilarProductsRepository()
+        binding.similarProducts.adapter =
+            ProductAdapter(items) { position -> onProductClicked(position) }
+        similarProductsViewModel = ViewModelProvider(
+            this,
+            SimilarProductsViewModelFactory(similarProductsRepository)
+        )[SimilarProductsViewModel::class.java]
+    }
+
+    private fun setUpRecyclerview() {
+        binding.similarProducts.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(this@ProductDetailsActivity, 2)
+        }
+    }
+
+    private fun onProductClicked(position: Int) {
+        val productId = items[position].id
+        val productPrice = items[position].price
+        val intent = Intent(this@ProductDetailsActivity, ProductDetailsActivity::class.java)
+        intent.putExtra("product_id", productId)
+        intent.putExtra("product_price", productPrice)
+        startActivity(intent)
+    }
+
     private fun setLineChart(prices: Array<Array<String>>) {
         if (prices.count() < 2) {
+            binding.getTheGraph.isVisible = false
             return
         }
         val xAxisData = ArrayList<String>()

@@ -3,6 +3,7 @@ package com.as3arelyoum.data.network
 import com.as3arelyoum.data.api.CategoryApi
 import com.as3arelyoum.data.api.ProductDetailsApi
 import com.as3arelyoum.data.api.ProductsApi
+import com.as3arelyoum.data.api.SimilarProductsApi
 import com.as3arelyoum.utils.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,5 +37,9 @@ object RetrofitInstance {
 
     val productDetailsApi: ProductDetailsApi by lazy {
         retrofit.create(ProductDetailsApi::class.java)
+    }
+
+    val similarProductApi: SimilarProductsApi by lazy {
+        retrofit.create(SimilarProductsApi::class.java)
     }
 }
