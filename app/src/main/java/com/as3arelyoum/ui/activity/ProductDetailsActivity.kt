@@ -32,7 +32,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun obtainListFromServer() {
-        val productId = 95 // intent.getIntExtra("product_id", 0)
+        val productId = intent.getIntExtra("product_id", 0)
         val productPrice = intent.getStringExtra("product_price")
 
         Log.d("TAG", "obtainListFromServer: $productId")
@@ -74,19 +74,13 @@ class ProductDetailsActivity : AppCompatActivity() {
 
         val xAxisData = ArrayList<String>()
         val entries = ArrayList<Entry>()
-
         val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
         lineDataSet.color = resources.getColor(R.color.green)
         lineDataSet.setDrawFilled(true)
         lineDataSet.fillColor = resources.getColor(R.color.green)
         lineDataSet.fillAlpha = 20
-
         prices.forEachIndexed { index, price ->
-            if (index == 0 || index == (prices.count() - 2)) {
-                xAxisData.add(price.first())
-            } else {
-                xAxisData.add("")
-            }
+            xAxisData.add(price.first())
             entries.add(Entry(price.last().toFloat(), index))
         }
 
