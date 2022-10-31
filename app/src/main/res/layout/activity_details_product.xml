@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/recycler_selector"
         android:gravity="center"
-        android:orientation="vertical"
-        tools:ignore="UseCompoundDrawables">
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
@@ -38,11 +37,11 @@
                         android:id="@+id/toolbarTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_4sdp"
-                        android:padding="@dimen/_4sdp"
+                        android:layout_marginEnd="@dimen/_6ssp"
+                        android:padding="@dimen/_5ssp"
                         android:text="@string/product_details"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_14sdp" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.appbar.MaterialToolbar>
 
@@ -50,87 +49,112 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/product_source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#192630"
-            android:textSize="@dimen/_10ssp"
-            android:padding="@dimen/_8sdp"
-            android:layout_gravity="end"
-            android:fontFamily="sans-serif-black"
-            tools:text="من أمازون" />
-
-        <ImageView
-            android:id="@+id/product_image"
-            android:layout_width="@dimen/_130sdp"
-            android:layout_height="@dimen/_130sdp"
-            android:layout_margin="@dimen/_10sdp"
-            tools:src="@mipmap/ic_launcher_round"
-            android:contentDescription="@string/product_details" />
-
-        <TextView
-            android:id="@+id/name_tv"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:textAlignment="center"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_10ssp"
-            android:textStyle="bold"
-            tools:text="Product Name" />
+            android:layout_below="@id/appBar">
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:weightSum="3"
-           android:layout_margin="@dimen/_10sdp"
-           android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-           <Button
-               android:id="@+id/product_btn"
-               android:layout_width="0dp"
-               android:layout_weight="1.5"
-               android:layout_height="wrap_content"
-               android:backgroundTint="#BA3E3E"
-               android:layout_marginEnd="@dimen/_10sdp"
-               android:textColor="#FFFFFF"
-               android:textSize="@dimen/_10sdp"
-               android:textStyle="bold"
-               tools:text="إشتريه من أمازون" />
+                <LinearLayout
+                    android:id="@+id/product_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-           <TextView
-               android:id="@+id/price_tv"
-               android:layout_width="0dp"
-               android:layout_weight="1.5"
-               android:layout_height="wrap_content"
-               android:textColor="@color/price"
-               android:textSize="@dimen/_10ssp"
-               android:gravity="center"
-               android:textStyle="bold"
-               tools:text="90000 جنيه مصري" />
+                    <TextView
+                        android:id="@+id/product_source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_20sdp"
+                        android:fontFamily="sans-serif-black"
+                        android:textColor="#E69317"
+                        android:textSize="@dimen/_13ssp"
+                        tools:text="من أمازون" />
 
-       </LinearLayout>
+                    <ImageView
+                        android:id="@+id/product_image"
+                        android:layout_width="@dimen/_130sdp"
+                        android:layout_height="@dimen/_130sdp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:contentDescription="@string/product_details"
+                        tools:src="@mipmap/ic_launcher_round" />
+
+                    <TextView
+                        android:id="@+id/name_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold"
+                        tools:text="Product Name" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/price_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/product_layout"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <Button
+                        android:id="@+id/product_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_weight="1.8"
+                        android:backgroundTint="#BA3E3E"
+                        android:textColor="#FFFFFF"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        tools:text="إشتريه من أمازون" />
+
+                    <TextView
+                        android:id="@+id/price_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:gravity="center"
+                        android:textColor="@color/price"
+                        android:textSize="@dimen/_10ssp"
+                        android:textStyle="bold"
+                        tools:text="90000 جنيه مصري" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/getTheGraph"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_200sdp"
+            android:layout_below="@id/cardView"
             android:layout_margin="@dimen/_5sdp" />
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_similar_products"
             android:layout_width="match_parent"
-            android:scrollbars="none"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/getTheGraph"
+            android:layout_marginTop="@dimen/_40sdp"
             android:background="@color/mainBg"
-            android:layout_height="wrap_content">
+            android:elevation="@dimen/_10sdp"
+            tools:listitem="@layout/similar_product_card" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_similar_products"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/similar_product_card" />
-
-        </androidx.core.widget.NestedScrollView>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </ScrollView>
