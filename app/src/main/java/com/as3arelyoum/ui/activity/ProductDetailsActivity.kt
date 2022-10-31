@@ -8,11 +8,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.ActivityDetailsProductBinding
-import com.as3arelyoum.ui.adapter.ProductAdapter
+import com.as3arelyoum.ui.adapter.SimilarProductAdapter
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
@@ -28,6 +28,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private var _binding: ActivityDetailsProductBinding? = null
     private val binding get() = _binding!!
     private var items: ArrayList<Product> = ArrayList()
+    private val productId by lazy { intent.getIntExtra("product_id", 0) }
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
 
@@ -35,18 +36,22 @@ class ProductDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailsProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUpToolBar()
+
+        setUpViewModel()
+        setUpSimilarProductsViewModel()
+        setUpRecyclerview()
+        getProductDetails(productId)
+        getSimilarProducts(productId)
+    }
+
+    private fun setUpToolBar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-        val productId = intent.getIntExtra("product_id", 0)
-        setUpViewModel()
-        setUpSimilarProductsViewModel()
-        setUpRecyclerview()
-        getProductDetails(productId)
-        getSimilarProducts(productId)
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
@@ -63,7 +68,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                         binding.nameTv.text = product.name
                         binding.productSource.text = "من ${product.source}"
                         binding.priceTv.text = "$productPrice جنيه مصري "
-                        binding.productBtn.text = "اشتري من ${product.source}"
+                        binding.productBtn.text = "اشتريه من ${product.source}"
                         binding.productBtn.setOnClickListener {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
@@ -80,14 +85,11 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getSimilarProducts(productId: Int) {
-
         similarProductsViewModel.getSimilarProducts(productId).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { it1 -> items.addAll(it1) }
-                    binding.similarProducts.adapter?.notifyDataSetChanged()
-                    Log.d("Product", "getSimilarProducts: ${items.first().url}")
-
+                    binding.rvSimilarProducts.adapter?.notifyDataSetChanged()
                 }
                 Status.LOADING -> {}
                 Status.FAILURE -> {}
@@ -104,8 +106,8 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     private fun setUpSimilarProductsViewModel() {
         val similarProductsRepository = SimilarProductsRepository()
-        binding.similarProducts.adapter =
-            ProductAdapter(items) { position -> onProductClicked(position) }
+        binding.rvSimilarProducts.adapter =
+            SimilarProductAdapter(items) { position -> onProductClicked(position) }
         similarProductsViewModel = ViewModelProvider(
             this,
             SimilarProductsViewModelFactory(similarProductsRepository)
@@ -113,9 +115,9 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerview() {
-        binding.similarProducts.apply {
+        binding.rvSimilarProducts.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(this@ProductDetailsActivity, 2)
+            layoutManager = LinearLayoutManager(this@ProductDetailsActivity)
         }
     }
 

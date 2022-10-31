@@ -4,5 +4,5 @@
     <string name="categories">الأقـسـام</string>
     <string name="category_icon">Category Icon</string>
     <string name="products">المنتجات</string>
-    <string name="product">المنتج</string>
+    <string name="product_details">مواصفات المنتج</string>
 </resources>

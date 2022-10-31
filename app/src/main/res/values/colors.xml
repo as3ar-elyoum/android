@@ -6,4 +6,6 @@
     <color name="purple_200">#881414</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="price">#4CAF50</color>
+    <color name="mainBg">#E6E6E6</color>
 </resources>
