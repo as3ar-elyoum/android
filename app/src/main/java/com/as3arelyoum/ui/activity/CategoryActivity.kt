@@ -17,7 +17,11 @@ import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
+import com.as3arelyoum.utils.helper.FirebaseEvents.Companion.sendFirebaseEvent
 import com.as3arelyoum.utils.status.Status
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.hugocastelani.waterfalltoolbar.Dp
 
 
@@ -27,7 +31,7 @@ class CategoryActivity : AppCompatActivity() {
     private var items: ArrayList<Category> = ArrayList()
     private val viewModel: SplashScreenViewModel by viewModels()
     private lateinit var categoryViewModel: CategoryViewModel
-
+    private lateinit var analytics: FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
             setKeepOnScreenCondition {
@@ -37,6 +41,7 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        analytics = Firebase.analytics
         setUpRecyclerview()
         initData()
         setUpToolbar()
