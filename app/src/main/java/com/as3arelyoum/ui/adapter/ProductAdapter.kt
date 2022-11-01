@@ -44,7 +44,7 @@ class ProductAdapter(
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-            binding.root.setOnClickListener(this)
+            binding.productCard.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {

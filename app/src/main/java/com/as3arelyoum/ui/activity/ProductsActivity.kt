@@ -14,19 +14,20 @@ import com.as3arelyoum.ui.factory.ProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.ProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductsViewModel
 import com.as3arelyoum.utils.status.Status
-import com.hugocastelani.waterfalltoolbar.Dp
 
 class ProductsActivity : AppCompatActivity() {
     private var _binding: ActivityProductsBinding? = null
     private val binding get() = _binding!!
     private var items: ArrayList<Product> = ArrayList()
     private lateinit var productsViewModel: ProductsViewModel
+    private val categoryId by lazy { intent.getIntExtra("category_id", 0) }
+    private val categoryName by lazy { intent.getStringExtra("category_name") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityProductsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setUpToolbar()
+        initToolbar()
         initData()
         setUpRecyclerview()
         obtainListFromServer()
@@ -45,8 +46,6 @@ class ProductsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun obtainListFromServer() {
-        val categoryId = intent.getIntExtra("category_id", 0)
-
         productsViewModel.getAllProducts(categoryId).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -68,13 +67,14 @@ class ProductsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpToolbar() {
+    private fun initToolbar() {
         setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = getString(R.string.categories)
-        binding.waterfallToolbar.apply {
-            recyclerView = binding.recyclerview
-            initialElevation = Dp(0F).toPx()
-            finalElevation = Dp(10F).toPx()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        binding.toolbarTitle.text = categoryName
+        binding.toolbar.apply {
+            setNavigationIcon(R.drawable.ic_ios_back)
+            setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         }
     }
 

@@ -8,4 +8,6 @@
     <color name="black">#000000</color>
     <color name="price">#4CAF50</color>
     <color name="mainBg">#E6E6E6</color>
+    <color name="price_color">#2196F3</color>
+    <color name="source_color">#DC8E1B</color>
 </resources>
