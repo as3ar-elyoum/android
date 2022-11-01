@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "980892466968",
+    "project_id": "as3ar-alyoum",
+    "storage_bucket": "as3ar-alyoum.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980892466968:android:255f2f3d5f7a8af017a86d",
+        "android_client_info": {
+          "package_name": "com.as3arelyoum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980892466968-0pptmtuon2c780q3p9v8gsl7taur0sc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtP2-JqqB6pszUUr0v8kck7QlkCapCyU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980892466968-0pptmtuon2c780q3p9v8gsl7taur0sc6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
