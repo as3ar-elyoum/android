@@ -3,6 +3,7 @@ package com.as3arelyoum.data.model
 data class Product(
     var id: Int,
     var name: String,
+    var description: String,
     var image_url: String,
     var price: String,
     var url: String,

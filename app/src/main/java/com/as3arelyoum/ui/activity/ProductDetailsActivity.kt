@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
@@ -18,6 +20,8 @@ import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
 import com.as3arelyoum.utils.Constants.displayProductDetails
+import com.as3arelyoum.utils.Constants.displayProductPrice
+import com.as3arelyoum.utils.ViewAnimation
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.Entry
@@ -43,6 +47,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         initSimilarProductsRepository()
         initProductDetailsObserve(productId)
         initSimilarProductsObserve(productId)
+        toggleDescription()
     }
 
     private fun initToolbar() {
@@ -70,10 +75,15 @@ class ProductDetailsActivity : AppCompatActivity() {
                         binding.nameTv.text = product.name
                         binding.productSource.text =
                             displayProductDetails(getString(R.string.from), product.source)
-                        binding.priceTv.text =
-                            displayProductDetails(productPrice!!, getString(R.string.egp))
                         binding.productBtn.text =
-                            displayProductDetails(getString(R.string.buy_from), product.source)
+                            displayProductPrice(
+                                getString(R.string.buy_from),
+                                product.source,
+                                getString(R.string.b),
+                                productPrice!!,
+                                getString(R.string.egp)
+                            )
+                        binding.descriptionTv.text = product.description
                         binding.productBtn.setOnClickListener {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
@@ -164,5 +174,46 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
+    private fun toggleDescription() {
+        binding.btToggleDescription.setOnClickListener { view ->
+            toggleSection(
+                view,
+                binding.descriptionTv
+            )
+        }
+
+        toggleArrow(binding.btToggleDescription)
+        binding.descriptionTv.visibility = View.VISIBLE
+    }
+
+    private fun toggleSection(bt: View, lyt: View) {
+        val show = toggleArrow(bt)
+        if (show) {
+            ViewAnimation.expand(
+                lyt
+            ) { nestedScrollTo(binding.nestedScrollView, lyt) }
+        } else {
+            ViewAnimation.collapse(lyt)
+        }
+    }
+
+    private fun toggleArrow(view: View): Boolean {
+        return if (view.rotation == 0f) {
+            view.animate().setDuration(200).rotation(180f)
+            true
+        } else {
+            view.animate().setDuration(200).rotation(0f)
+            false
+        }
+    }
+
+    private fun nestedScrollTo(nested: NestedScrollView, targetView: View) {
+        nested.post { nested.scrollTo(500, targetView.bottom) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
 
