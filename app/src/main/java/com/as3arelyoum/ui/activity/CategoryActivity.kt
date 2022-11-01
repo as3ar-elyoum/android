@@ -99,8 +99,10 @@ class CategoryActivity : AppCompatActivity() {
 
     private fun onCategoryClicked(position: Int) {
         val categoryId = items[position].id
+        val categoryName = items[position].name
         val intent = Intent(this@CategoryActivity, ProductsActivity::class.java)
         intent.putExtra("category_id", categoryId)
+        intent.putExtra("category_name", categoryName)
         startActivity(intent)
     }
 
