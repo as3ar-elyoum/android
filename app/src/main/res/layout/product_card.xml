@@ -41,38 +41,42 @@
                 android:textStyle="bold"
                 tools:text="معالج كور أي فايف سداسي النواة 12 ثريد" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="bottom"
                 android:orientation="horizontal"
-                android:padding="@dimen/_10sdp"
-                android:weightSum="2">
+                android:padding="@dimen/_10sdp">
 
                 <TextView
                     android:id="@+id/price_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="end"
                     android:textColor="@color/price_color"
                     android:textSize="@dimen/_9ssp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/source_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="7000.0 جنيه مصري" />
 
                 <TextView
                     android:id="@+id/source_tv"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:fontFamily="sans-serif-black"
                     android:textColor="@color/source_color"
                     android:textSize="@dimen/_10ssp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="من أمازون" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </com.balysv.materialripple.MaterialRippleLayout>
 </androidx.cardview.widget.CardView>

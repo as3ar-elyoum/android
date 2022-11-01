@@ -5,4 +5,7 @@
     <string name="category_icon">Category Icon</string>
     <string name="products">المنتجات</string>
     <string name="product_details">مواصفات المنتج</string>
+    <string name="from">من</string>
+    <string name="egp">جنيه مصري</string>
+    <string name="buy_from">اشتريه من</string>
 </resources>

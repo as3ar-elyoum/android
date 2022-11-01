@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +17,7 @@ import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
+import com.as3arelyoum.utils.Constants.displayProductDetails
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.Entry
@@ -27,29 +27,28 @@ import com.github.mikephil.charting.data.LineDataSet
 class ProductDetailsActivity : AppCompatActivity() {
     private var _binding: ActivityDetailsProductBinding? = null
     private val binding get() = _binding!!
-    private var items: ArrayList<Product> = ArrayList()
-    private val productId by lazy { intent.getIntExtra("product_id", 0) }
+    private val similarList: ArrayList<Product> = ArrayList()
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
+    private val productId by lazy { intent.getIntExtra("product_id", 0) }
+    private val productPrice by lazy { intent.getStringExtra("product_price") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailsProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setUpToolBar()
-
-        setUpViewModel()
-        setUpSimilarProductsViewModel()
-        setUpRecyclerview()
-        getProductDetails(productId)
-        getSimilarProducts(productId)
+        initToolbar()
+        initProductsViewModel()
+        initSimilarProductsRecyclerView()
+        initSimilarProductsRepository()
+        initProductDetailsObserve(productId)
+        initSimilarProductsObserve(productId)
     }
 
-    private fun setUpToolBar() {
+    private fun initToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        // set back button drawable
         binding.toolbar.apply {
             setNavigationIcon(R.drawable.ic_ios_back)
             setNavigationOnClickListener {
@@ -58,21 +57,23 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-    private fun getProductDetails(productId: Int) {
-        val productPrice = intent.getStringExtra("product_price")
-
-        Log.d("TAG", "obtainListFromServer: $productId")
+    private fun initProductDetailsObserve(productId: Int) {
         productDetailsViewModel.getProductDetails(productId).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { product ->
-                        Glide.with(this).load(product.image_url).into(binding.productImage)
+                        Glide.with(this)
+                            .load(product.image_url)
+                            .placeholder(R.drawable.ic_downloading)
+                            .into(binding.productImage)
 
                         binding.nameTv.text = product.name
-                        binding.productSource.text = "من ${product.source}"
-                        binding.priceTv.text = "$productPrice جنيه مصري "
-                        binding.productBtn.text = "اشتريه من ${product.source}"
+                        binding.productSource.text =
+                            displayProductDetails(getString(R.string.from), product.source)
+                        binding.priceTv.text =
+                            displayProductDetails(productPrice!!, getString(R.string.egp))
+                        binding.productBtn.text =
+                            displayProductDetails(getString(R.string.buy_from), product.source)
                         binding.productBtn.setOnClickListener {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
@@ -88,12 +89,14 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun getSimilarProducts(productId: Int) {
-        similarProductsViewModel.getSimilarProducts(productId).observe(this) {
+    private fun initSimilarProductsObserve(productId: Int) {
+        similarProductsViewModel.getSimilarProducts(productId).observe(this) { it ->
             when (it.status) {
                 Status.SUCCESS -> {
-                    it.data?.let { it1 -> items.addAll(it1) }
-                    binding.rvSimilarProducts.adapter?.notifyDataSetChanged()
+                    it.data?.let {
+                        similarList.addAll(it)
+                        binding.rvSimilarProducts.adapter?.notifyDataSetChanged()
+                    }
                 }
                 Status.LOADING -> {}
                 Status.FAILURE -> {}
@@ -101,24 +104,26 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpViewModel() {
+    private fun initProductsViewModel() {
         productDetailsViewModel = ViewModelProvider(
             this,
             ProductDetailsViewModelFactory()
         )[ProductDetailsViewModel::class.java]
     }
 
-    private fun setUpSimilarProductsViewModel() {
+    private fun initSimilarProductsRepository() {
         val similarProductsRepository = SimilarProductsRepository()
-        binding.rvSimilarProducts.adapter =
-            SimilarProductAdapter(items) { position -> onProductClicked(position) }
         similarProductsViewModel = ViewModelProvider(
             this,
             SimilarProductsViewModelFactory(similarProductsRepository)
         )[SimilarProductsViewModel::class.java]
+        binding.rvSimilarProducts.apply {
+            adapter = SimilarProductAdapter(similarList)
+            { position -> onProductClicked(position) }
+        }
     }
 
-    private fun setUpRecyclerview() {
+    private fun initSimilarProductsRecyclerView() {
         binding.rvSimilarProducts.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@ProductDetailsActivity)
@@ -126,8 +131,8 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     private fun onProductClicked(position: Int) {
-        val productId = items[position].id
-        val productPrice = items[position].price
+        val productId = similarList[position].id
+        val productPrice = similarList[position].price
         val intent = Intent(this@ProductDetailsActivity, ProductDetailsActivity::class.java)
         intent.putExtra("product_id", productId)
         intent.putExtra("product_price", productPrice)
@@ -158,5 +163,6 @@ class ProductDetailsActivity : AppCompatActivity() {
             animateXY(1000, 1000)
         }
     }
+
 }
 
