@@ -23,7 +23,8 @@
             android:id="@+id/product_image"
             android:layout_width="match_parent"
             android:padding="@dimen/_4sdp"
-            android:layout_height="@dimen/_120sdp"/>
+            android:layout_height="@dimen/_140sdp"
+            android:contentDescription="@string/products" />
 
         <TextView
             android:id="@+id/name_tv"
