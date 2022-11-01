@@ -4,15 +4,29 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
 
-class ProductAdapter(
-    private var list: List<Product>,
+class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
-) : RecyclerView.Adapter<ProductAdapter.CustomViewHolder>() {
+) : RecyclerView.Adapter<ProductsAdapter.CustomViewHolder>() {
+
+    private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.url == newItem.url
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
@@ -22,10 +36,11 @@ class ProductAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val productItems = list[position]
+        val productItems = differ.currentList[position]
         holder.binding.apply {
             Glide.with(holder.binding.root.context)
                 .load(productItems.image_url)
+                .placeholder(R.drawable.ic_downloading)
                 .into(productImage)
             nameTv.text = productItems.name
             priceTv.text =  productItems.price + " " + "جنيه مصري"
@@ -34,7 +49,7 @@ class ProductAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return differ.currentList.size
     }
 
     inner class CustomViewHolder(

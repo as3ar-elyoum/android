@@ -1,37 +1,29 @@
 package com.as3arelyoum.ui.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
-import com.as3arelyoum.data.model.Category
 import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
-import com.as3arelyoum.utils.helper.FirebaseEvents.Companion.sendFirebaseEvent
 import com.as3arelyoum.utils.status.Status
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import com.hugocastelani.waterfalltoolbar.Dp
-
 
 class CategoryActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-    private var items: ArrayList<Category> = ArrayList()
     private val viewModel: SplashScreenViewModel by viewModels()
     private lateinit var categoryViewModel: CategoryViewModel
-    private lateinit var analytics: FirebaseAnalytics
+    private lateinit var categoryAdapter: CategoryAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
             setKeepOnScreenCondition {
@@ -41,58 +33,44 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        analytics = Firebase.analytics
-        setUpRecyclerview()
-        initData()
-        setUpToolbar()
-        obtainListFromServer()
+        initRecyclerView()
+        initRepository()
+        initToolbar()
+        initCategoryObserve()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun obtainListFromServer() {
+    private fun initCategoryObserve() {
         categoryViewModel.getAllCategories().observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    it.data?.let { it1 -> items.addAll(it1) }
-                    binding.recyclerview.adapter?.notifyDataSetChanged()
+                    it.data?.let { categoryList ->
+                        categoryAdapter.differ.submitList(categoryList)
+                    }
                 }
-                Status.FAILURE -> {
-                    Toast.makeText(
-                        this,
-                        "Failed to load the data ${it.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                Status.LOADING -> {
-                    Toast.makeText(
-                        this,
-                        "Loading...",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                Status.FAILURE -> {}
+                Status.LOADING -> {}
             }
         }
     }
 
-    private fun initData() {
+    private fun initRepository() {
         val categoryRepository = CategoryRepository()
         categoryViewModel = ViewModelProvider(
             this,
             CategoryViewModelFactory(categoryRepository)
         )[CategoryViewModel::class.java]
-
-        binding.recyclerview.adapter =
-            CategoryAdapter(items) { position -> onCategoryClicked(position) }
     }
 
-    private fun setUpRecyclerview() {
+    private fun initRecyclerView() {
+        categoryAdapter = CategoryAdapter { position -> onCategoryClicked(position) }
         binding.recyclerview.apply {
             setHasFixedSize(true)
+            adapter = categoryAdapter
             layoutManager = GridLayoutManager(this@CategoryActivity, 2)
         }
     }
 
-    private fun setUpToolbar() {
+    private fun initToolbar() {
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = getString(R.string.app_name)
         binding.waterfallToolbar.apply {
@@ -103,8 +81,8 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     private fun onCategoryClicked(position: Int) {
-        val categoryId = items[position].id
-        val categoryName = items[position].name
+        val categoryId = categoryAdapter.differ.currentList[position].id
+        val categoryName = categoryAdapter.differ.currentList[position].name
         val intent = Intent(this@CategoryActivity, ProductsActivity::class.java)
         intent.putExtra("category_id", categoryId)
         intent.putExtra("category_name", categoryName)

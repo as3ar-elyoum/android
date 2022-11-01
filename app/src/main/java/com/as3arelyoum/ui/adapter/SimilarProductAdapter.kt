@@ -1,16 +1,17 @@
 package com.as3arelyoum.ui.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.SimilarProductCardBinding
+import com.as3arelyoum.utils.Constants.displayProductDetails
 import com.bumptech.glide.Glide
 
 class SimilarProductAdapter(
-    private var list: List<Product>,
+    private var similarProductsList: List<Product>,
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<SimilarProductAdapter.CustomViewHolder>() {
 
@@ -20,21 +21,21 @@ class SimilarProductAdapter(
         return CustomViewHolder(recyclerCard, onItemClicked)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val productItems = list[position]
+        val productItems = similarProductsList[position]
         holder.binding.apply {
             Glide.with(holder.binding.root.context)
                 .load(productItems.image_url)
                 .into(productImage)
             nameTv.text = productItems.name
-            priceTv.text =  productItems.price + " " + "جنيه مصري"
-            sourceTv.text = "من" + " " + productItems.source
+            priceTv.text =
+                displayProductDetails(productItems.price, root.context.getString(R.string.egp))
+            sourceTv.text = displayProductDetails(productItems.source, root.context.getString(R.string.from))
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return similarProductsList.size
     }
 
     inner class CustomViewHolder(
