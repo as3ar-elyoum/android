@@ -23,7 +23,7 @@ class CategoryAdapter(
         val categoryItems = list[position]
         holder.binding.apply {
             Glide.with(holder.binding.root.context)
-                .load("https://m7madmagdy.github.io/pages/%D8%A7%D8%AF%D9%88%D8%A7%D8%AA%20%D9%85%D9%86%D8%B2%D9%84%D9%8A%D8%A9.png")
+                .load(categoryItems.icon)
                 .into(categoryImage)
             categoryNameTv.text = categoryItems.name
         }
