@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/mainBg"
+        tools:listitem="@layout/product_card"
         tools:itemCount="20" />
 
 </LinearLayout>

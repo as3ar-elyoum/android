@@ -28,7 +28,7 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/waterfall_toolbar"
+        android:background="@color/mainBg"
         app:layout_constraintBottom_toTopOf="@+id/linear_adMob"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

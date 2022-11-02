@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardElevation="@dimen/_3sdp"
+    app:cardCornerRadius="@dimen/_2sdp"
+    app:cardElevation="@dimen/_2sdp"
     app:cardUseCompatPadding="true">
 
     <com.balysv.materialripple.MaterialRippleLayout

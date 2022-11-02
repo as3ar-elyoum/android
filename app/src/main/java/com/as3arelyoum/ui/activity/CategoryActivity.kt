@@ -10,7 +10,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
-import com.as3arelyoum.databinding.ActivityMainBinding
+import com.as3arelyoum.databinding.ActivityCategoryBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
@@ -23,7 +23,7 @@ import com.google.android.gms.ads.AdView
 import com.hugocastelani.waterfalltoolbar.Dp
 
 class CategoryActivity : AppCompatActivity() {
-    private var _binding: ActivityMainBinding? = null
+    private var _binding: ActivityCategoryBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SplashScreenViewModel by viewModels()
     private val interstitial = Interstitial()
@@ -40,7 +40,7 @@ class CategoryActivity : AppCompatActivity() {
             }
         }
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
         initRepository()
