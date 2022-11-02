@@ -2,6 +2,8 @@ package com.as3arelyoum.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,15 +16,22 @@ import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
+import com.as3arelyoum.utils.ads.Banner
+import com.as3arelyoum.utils.ads.Interstitial
 import com.as3arelyoum.utils.status.Status
+import com.google.android.gms.ads.AdView
 import com.hugocastelani.waterfalltoolbar.Dp
 
 class CategoryActivity : AppCompatActivity() {
     private var _binding: ActivityCategoryBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SplashScreenViewModel by viewModels()
+    private val interstitial = Interstitial()
+    private var handler = Handler(Looper.myLooper()!!)
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var adView: AdView
+    private lateinit var runnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
@@ -37,6 +46,24 @@ class CategoryActivity : AppCompatActivity() {
         initRepository()
         initToolbar()
         initCategoryObserve()
+        adView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.postDelayed(runnable, 120000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
+
+    private fun adView() {
+        adView = findViewById(R.id.adView)
+        Banner.show(this, adView)
+        runnable = Runnable { interstitial.load(this@CategoryActivity) }
+        handler.post(runnable)
     }
 
     private fun initCategoryObserve() {
