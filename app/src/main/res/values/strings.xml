@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">أسـعـار الـيـوم</string>
-<!--    <string name="admob_app_id">ca-app-pub-1747848120826315~3829017498</string>-->
+    <string name="admob_app_id">ca-app-pub-1747848120826315~3829017498</string>
     <string name="ad_banner_unit_id">ca-app-pub-1747848120826315/1405022371</string>
     <string name="interstitial_ads">ca-app-pub-1747848120826315/3026183318</string>
     <string name="categories">الأقـسـام</string>
