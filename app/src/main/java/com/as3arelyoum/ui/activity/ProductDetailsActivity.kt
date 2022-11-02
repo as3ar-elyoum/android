@@ -1,3 +1,4 @@
+
 package com.as3arelyoum.ui.activity
 
 import android.annotation.SuppressLint
@@ -6,8 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
@@ -19,8 +20,10 @@ import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
+import com.as3arelyoum.utils.Constants
 import com.as3arelyoum.utils.Constants.displayProductDetails
 import com.as3arelyoum.utils.Constants.displayProductPrice
+import com.as3arelyoum.utils.Constants.toggleArrow
 import com.as3arelyoum.utils.ViewAnimation
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
@@ -83,7 +86,14 @@ class ProductDetailsActivity : AppCompatActivity() {
                                 productPrice!!,
                                 getString(R.string.egp)
                             )
-                        binding.descriptionTv.text = product.description
+                        var description = product.description
+                        description = if (description.contains("  ") || description.contains("   ")) {
+                            description.replace("  ", "\n").removeRange(0..55).trimMargin()
+                        } else {
+                            description.removeRange(0..55).trimMargin()
+                        }
+                        binding.descriptionTv.text = description
+
                         binding.productBtn.setOnClickListener {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
@@ -151,15 +161,15 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     private fun setLineChart(prices: Array<Array<String>>) {
         if (prices.count() < 2) {
-            binding.getTheGraph.isVisible = false
+            binding.graphCard.isVisible = false
             return
         }
         val xAxisData = ArrayList<String>()
         val entries = ArrayList<Entry>()
         val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
-        lineDataSet.color = resources.getColor(R.color.green)
+        lineDataSet.color = ContextCompat.getColor(this, R.color.green)
         lineDataSet.setDrawFilled(true)
-        lineDataSet.fillColor = resources.getColor(R.color.green)
+        lineDataSet.fillColor = ContextCompat.getColor(this, R.color.green)
         lineDataSet.fillAlpha = 20
         prices.forEachIndexed { index, price ->
             xAxisData.add(price.first())
@@ -169,7 +179,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         val data = LineData(xAxisData, lineDataSet)
         binding.getTheGraph.data = data
         binding.getTheGraph.apply {
-            setBackgroundColor(resources.getColor(android.R.color.white))
+            setBackgroundColor(ContextCompat.getColor(this@ProductDetailsActivity, R.color.white))
             animateXY(1000, 1000)
         }
     }
@@ -191,24 +201,10 @@ class ProductDetailsActivity : AppCompatActivity() {
         if (show) {
             ViewAnimation.expand(
                 lyt
-            ) { nestedScrollTo(binding.nestedScrollView, lyt) }
+            ) { Constants.nestedScrollTo(binding.nestedScrollView, lyt) }
         } else {
             ViewAnimation.collapse(lyt)
         }
-    }
-
-    private fun toggleArrow(view: View): Boolean {
-        return if (view.rotation == 0f) {
-            view.animate().setDuration(200).rotation(180f)
-            true
-        } else {
-            view.animate().setDuration(200).rotation(0f)
-            false
-        }
-    }
-
-    private fun nestedScrollTo(nested: NestedScrollView, targetView: View) {
-        nested.post { nested.scrollTo(500, targetView.bottom) }
     }
 
     override fun onDestroy() {
@@ -216,4 +212,3 @@ class ProductDetailsActivity : AppCompatActivity() {
         _binding = null
     }
 }
-

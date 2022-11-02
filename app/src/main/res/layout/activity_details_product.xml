@@ -10,10 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -23,7 +20,8 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_4sdp"
                 android:background="@color/toolbar"
                 app:layout_scrollFlags="scroll|enterAlways">
 
@@ -35,7 +33,8 @@
                     android:padding="@dimen/_5ssp"
                     android:text="@string/product_details"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -53,6 +52,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -79,7 +79,7 @@
                             android:layout_marginTop="@dimen/_20sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
                             android:fontFamily="sans-serif-black"
-                            android:textColor="#E69317"
+                            android:textColor="#4CAF50"
                             android:textSize="@dimen/_13ssp"
                             tools:text="من أمازون" />
 
@@ -116,7 +116,7 @@
                         android:layout_marginEnd="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_15sdp"
                         android:backgroundTint="#BA3E3E"
-                        android:padding="@dimen/_11sdp"
+                        android:padding="@dimen/_10sdp"
                         android:textColor="#FFFFFF"
                         android:textSize="@dimen/_10sdp"
                         android:textStyle="bold"
@@ -138,14 +138,13 @@
                     android:id="@+id/description_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_3sdp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="@dimen/_3sdp">
 
                     <ImageButton
                         android:id="@+id/bt_toggle_description"
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_40sdp"
-                        android:layout_alignParentEnd="true"
                         android:layout_above="@id/description_tv"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/drop_arrow"
@@ -156,24 +155,30 @@
                         android:id="@+id/description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5ssp"
-                        android:drawablePadding="@dimen/_4sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:drawablePadding="@dimen/_6sdp"
                         android:padding="@dimen/_4sdp"
                         android:text="@string/product_description"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_13ssp"
                         android:textStyle="bold"
-                        app:drawableLeftCompat="@drawable/ic_info"
+                        app:drawableRightCompat="@drawable/ic_info"
                         app:drawableTint="@color/black" />
 
                     <TextView
                         android:id="@+id/description_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_10sdp"
                         android:layout_below="@id/description"
-                        android:text="@string/long_lorem_ipsum"
+                        android:paddingStart="@dimen/_15sdp"
+                        android:paddingEnd="@dimen/_15sdp"
+                        android:paddingBottom="@dimen/_10sdp"
                         android:textColor="@color/black"
+                        tools:text="@string/product_description"
                         tools:textSize="@dimen/_11ssp" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -186,18 +191,41 @@
                 android:layout_marginTop="@dimen/_3sdp"
                 app:cardBackgroundColor="@color/white">
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/getTheGraph"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_250sdp"
-                    android:layout_margin="@dimen/_8sdp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_2sdp"
+                        android:drawablePadding="@dimen/_6sdp"
+                        android:paddingStart="@dimen/_8sdp"
+                        android:paddingTop="@dimen/_14sdp"
+                        android:paddingEnd="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_14sdp"
+                        android:text="@string/price_changeable"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="bold"
+                        app:drawableRightCompat="@drawable/ic_price_change"
+                        app:drawableTint="@color/green" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/getTheGraph"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_250sdp"
+                        android:layout_margin="@dimen/_8sdp" />
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/similar_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_40sdp"
                 android:layout_below="@id/graphCard"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:cardBackgroundColor="@color/white">
@@ -210,16 +238,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/_14ssp"
-                        android:paddingTop="@dimen/_20sdp"
-                        android:paddingBottom="@dimen/_20sdp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:paddingEnd="@dimen/_8sdp"
-                        android:paddingStart="@dimen/_8sdp"
                         android:layout_margin="@dimen/_2sdp"
                         android:drawablePadding="@dimen/_6sdp"
+                        android:paddingStart="@dimen/_8sdp"
+                        android:paddingTop="@dimen/_14sdp"
+                        android:paddingEnd="@dimen/_8sdp"
+                        android:paddingBottom="@dimen/_14sdp"
                         android:text="@string/similar_product_text"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="bold"
                         app:drawableRightCompat="@drawable/ic_shopping_cart" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -227,7 +255,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/mainBg"
-                        android:layout_marginBottom="@dimen/_20sdp"
                         tools:listitem="@layout/similar_product_card" />
 
                 </LinearLayout>
