@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:elevation="10dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -22,6 +21,7 @@
         <ImageView
             android:id="@+id/category_image"
             android:layout_width="@dimen/_90sdp"
+            tools:src="@mipmap/ic_launcher_round"
             android:layout_height="@dimen/_90sdp"/>
 
         <TextView
