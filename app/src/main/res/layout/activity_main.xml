@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,11 @@
     <com.hugocastelani.waterfalltoolbar.WaterfallToolbar
         android:id="@+id/waterfall_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -19,11 +23,26 @@
 
     </com.hugocastelani.waterfalltoolbar.WaterfallToolbar>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/waterfall_toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/linear_adMob"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waterfall_toolbar"
         tools:itemCount="20"
         tools:listitem="@layout/category_card" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_adMob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <include layout="@layout/admob_banner" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
