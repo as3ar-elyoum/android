@@ -1,10 +1,13 @@
+
 package com.as3arelyoum.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +20,11 @@ import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
+import com.as3arelyoum.utils.Constants
 import com.as3arelyoum.utils.Constants.displayProductDetails
+import com.as3arelyoum.utils.Constants.displayProductPrice
+import com.as3arelyoum.utils.Constants.toggleArrow
+import com.as3arelyoum.utils.ViewAnimation
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.Entry
@@ -43,6 +50,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         initSimilarProductsRepository()
         initProductDetailsObserve(productId)
         initSimilarProductsObserve(productId)
+        toggleDescription()
     }
 
     private fun initToolbar() {
@@ -70,10 +78,22 @@ class ProductDetailsActivity : AppCompatActivity() {
                         binding.nameTv.text = product.name
                         binding.productSource.text =
                             displayProductDetails(getString(R.string.from), product.source)
-                        binding.priceTv.text =
-                            displayProductDetails(productPrice!!, getString(R.string.egp))
                         binding.productBtn.text =
-                            displayProductDetails(getString(R.string.buy_from), product.source)
+                            displayProductPrice(
+                                getString(R.string.buy_from),
+                                product.source,
+                                getString(R.string.b),
+                                productPrice!!,
+                                getString(R.string.egp)
+                            )
+                        var description = product.description
+                        description = if (description.contains("  ") || description.contains("   ")) {
+                            description.replace("  ", "\n").removeRange(0..55).trimMargin()
+                        } else {
+                            description.removeRange(0..55).trimMargin()
+                        }
+                        binding.descriptionTv.text = description
+
                         binding.productBtn.setOnClickListener {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
@@ -141,15 +161,15 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     private fun setLineChart(prices: Array<Array<String>>) {
         if (prices.count() < 2) {
-            binding.getTheGraph.isVisible = false
+            binding.graphCard.isVisible = false
             return
         }
         val xAxisData = ArrayList<String>()
         val entries = ArrayList<Entry>()
         val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
-        lineDataSet.color = resources.getColor(R.color.green)
+        lineDataSet.color = ContextCompat.getColor(this, R.color.green)
         lineDataSet.setDrawFilled(true)
-        lineDataSet.fillColor = resources.getColor(R.color.green)
+        lineDataSet.fillColor = ContextCompat.getColor(this, R.color.green)
         lineDataSet.fillAlpha = 20
         prices.forEachIndexed { index, price ->
             xAxisData.add(price.first())
@@ -159,10 +179,36 @@ class ProductDetailsActivity : AppCompatActivity() {
         val data = LineData(xAxisData, lineDataSet)
         binding.getTheGraph.data = data
         binding.getTheGraph.apply {
-            setBackgroundColor(resources.getColor(android.R.color.white))
+            setBackgroundColor(ContextCompat.getColor(this@ProductDetailsActivity, R.color.white))
             animateXY(1000, 1000)
         }
     }
 
-}
+    private fun toggleDescription() {
+        binding.btToggleDescription.setOnClickListener { view ->
+            toggleSection(
+                view,
+                binding.descriptionTv
+            )
+        }
 
+        toggleArrow(binding.btToggleDescription)
+        binding.descriptionTv.visibility = View.VISIBLE
+    }
+
+    private fun toggleSection(bt: View, lyt: View) {
+        val show = toggleArrow(bt)
+        if (show) {
+            ViewAnimation.expand(
+                lyt
+            ) { Constants.nestedScrollTo(binding.nestedScrollView, lyt) }
+        } else {
+            ViewAnimation.collapse(lyt)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+}
