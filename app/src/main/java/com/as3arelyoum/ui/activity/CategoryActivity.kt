@@ -20,7 +20,6 @@ import com.as3arelyoum.utils.ads.Banner
 import com.as3arelyoum.utils.ads.Interstitial
 import com.as3arelyoum.utils.status.Status
 import com.google.android.gms.ads.AdView
-import com.hugocastelani.waterfalltoolbar.Dp
 
 class CategoryActivity : AppCompatActivity() {
     private var _binding: ActivityCategoryBinding? = null
@@ -44,7 +43,6 @@ class CategoryActivity : AppCompatActivity() {
         setContentView(binding.root)
         initRecyclerView()
         initRepository()
-        initToolbar()
         initCategoryObserve()
         adView()
     }
@@ -94,16 +92,6 @@ class CategoryActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = categoryAdapter
             layoutManager = GridLayoutManager(this@CategoryActivity, 2)
-        }
-    }
-
-    private fun initToolbar() {
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = getString(R.string.app_name)
-        binding.waterfallToolbar.apply {
-            recyclerView = binding.recyclerview
-            initialElevation = Dp(0F).toPx()
-            finalElevation = Dp(10F).toPx()
         }
     }
 

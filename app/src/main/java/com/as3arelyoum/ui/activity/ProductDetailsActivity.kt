@@ -88,9 +88,9 @@ class ProductDetailsActivity : AppCompatActivity() {
                             )
                         var description = product.description
                         description = if (description.contains("  ") || description.contains("   ")) {
-                            description.replace("  ", "\n").removeRange(0..55).trimMargin()
+                            description.replace("  ", "\n").removePrefix(getString(R.string.amazon_first_line)).trimMargin()
                         } else {
-                            description.removeRange(0..55).trimMargin()
+                            description.removePrefix(getString(R.string.amazon_first_line)).trimMargin()
                         }
                         binding.descriptionTv.text = description
 

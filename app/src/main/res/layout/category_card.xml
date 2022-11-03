@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/category_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/category_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/recycler_selector"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp"
-        tools:ignore="UseCompoundDrawables">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/category_image"
-            android:layout_width="@dimen/_90sdp"
-            tools:src="@mipmap/ic_launcher_round"
-            android:layout_height="@dimen/_90sdp"/>
-
-        <TextView
-            android:id="@+id/category_name_tv"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_10sdp"
-            android:padding="@dimen/_4sdp"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            tools:text="Category Name" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp"
+            tools:ignore="UseCompoundDrawables">
 
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:id="@+id/category_image"
+                android:layout_width="@dimen/_90sdp"
+                tools:src="@mipmap/ic_launcher_round"
+                android:layout_height="@dimen/_90sdp"
+                android:contentDescription="@string/categories" />
+
+            <TextView
+                android:id="@+id/category_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:padding="@dimen/_4sdp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                tools:text="Category Name" />
+
+        </LinearLayout>
+
+    </com.balysv.materialripple.MaterialRippleLayout>
+</androidx.cardview.widget.CardView>

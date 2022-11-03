@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mainBg"
-    android:orientation="vertical">
+    android:background="@color/mainBg">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -21,7 +20,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_4sdp"
                 android:background="@color/toolbar"
                 app:layout_scrollFlags="scroll|enterAlways">
 
@@ -79,7 +77,8 @@
                             android:layout_marginTop="@dimen/_20sdp"
                             android:layout_marginEnd="@dimen/_15sdp"
                             android:fontFamily="sans-serif-black"
-                            android:textColor="#4CAF50"
+                            android:textStyle="bold"
+                            android:textColor="@color/source_color"
                             android:textSize="@dimen/_13ssp"
                             tools:text="من أمازون" />
 

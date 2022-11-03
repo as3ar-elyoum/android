@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,13 +13,15 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:background="@color/toolbar"
+                android:padding="@dimen/_2sdp"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <com.google.android.material.textview.MaterialTextView
@@ -28,9 +30,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_6ssp"
                     android:padding="@dimen/_5ssp"
-                    tools:text="@string/products"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12ssp"
+                    android:textStyle="bold"
+                    tools:text="@string/products" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -43,7 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/mainBg"
-        tools:listitem="@layout/product_card"
-        tools:itemCount="20" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:itemCount="20"
+        tools:listitem="@layout/product_card" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

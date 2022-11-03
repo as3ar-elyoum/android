@@ -4,7 +4,7 @@
     <string name="admob_app_id">ca-app-pub-1747848120826315~3829017498</string>
     <string name="ad_banner_unit_id">ca-app-pub-1747848120826315/1405022371</string>
     <string name="interstitial_ads">ca-app-pub-1747848120826315/3026183318</string>
-    <string name="categories">الأقـسـام</string>
+    <string name="categories">أقـسـام الـمنتـجـات</string>
     <string name="category_icon">Category Icon</string>
     <string name="products">المنتجات</string>
     <string name="product_details">مواصفات المنتج</string>
@@ -16,4 +16,5 @@
     <string name="similar_product_text">منتجات مشابهة</string>
     <string name="drop_arrow">drop_arrow</string>
     <string name="price_changeable">التغير في السعر</string>
+    <string name="amazon_first_line">تأكد من أن هذا مناسب عن طريق إدخال رقم الطراز الخاص بك.</string>
 </resources>
