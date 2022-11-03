@@ -4,10 +4,9 @@ import android.view.View
 import androidx.core.widget.NestedScrollView
 
 object Constants {
-    const val BASE_URL = "http://price-index.magdi.work:8080/api/"
+    const val BASE_URL = "https://price-index.magdi.work/api/"
     const val CATEGORIES = "categories"
     const val PRODUCTS = "products"
-
 
     fun displayProductDetails(str: String, source: String): String {
         return "$str $source"
