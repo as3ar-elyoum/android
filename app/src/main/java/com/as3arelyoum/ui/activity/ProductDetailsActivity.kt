@@ -194,9 +194,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                 binding.descriptionTv
             )
         }
-
         toggleArrow(binding.btToggleDescription)
-        binding.descriptionTv.visibility = View.VISIBLE
     }
 
 

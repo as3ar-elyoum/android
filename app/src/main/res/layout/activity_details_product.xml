@@ -145,6 +145,7 @@
                         android:id="@+id/bt_toggle_description"
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_40sdp"
+                        android:rotation="180"
                         android:layout_above="@id/description_tv"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/drop_arrow"
@@ -178,6 +179,7 @@
                         android:paddingEnd="@dimen/_15sdp"
                         android:paddingBottom="@dimen/_10sdp"
                         android:textColor="@color/black"
+                        android:visibility="gone"
                         tools:text="@string/product_description"
                         tools:textSize="@dimen/_11ssp" />
                 </RelativeLayout>
