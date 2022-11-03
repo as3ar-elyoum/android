@@ -1,4 +1,3 @@
-
 package com.as3arelyoum.ui.activity
 
 import android.annotation.SuppressLint
@@ -87,11 +86,15 @@ class ProductDetailsActivity : AppCompatActivity() {
                                 getString(R.string.egp)
                             )
                         var description = product.description
-                        description = if (description.contains("  ") || description.contains("   ")) {
-                            description.replace("  ", "\n").removePrefix(getString(R.string.amazon_first_line)).trimMargin()
-                        } else {
-                            description.removePrefix(getString(R.string.amazon_first_line)).trimMargin()
-                        }
+                        description =
+                            if (description.contains("  ") || description.contains("   ")) {
+                                description.replace("   ", "\n")
+                                    .removePrefix(getString(R.string.amazon_first_line))
+                                    .trim()
+                            } else {
+                                description.removePrefix(getString(R.string.amazon_first_line))
+                                    .trim()
+                            }
                         binding.descriptionTv.text = description
 
                         binding.productBtn.setOnClickListener {
@@ -177,8 +180,8 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
 
         val data = LineData(xAxisData, lineDataSet)
-        binding.getTheGraph.data = data
-        binding.getTheGraph.apply {
+        binding.lineChart.data = data
+        binding.lineChart.apply {
             setBackgroundColor(ContextCompat.getColor(this@ProductDetailsActivity, R.color.white))
             animateXY(1000, 1000)
         }
@@ -196,12 +199,13 @@ class ProductDetailsActivity : AppCompatActivity() {
         binding.descriptionTv.visibility = View.VISIBLE
     }
 
+
     private fun toggleSection(bt: View, lyt: View) {
         val show = toggleArrow(bt)
         if (show) {
-            ViewAnimation.expand(
-                lyt
-            ) { Constants.nestedScrollTo(binding.nestedScrollView, lyt) }
+            ViewAnimation.expand(lyt) {
+                Constants.nestedScrollTo(binding.nestedScrollView, lyt)
+            }
         } else {
             ViewAnimation.collapse(lyt)
         }

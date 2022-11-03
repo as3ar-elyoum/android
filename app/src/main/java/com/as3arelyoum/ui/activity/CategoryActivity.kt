@@ -9,17 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.as3arelyoum.R
 import com.as3arelyoum.databinding.ActivityCategoryBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
-import com.as3arelyoum.utils.ads.Banner
 import com.as3arelyoum.utils.ads.Interstitial
 import com.as3arelyoum.utils.status.Status
-import com.google.android.gms.ads.AdView
 
 class CategoryActivity : AppCompatActivity() {
     private var _binding: ActivityCategoryBinding? = null
@@ -29,7 +26,7 @@ class CategoryActivity : AppCompatActivity() {
     private var handler = Handler(Looper.myLooper()!!)
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var adView: AdView
+//    private lateinit var adView: AdView
     private lateinit var runnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +55,8 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     private fun adView() {
-        adView = findViewById(R.id.adView)
-        Banner.show(this, adView)
+//        adView = findViewById(R.id.adView)
+//        Banner.show(this, adView)
         runnable = Runnable { interstitial.load(this@CategoryActivity) }
         handler.post(runnable)
     }
