@@ -10,4 +10,5 @@
     <color name="mainBg">#E6E6E6</color>
     <color name="price_color">#2196F3</color>
     <color name="source_color">#DC8E1B</color>
+    <color name="overlay_dark_40">#66323232</color>
 </resources>

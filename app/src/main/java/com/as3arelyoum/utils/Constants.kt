@@ -28,6 +28,6 @@ object Constants {
     }
 
     fun nestedScrollTo(nested: NestedScrollView, targetView: View) {
-        nested.post { nested.scrollTo(500, targetView.bottom) }
+        nested.post { nested.scrollTo(500, targetView.top) }
     }
 }

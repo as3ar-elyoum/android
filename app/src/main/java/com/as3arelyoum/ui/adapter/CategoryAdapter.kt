@@ -10,6 +10,7 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Category
 import com.as3arelyoum.databinding.CategoryCardBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class CategoryAdapter(
     private val onItemClicked: (position: Int) -> Unit
@@ -39,6 +40,7 @@ class CategoryAdapter(
             Glide.with(holder.binding.root.context)
                 .load(categoryItems.icon)
                 .placeholder(R.drawable.ic_downloading)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(categoryImage)
             categoryNameTv.text = categoryItems.name
         }
