@@ -1,4 +1,4 @@
-package com.as3arelyoum.utils.helper
+package com.as3arelyoum.utils.firebase
 
 import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
