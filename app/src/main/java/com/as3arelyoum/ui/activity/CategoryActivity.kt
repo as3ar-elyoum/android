@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,6 +18,8 @@ import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
 import com.as3arelyoum.utils.ads.Interstitial
 import com.as3arelyoum.utils.status.Status
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class CategoryActivity : AppCompatActivity() {
     private var _binding: ActivityCategoryBinding? = null
@@ -42,6 +45,7 @@ class CategoryActivity : AppCompatActivity() {
         initRepository()
         initCategoryObserve()
         adView()
+        getTokenRegistration()
     }
 
     override fun onResume() {
@@ -99,6 +103,19 @@ class CategoryActivity : AppCompatActivity() {
         intent.putExtra("category_id", categoryId)
         intent.putExtra("category_name", categoryName)
         startActivity(intent)
+    }
+
+    private fun getTokenRegistration() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.d("token", token)
+        })
     }
 
     override fun onDestroy() {
