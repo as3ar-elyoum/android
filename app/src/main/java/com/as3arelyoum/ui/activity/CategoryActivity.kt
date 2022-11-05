@@ -1,25 +1,29 @@
 package com.as3arelyoum.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.as3arelyoum.data.model.UserInfo
 import com.as3arelyoum.databinding.ActivityCategoryBinding
 import com.as3arelyoum.ui.adapter.CategoryAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
+import com.as3arelyoum.utils.PrefUtil
 import com.as3arelyoum.utils.ads.Interstitial
 import com.as3arelyoum.utils.status.Status
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+
 
 class CategoryActivity : AppCompatActivity() {
     private var _binding: ActivityCategoryBinding? = null
@@ -29,9 +33,11 @@ class CategoryActivity : AppCompatActivity() {
     private var handler = Handler(Looper.myLooper()!!)
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categoryAdapter: CategoryAdapter
-//    private lateinit var adView: AdView
+    //    private lateinit var adView: AdView
     private lateinit var runnable: Runnable
 
+
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
             setKeepOnScreenCondition {
@@ -41,11 +47,29 @@ class CategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        PrefUtil.initPrefUtil(this)
         initRecyclerView()
         initRepository()
         initCategoryObserve()
         adView()
-        getTokenRegistration()
+        addUserToApi()
+    }
+
+    @SuppressLint("HardwareIds")
+    private fun addUserToApi() {
+        val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        val userToken = PrefUtil.getData("token")
+        val userInfo = UserInfo(deviceId, userToken)
+
+        if (userToken.isNotEmpty()) {
+            categoryViewModel.addUser(userInfo).observe(this){
+                when(it.status){
+                    Status.SUCCESS -> {}
+                    Status.FAILURE -> {}
+                    Status.LOADING -> {}
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -108,13 +132,11 @@ class CategoryActivity : AppCompatActivity() {
     private fun getTokenRegistration() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
 
-            // Get new FCM registration token
             val token = task.result
-            Log.d("token", token)
+            PrefUtil.saveData("token", token.toString())
         })
     }
 

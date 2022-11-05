@@ -8,6 +8,7 @@ object Constants {
     const val CATEGORIES = "categories"
     const val PRODUCTS = "products"
     const val CHANNEL_ID = "firebase_channel_id"
+    const val PREF_FILE = "pref_file"
 
     fun displayProductDetails(str: String, source: String): String {
         return "$str $source"
