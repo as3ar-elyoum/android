@@ -6,5 +6,5 @@ import retrofit2.http.POST
 
 interface UserApi {
     @POST("devices")
-    suspend fun addUser(@Body userInfo: UserInfo): UserInfo
+    suspend fun addDevice(@Body userInfo: UserInfo): UserInfo
 }

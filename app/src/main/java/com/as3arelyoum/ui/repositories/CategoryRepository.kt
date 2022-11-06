@@ -6,5 +6,5 @@ import com.as3arelyoum.data.network.RetrofitInstance
 class CategoryRepository {
     suspend fun getAllCategories() = RetrofitInstance.categoryApi.getAllCategories()
 
-    suspend fun addUser(userInfo: UserInfo) = RetrofitInstance.userApi.addUser(userInfo)
+    suspend fun addDevice(userInfo: UserInfo) = RetrofitInstance.userApi.addDevice(userInfo)
 }
