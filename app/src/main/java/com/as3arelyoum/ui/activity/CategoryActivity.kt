@@ -36,7 +36,6 @@ class CategoryActivity : AppCompatActivity() {
     //    private lateinit var adView: AdView
     private lateinit var runnable: Runnable
 
-
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {

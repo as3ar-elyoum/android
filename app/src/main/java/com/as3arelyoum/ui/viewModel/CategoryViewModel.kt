@@ -16,10 +16,10 @@ class CategoryViewModel(private val categoriesRepo: CategoryRepository) : ViewMo
         }
     }
 
-    fun addUser(userInfo: UserInfo) = liveData {
+    fun addDevice(userInfo: UserInfo) = liveData {
         emit(Resource.loading(null))
         try{
-            emit(Resource.success(categoriesRepo.addUser(userInfo)))
+            emit(Resource.success(categoriesRepo.addDevice(userInfo)))
         } catch (e:Exception){
             emit(Resource.error(null,e.message.toString()))
         }
