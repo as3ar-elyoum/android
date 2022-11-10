@@ -6,13 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/mainBg"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:itemCount="20"
-        tools:listitem="@layout/product_card" />
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/mainBg"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:itemCount="20"
+            tools:listitem="@layout/product_card" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

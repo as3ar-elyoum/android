@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +39,7 @@ class ProductDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val similarList: ArrayList<Product> = ArrayList()
     private val arguments: ProductDetailsFragmentArgs by navArgs()
-
+    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
 
@@ -58,9 +60,20 @@ class ProductDetailsFragment : Fragment() {
         initProductDetailsObserve(arguments.productId)
         initSimilarProductsObserve(arguments.productId)
         toggleDescription()
+        initRefresh()
     }
 
-    private fun initToolbar(){
+    private fun initRefresh() {
+        binding.refresh.setOnRefreshListener {
+            handler.postDelayed({
+                binding.refresh.isRefreshing = false
+                initProductDetailsObserve(arguments.productId)
+                initSimilarProductsObserve(arguments.productId)
+            }, 1000)
+        }
+    }
+
+    private fun initToolbar() {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.apply {
             requireActivity().title = getString(R.string.product_details)

@@ -1,6 +1,8 @@
 package com.as3arelyoum.ui.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +23,10 @@ import com.as3arelyoum.utils.status.Status
 class ProductsFragment : Fragment() {
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
+    private val arguments: ProductsFragmentArgs by navArgs()
+    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var productsViewModel: ProductsViewModel
     private lateinit var productsAdapter: ProductsAdapter
-    private val arguments: ProductsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +42,7 @@ class ProductsFragment : Fragment() {
         initRecyclerView()
         initRepository()
         initProductsObserve()
+        initRefresh()
     }
 
     private fun initToolbar(){
@@ -48,6 +52,15 @@ class ProductsFragment : Fragment() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_ios_back)
+        }
+    }
+
+    private fun initRefresh() {
+        binding.refresh.setOnRefreshListener {
+            handler.postDelayed({
+                binding.refresh.isRefreshing = false
+                initProductsObserve()
+            }, 1000)
         }
     }
 
