@@ -1,18 +1,23 @@
-package com.as3arelyoum.ui.activity
+package com.as3arelyoum.ui.fragments
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
-import com.as3arelyoum.databinding.ActivityDetailsProductBinding
+import com.as3arelyoum.databinding.FragmentProductDetailsBinding
 import com.as3arelyoum.ui.adapter.SimilarProductAdapter
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
@@ -20,9 +25,6 @@ import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
 import com.as3arelyoum.utils.Constants
-import com.as3arelyoum.utils.Constants.displayProductDetails
-import com.as3arelyoum.utils.Constants.displayProductPrice
-import com.as3arelyoum.utils.Constants.toggleArrow
 import com.as3arelyoum.utils.ViewAnimation
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
@@ -30,42 +32,46 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 
-class ProductDetailsActivity : AppCompatActivity() {
-    private var _binding: ActivityDetailsProductBinding? = null
+class ProductDetailsFragment : Fragment() {
+    private var _binding: FragmentProductDetailsBinding? = null
     private val binding get() = _binding!!
     private val similarList: ArrayList<Product> = ArrayList()
+    private val arguments: ProductDetailsFragmentArgs by navArgs()
+
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
-    private val productId by lazy { intent.getIntExtra("product_id", 0) }
-    private val productPrice by lazy { intent.getStringExtra("product_price") }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityDetailsProductBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initProductsViewModel()
         initSimilarProductsRecyclerView()
         initSimilarProductsRepository()
-        initProductDetailsObserve(productId)
-        initSimilarProductsObserve(productId)
+        initProductDetailsObserve(arguments.productId)
+        initSimilarProductsObserve(arguments.productId)
         toggleDescription()
     }
 
-    private fun initToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        binding.toolbar.apply {
-            setNavigationIcon(R.drawable.ic_ios_back)
-            setNavigationOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
-            }
+    private fun initToolbar(){
+        val activity = activity as AppCompatActivity
+        activity.supportActionBar?.apply {
+            requireActivity().title = getString(R.string.product_details)
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_ios_back)
         }
     }
 
     private fun initProductDetailsObserve(productId: Int) {
-        productDetailsViewModel.getProductDetails(productId).observe(this) {
+        productDetailsViewModel.getProductDetails(productId).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { product ->
@@ -76,13 +82,16 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                         binding.nameTv.text = product.name
                         binding.productSource.text =
-                            displayProductDetails(getString(R.string.from), product.source)
+                            Constants.displayProductDetails(
+                                getString(R.string.from),
+                                product.source
+                            )
                         binding.productBtn.text =
-                            displayProductPrice(
+                            Constants.displayProductPrice(
                                 getString(R.string.buy_from),
                                 product.source,
                                 getString(R.string.b),
-                                productPrice!!,
+                                arguments.productPrice,
                                 getString(R.string.egp)
                             )
                         var description = product.description
@@ -113,7 +122,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initSimilarProductsObserve(productId: Int) {
-        similarProductsViewModel.getSimilarProducts(productId).observe(this) { it ->
+        similarProductsViewModel.getSimilarProducts(productId).observe(viewLifecycleOwner) { it ->
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let {
@@ -149,17 +158,18 @@ class ProductDetailsActivity : AppCompatActivity() {
     private fun initSimilarProductsRecyclerView() {
         binding.rvSimilarProducts.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@ProductDetailsActivity)
+            layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
     private fun onProductClicked(position: Int) {
         val productId = similarList[position].id
         val productPrice = similarList[position].price
-        val intent = Intent(this@ProductDetailsActivity, ProductDetailsActivity::class.java)
-        intent.putExtra("product_id", productId)
-        intent.putExtra("product_price", productPrice)
-        startActivity(intent)
+        val action = ProductDetailsFragmentDirections.actionProductDetailsFragmentSelf(
+            productId,
+            productPrice
+        )
+        findNavController().navigate(action)
     }
 
     private fun setLineChart(prices: Array<Array<String>>) {
@@ -170,9 +180,9 @@ class ProductDetailsActivity : AppCompatActivity() {
         val xAxisData = ArrayList<String>()
         val entries = ArrayList<Entry>()
         val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
-        lineDataSet.color = ContextCompat.getColor(this, R.color.green)
+        lineDataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
         lineDataSet.setDrawFilled(true)
-        lineDataSet.fillColor = ContextCompat.getColor(this, R.color.green)
+        lineDataSet.fillColor = ContextCompat.getColor(requireContext(), R.color.green)
         lineDataSet.fillAlpha = 20
         prices.forEachIndexed { index, price ->
             xAxisData.add(price.first())
@@ -182,7 +192,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         val data = LineData(xAxisData, lineDataSet)
         binding.lineChart.data = data
         binding.lineChart.apply {
-            setBackgroundColor(ContextCompat.getColor(this@ProductDetailsActivity, R.color.white))
+            setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             animateXY(1000, 1000)
         }
     }
@@ -194,12 +204,12 @@ class ProductDetailsActivity : AppCompatActivity() {
                 binding.descriptionTv
             )
         }
-        toggleArrow(binding.btToggleDescription)
+        Constants.toggleArrow(binding.btToggleDescription)
     }
 
 
     private fun toggleSection(bt: View, lyt: View) {
-        val show = toggleArrow(bt)
+        val show = Constants.toggleArrow(bt)
         if (show) {
             ViewAnimation.expand(lyt) {
                 Constants.nestedScrollTo(binding.nestedScrollView, lyt)
@@ -209,8 +219,8 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }
