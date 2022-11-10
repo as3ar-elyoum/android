@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="toolbar">#161A1C</color>
+    <color name="toolbar">#FFFFFF</color>
     <color name="splashScreenBg">#FFFFFF</color>
     <color name="green">#FF3B8A1B</color>
     <color name="purple_200">#881414</color>
