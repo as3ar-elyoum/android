@@ -2,6 +2,8 @@ package com.as3arelyoum.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,7 @@ import com.as3arelyoum.utils.status.Status
 class CategoriesFragment : Fragment() {
     private var _binding: FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
+    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categoryAdapter: CategoryAdapter
 
@@ -42,6 +45,16 @@ class CategoriesFragment : Fragment() {
         initRepository()
         initCategoryObserve()
         addUserToApi()
+        initRefresh()
+    }
+
+    private fun initRefresh() {
+        binding.refresh.setOnRefreshListener {
+            handler.postDelayed({
+                binding.refresh.isRefreshing = false
+                initCategoryObserve()
+            }, 1000)
+        }
     }
 
     @SuppressLint("HardwareIds")
