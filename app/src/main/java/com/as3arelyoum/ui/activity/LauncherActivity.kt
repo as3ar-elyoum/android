@@ -1,6 +1,8 @@
 package com.as3arelyoum.ui.activity
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,11 +16,17 @@ import androidx.navigation.ui.setupWithNavController
 import com.as3arelyoum.R
 import com.as3arelyoum.databinding.ActivityLauncherBinding
 import com.as3arelyoum.ui.viewModel.SplashScreenViewModel
+import com.as3arelyoum.utils.ads.Banner
+import com.as3arelyoum.utils.ads.Interstitial
+import com.google.android.gms.ads.AdView
 
 class LauncherActivity : AppCompatActivity() {
     private var _binding: ActivityLauncherBinding? = null
     private val binding get() = _binding!!
     private val splashViewModel: SplashScreenViewModel by viewModels()
+    private val handler = Handler(Looper.getMainLooper())
+    private val interstitialAd = Interstitial()
+    private lateinit var runnable: Runnable
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +34,25 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val adView: AdView = findViewById(R.id.adView)
+        Banner.show(this, adView)
         setupNavController()
+        adView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handler.postDelayed(runnable, 120000)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(runnable)
+    }
+
+    private fun adView() {
+        runnable = Runnable { interstitialAd.load(this@LauncherActivity) }
+        handler.post(runnable)
     }
 
     private fun setupNavController(): NavController {
@@ -39,7 +65,6 @@ class LauncherActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         NavigationUI.setupActionBarWithNavController(this, navController)
-
         return navController
     }
 

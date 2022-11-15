@@ -50,10 +50,8 @@ class CategoriesFragment : Fragment() {
 
     private fun initRefresh() {
         binding.refresh.setOnRefreshListener {
-            handler.postDelayed({
-                binding.refresh.isRefreshing = false
-                initCategoryObserve()
-            }, 1000)
+            binding.refresh.isRefreshing = false
+            addUserToApi()
         }
     }
 

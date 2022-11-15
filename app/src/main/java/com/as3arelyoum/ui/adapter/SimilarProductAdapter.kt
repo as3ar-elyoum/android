@@ -30,7 +30,7 @@ class SimilarProductAdapter(
             nameTv.text = "${productItems.id} - ${productItems.name}"
             priceTv.text =
                 displayProductDetails(productItems.price, root.context.getString(R.string.egp))
-            sourceTv.text = displayProductDetails(productItems.source, root.context.getString(R.string.from))
+            sourceTv.text = displayProductDetails(root.context.getString(R.string.from), productItems.source)
         }
     }
 

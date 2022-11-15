@@ -45,7 +45,7 @@ class ProductsFragment : Fragment() {
         initRefresh()
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.apply {
             requireActivity().title = arguments.categoryName
@@ -57,10 +57,8 @@ class ProductsFragment : Fragment() {
 
     private fun initRefresh() {
         binding.refresh.setOnRefreshListener {
-            handler.postDelayed({
-                binding.refresh.isRefreshing = false
-                initProductsObserve()
-            }, 1000)
+            binding.refresh.isRefreshing = false
+            initProductsObserve()
         }
     }
 
