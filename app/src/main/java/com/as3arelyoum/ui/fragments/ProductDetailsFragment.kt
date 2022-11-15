@@ -65,11 +65,8 @@ class ProductDetailsFragment : Fragment() {
 
     private fun initRefresh() {
         binding.refresh.setOnRefreshListener {
-            handler.postDelayed({
-                binding.refresh.isRefreshing = false
-                initProductDetailsObserve(arguments.productId)
-                initSimilarProductsObserve(arguments.productId)
-            }, 1000)
+            binding.refresh.isRefreshing = false
+            initProductDetailsObserve(arguments.productId)
         }
     }
 
