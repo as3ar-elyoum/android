@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.as3arelyoum.data.api.* { *; }
+-keep class com.as3arelyoum.data.model.* { *; }

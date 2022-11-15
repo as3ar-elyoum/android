@@ -34,8 +34,6 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val adView: AdView = findViewById(R.id.adView)
-        Banner.show(this, adView)
         setupNavController()
         adView()
     }
@@ -51,6 +49,8 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun adView() {
+        val adView: AdView = findViewById(R.id.adView)
+        Banner.show(this, adView)
         runnable = Runnable { interstitialAd.load(this@LauncherActivity) }
         handler.post(runnable)
     }

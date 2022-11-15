@@ -48,6 +48,7 @@
                                 android:layout_gravity="end"
                                 android:layout_marginTop="@dimen/_20sdp"
                                 android:layout_marginEnd="@dimen/_15sdp"
+                                android:padding="@dimen/_6sdp"
                                 android:fontFamily="sans-serif-black"
                                 android:textColor="@color/source_color"
                                 android:textSize="@dimen/_13ssp"
@@ -58,6 +59,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_150sdp"
                                 android:layout_gravity="center"
+                                android:padding="@dimen/_10sdp"
                                 android:contentDescription="@string/product_details"
                                 tools:src="@mipmap/ic_launcher_round" />
 
