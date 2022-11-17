@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,16 @@ import com.as3arelyoum.databinding.FragmentProductDetailsBinding
 import com.as3arelyoum.ui.adapter.CategorySpinnerAdapter
 import com.as3arelyoum.ui.adapter.SimilarProductAdapter
 import com.as3arelyoum.ui.adapter.StatusSpinnerAdapter
+import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
+import com.as3arelyoum.ui.factory.ProductsViewModelFactory
 import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
+import com.as3arelyoum.ui.repositories.CategoryRepository
+import com.as3arelyoum.ui.repositories.ProductsRepository
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
+import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
+import com.as3arelyoum.ui.viewModel.ProductsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
 import com.as3arelyoum.utils.Constants
 import com.as3arelyoum.utils.ViewAnimation
@@ -60,7 +67,6 @@ class ProductDetailsFragment : Fragment() {
         initSimilarProductsObserve(arguments.productId)
         toggleDescription()
         initRefresh()
-        initSpinnerAdapter()
     }
 
     private fun initRefresh() {
@@ -121,7 +127,8 @@ class ProductDetailsFragment : Fragment() {
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
                             startActivity(browserIntent)
                         }
-
+                        initCategorySpinnerAdapter(product.category_id)
+                        binding.categoryId.text = product.category_id.toString()
                         setLineChart(product.prices)
                     }
                 }
@@ -173,7 +180,7 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
-    private fun initSpinnerAdapter() {
+    private fun initStatusSpinnerAdapter(product_id: Int) {
         val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
         if (!filtersEnabled) {
             binding.apply {
@@ -182,14 +189,52 @@ class ProductDetailsFragment : Fragment() {
             }
         }
 
-        val statusList = listOf("Active", "InActive", "Duplicate", "Deleted")
-        val categoryList = listOf(1, 2, 3, 4, 5, 6)
+        val productRepository = ProductsRepository()
+        val productsViewModel = ViewModelProvider(
+            this,
+            ProductsViewModelFactory(productRepository)
+        )[ProductsViewModel::class.java]
 
-        val statusSpinnerAdapter = StatusSpinnerAdapter(requireContext(), statusList)
-        binding.statusSpinner.adapter = statusSpinnerAdapter
+        productsViewModel.getAllProducts(product_id).observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data?.let { statusList ->
 
-        val categorySpinnerAdapter = CategorySpinnerAdapter(requireContext(), categoryList)
-        binding.categorySpinner.adapter = categorySpinnerAdapter
+                        val statusSpinnerAdapter =
+                            StatusSpinnerAdapter(requireContext(), statusList)
+                        statusSpinnerAdapter.setStatus(statusList)
+                        binding.statusSpinner.adapter = statusSpinnerAdapter
+                        Log.d("data", "initStatusSpinnerAdapter: $statusList")
+                    }
+                }
+                Status.FAILURE -> {}
+                Status.LOADING -> {}
+            }
+        }
+    }
+
+    private fun initCategorySpinnerAdapter(category_id: Int) {
+        val categoryRepo = CategoryRepository()
+        val categoryViewModel = ViewModelProvider(
+            this,
+            CategoryViewModelFactory(categoryRepo)
+        )[CategoryViewModel::class.java]
+        categoryViewModel.getAllCategories().observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data?.let { categoryList ->
+                        val categorySpinnerAdapter =
+                            CategorySpinnerAdapter(requireContext(), categoryList)
+                        categorySpinnerAdapter.setCategory(categoryList)
+                        binding.categorySpinner.adapter = categorySpinnerAdapter
+                        val selectedCategory = categoryList.find { it.id == category_id }
+                        binding.categorySpinner.setSelection(categoryList.indexOf(selectedCategory))
+                    }
+                }
+                Status.FAILURE -> {}
+                Status.LOADING -> {}
+            }
+        }
     }
 
     private fun onProductClicked(position: Int) {

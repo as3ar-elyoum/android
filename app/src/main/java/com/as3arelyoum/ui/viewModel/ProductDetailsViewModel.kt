@@ -14,4 +14,13 @@ class ProductDetailsViewModel : ViewModel() {
             emit(Resource.error(null, e.message.toString()))
         }
     }
+
+//    fun updateProductDetails(product_id: Int) = liveData {
+//        emit(Resource.loading(null))
+//        try {
+//            emit(Resource.success(RetrofitInstance.productDetailsApi.updateProductDetails(product_id)))
+//        } catch (e: Exception) {
+//            emit(Resource.error(null, e.message.toString()))
+//        }
+//    }
 }
