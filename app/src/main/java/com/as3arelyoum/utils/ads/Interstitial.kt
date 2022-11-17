@@ -17,6 +17,12 @@ class Interstitial {
     private val tag = "Interstitial Ad"
 
     fun load(context: Context) {
+        val adsEnabled = context.resources.getBoolean(R.bool.ENABLE_ADS)
+
+        if (!adsEnabled) {
+            return
+        }
+
         val adRequest = AdRequest.Builder().build()
         val unitId = context.getString(R.string.interstitial_ads)
 

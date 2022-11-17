@@ -11,4 +11,8 @@
     <color name="price_color">#2196F3</color>
     <color name="source_color">#DC8E1B</color>
     <color name="overlay_dark_40">#66323232</color>
+    <color name="spinnerRipple">#DBE5EF</color>
+    <color name="spinnerBg">#B3BCC6</color>
+    <color name="dropDown">#FFFFFF</color>
+
 </resources>

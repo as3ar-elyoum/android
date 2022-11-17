@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.FragmentProductDetailsBinding
+import com.as3arelyoum.ui.adapter.CategorySpinnerAdapter
 import com.as3arelyoum.ui.adapter.SimilarProductAdapter
+import com.as3arelyoum.ui.adapter.StatusSpinnerAdapter
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
@@ -39,7 +39,6 @@ class ProductDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val similarList: ArrayList<Product> = ArrayList()
     private val arguments: ProductDetailsFragmentArgs by navArgs()
-    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
 
@@ -61,6 +60,7 @@ class ProductDetailsFragment : Fragment() {
         initSimilarProductsObserve(arguments.productId)
         toggleDescription()
         initRefresh()
+        initSpinnerAdapter()
     }
 
     private fun initRefresh() {
@@ -121,6 +121,7 @@ class ProductDetailsFragment : Fragment() {
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
                             startActivity(browserIntent)
                         }
+
                         setLineChart(product.prices)
                     }
                 }
@@ -170,6 +171,25 @@ class ProductDetailsFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
         }
+    }
+
+    private fun initSpinnerAdapter() {
+        val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
+        if (!filtersEnabled) {
+            binding.apply {
+                spinnerLayout.visibility = View.GONE
+                updateProductBtn.visibility = View.GONE
+            }
+        }
+
+        val statusList = listOf("Active", "InActive", "Duplicate", "Deleted")
+        val categoryList = listOf(1, 2, 3, 4, 5, 6)
+
+        val statusSpinnerAdapter = StatusSpinnerAdapter(requireContext(), statusList)
+        binding.statusSpinner.adapter = statusSpinnerAdapter
+
+        val categorySpinnerAdapter = CategorySpinnerAdapter(requireContext(), categoryList)
+        binding.categorySpinner.adapter = categorySpinnerAdapter
     }
 
     private fun onProductClicked(position: Int) {

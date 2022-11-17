@@ -11,6 +11,8 @@ data class Product(
     var source_page: String,
     var created_at: String,
     var updated_at: String,
+    var status: List<String>,
+    var category_id: List<Int>,
     var prices: Array<Array<String>>
 ) {
     override fun equals(other: Any?): Boolean {

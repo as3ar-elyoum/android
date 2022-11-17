@@ -7,6 +7,7 @@ object Constants {
     const val BASE_URL = "https://price-index.magdi.work/api/"
     const val CATEGORIES = "categories"
     const val PRODUCTS = "products"
+    const val PRODUCT_DETAILS = "products/{product_id}"
     const val CHANNEL_ID = "firebase_channel_id"
     const val PREF_FILE = "pref_file"
 
