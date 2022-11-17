@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,14 +23,11 @@ import com.as3arelyoum.ui.adapter.SimilarProductAdapter
 import com.as3arelyoum.ui.adapter.StatusSpinnerAdapter
 import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
-import com.as3arelyoum.ui.factory.ProductsViewModelFactory
 import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
-import com.as3arelyoum.ui.repositories.ProductsRepository
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
-import com.as3arelyoum.ui.viewModel.ProductsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
 import com.as3arelyoum.utils.Constants
 import com.as3arelyoum.utils.ViewAnimation
@@ -130,6 +126,7 @@ class ProductDetailsFragment : Fragment() {
                         initCategorySpinnerAdapter(product.category_id)
                         binding.categoryId.text = product.category_id.toString()
                         setLineChart(product.prices)
+                        initStatusSpinnerAdapter(product.status)
                     }
                 }
                 Status.LOADING -> {}
@@ -180,37 +177,16 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
-    private fun initStatusSpinnerAdapter(product_id: Int) {
-        val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
-        if (!filtersEnabled) {
-            binding.apply {
-                spinnerLayout.visibility = View.GONE
-                updateProductBtn.visibility = View.GONE
-            }
-        }
-
-        val productRepository = ProductsRepository()
-        val productsViewModel = ViewModelProvider(
-            this,
-            ProductsViewModelFactory(productRepository)
-        )[ProductsViewModel::class.java]
-
-        productsViewModel.getAllProducts(product_id).observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let { statusList ->
-
-                        val statusSpinnerAdapter =
-                            StatusSpinnerAdapter(requireContext(), statusList)
-                        statusSpinnerAdapter.setStatus(statusList)
-                        binding.statusSpinner.adapter = statusSpinnerAdapter
-                        Log.d("data", "initStatusSpinnerAdapter: $statusList")
-                    }
-                }
-                Status.FAILURE -> {}
-                Status.LOADING -> {}
-            }
-        }
+    private fun initStatusSpinnerAdapter(status: String) {
+        val statusList = listOf(
+            "inactive",
+            "active",
+            "disabled",
+            "duplicated"
+        )
+        val statusSpinnerAdapter = StatusSpinnerAdapter(requireContext(), statusList)
+        binding.statusSpinner.adapter = statusSpinnerAdapter
+        binding.statusSpinner.setSelection(statusList.indexOf(status))
     }
 
     private fun initCategorySpinnerAdapter(category_id: Int) {

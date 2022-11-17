@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.SpinnerItemsBinding
 
-class StatusSpinnerAdapter(context: Context, product: List<Product>) :
-    ArrayAdapter<Product>(context, 0, product) {
+class StatusSpinnerAdapter(context: Context, product: List<String>) :
+    ArrayAdapter<String>(context, 0, product) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return initView(position, parent)
@@ -24,15 +23,10 @@ class StatusSpinnerAdapter(context: Context, product: List<Product>) :
         val binding = SpinnerItemsBinding.inflate(LayoutInflater.from(context), parent, false)
 
         binding.apply {
-            spinnerName.text = product?.status
+            spinnerName.text = product
             binding.spinnerImage.visibility = View.GONE
         }
 
         return binding.root
-    }
-
-    fun setStatus(status: List<Product>) {
-        addAll(status)
-        notifyDataSetChanged()
     }
 }
