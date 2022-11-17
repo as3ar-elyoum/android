@@ -17,4 +17,5 @@
     <string name="drop_arrow">drop_arrow</string>
     <string name="price_changeable">التغير في السعر</string>
     <string name="amazon_first_line">تأكد من أن هذا مناسب عن طريق إدخال رقم الطراز الخاص بك.</string>
+    <string name="update_product">تعديل المنتج</string>
 </resources>

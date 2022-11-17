@@ -32,9 +32,4 @@ class CategorySpinnerAdapter(context: Context, product: List<Category>) :
         }
         return binding.root
     }
-
-    fun setCategory(category: List<Category>) {
-        addAll(category)
-        notifyDataSetChanged()
-    }
 }
