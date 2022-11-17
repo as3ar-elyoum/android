@@ -35,6 +35,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <TextView
+                            android:id="@+id/categoryId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_margin="@dimen/_20sdp"
+                            android:fontFamily="sans-serif-black"
+                            android:padding="@dimen/_6sdp"
+                            android:textColor="#03A9F4"
+                            android:textSize="@dimen/_13ssp"
+                            tools:text="11" />
+
                         <LinearLayout
                             android:id="@+id/product_layout"
                             android:layout_width="match_parent"
@@ -48,8 +60,8 @@
                                 android:layout_gravity="end"
                                 android:layout_marginTop="@dimen/_20sdp"
                                 android:layout_marginEnd="@dimen/_15sdp"
-                                android:padding="@dimen/_6sdp"
                                 android:fontFamily="sans-serif-black"
+                                android:padding="@dimen/_6sdp"
                                 android:textColor="@color/source_color"
                                 android:textSize="@dimen/_13ssp"
                                 tools:text="من أمازون" />
@@ -59,8 +71,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_150sdp"
                                 android:layout_gravity="center"
-                                android:padding="@dimen/_10sdp"
                                 android:contentDescription="@string/product_details"
+                                android:padding="@dimen/_10sdp"
                                 tools:src="@mipmap/ic_launcher_round" />
 
                             <TextView
@@ -75,6 +87,43 @@
                                 android:textSize="@dimen/_10ssp"
                                 android:textStyle="bold"
                                 tools:text="Product Name" />
+
+                            <LinearLayout
+                                android:id="@+id/spinner_layout"
+                                android:layout_width="match_parent"
+                                android:weightSum="2"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <Spinner
+                                    android:id="@+id/status_spinner"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="20dp"
+                                    android:spinnerMode="dropdown"
+                                    android:background="@drawable/spinner"/>
+
+                                <Spinner
+                                    android:id="@+id/category_spinner"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="20dp"
+                                    android:background="@drawable/spinner"
+                                    android:spinnerMode="dropdown" />
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/update_product_btn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Update Product"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="@dimen/_16sdp"
+                                android:layout_marginRight="@dimen/_16sdp"
+                                android:backgroundTint="#25313A"/>
 
                         </LinearLayout>
 

@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +17,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
+import com.as3arelyoum.data.model.Category
 import com.as3arelyoum.data.model.Product
 import com.as3arelyoum.databinding.FragmentProductDetailsBinding
+import com.as3arelyoum.ui.adapter.CategorySpinnerAdapter
 import com.as3arelyoum.ui.adapter.SimilarProductAdapter
+import com.as3arelyoum.ui.adapter.StatusSpinnerAdapter
+import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.factory.ProductDetailsViewModelFactory
 import com.as3arelyoum.ui.factory.SimilarProductsViewModelFactory
+import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.repositories.SimilarProductsRepository
+import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.ui.viewModel.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModel.SimilarProductsViewModel
 import com.as3arelyoum.utils.Constants
@@ -33,15 +38,25 @@ import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.gson.JsonObject
+import org.json.JSONObject
 
 class ProductDetailsFragment : Fragment() {
     private var _binding: FragmentProductDetailsBinding? = null
     private val binding get() = _binding!!
     private val similarList: ArrayList<Product> = ArrayList()
     private val arguments: ProductDetailsFragmentArgs by navArgs()
-    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
+    private lateinit var productInstance: Product
+    private val statusList = listOf(
+        "inactive",
+        "active",
+        "disabled",
+        "duplicated"
+    )
+
+    lateinit var categoryList: List<Category>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +100,7 @@ class ProductDetailsFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { product ->
+                        productInstance = product
                         Glide.with(this)
                             .load(product.image_url)
                             .placeholder(R.drawable.ic_downloading)
@@ -121,7 +137,32 @@ class ProductDetailsFragment : Fragment() {
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
                             startActivity(browserIntent)
                         }
+                        initCategorySpinnerAdapter()
+                        binding.categoryId.text = product.category_id.toString()
                         setLineChart(product.prices)
+                        initStatusSpinnerAdapter(product.status)
+                        binding.updateProductBtn.setOnClickListener {
+                            val status = statusList[binding.statusSpinner.selectedItemPosition]
+                            val categoryId =
+                                categoryList[binding.categorySpinner.selectedItemPosition].id
+
+                            val params = JsonObject()
+                            val productObject = JsonObject()
+                            productObject.addProperty("category_id", categoryId)
+                            productObject.addProperty("status", status)
+                            params.add("product", productObject)
+
+                            productDetailsViewModel.updateProductDetails(
+                                product.id,
+                                params
+                            ).observe(viewLifecycleOwner) {
+                                when (it.status) {
+                                    Status.SUCCESS -> {}
+                                    Status.LOADING -> {}
+                                    Status.FAILURE -> {}
+                                }
+                            }
+                        }
                     }
                 }
                 Status.LOADING -> {}
@@ -169,6 +210,38 @@ class ProductDetailsFragment : Fragment() {
         binding.rvSimilarProducts.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun initStatusSpinnerAdapter(status: String) {
+        val statusSpinnerAdapter = StatusSpinnerAdapter(requireContext(), statusList)
+        binding.statusSpinner.adapter = statusSpinnerAdapter
+        binding.statusSpinner.setSelection(statusList.indexOf(status))
+    }
+
+    private fun initCategorySpinnerAdapter() {
+        val categoryRepo = CategoryRepository()
+        val categoryViewModel = ViewModelProvider(
+            this,
+            CategoryViewModelFactory(categoryRepo)
+        )[CategoryViewModel::class.java]
+        categoryViewModel.getAllCategories().observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data?.let { list ->
+                        categoryList = list
+                        val categorySpinnerAdapter =
+                            CategorySpinnerAdapter(requireContext(), categoryList)
+                        categorySpinnerAdapter.setCategory(categoryList)
+                        binding.categorySpinner.adapter = categorySpinnerAdapter
+                        val selectedCategory =
+                            categoryList.find { it.id == productInstance.category_id }
+                        binding.categorySpinner.setSelection(categoryList.indexOf(selectedCategory))
+                    }
+                }
+                Status.FAILURE -> {}
+                Status.LOADING -> {}
+            }
         }
     }
 
