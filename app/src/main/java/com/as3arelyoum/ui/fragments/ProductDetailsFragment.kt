@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -39,7 +39,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.JsonObject
-import org.json.JSONObject
 
 class ProductDetailsFragment : Fragment() {
     private var _binding: FragmentProductDetailsBinding? = null
@@ -49,6 +48,7 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var productDetailsViewModel: ProductDetailsViewModel
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
     private lateinit var productInstance: Product
+    private lateinit var categoryList: List<Category>
     private val statusList = listOf(
         "inactive",
         "active",
@@ -56,18 +56,11 @@ class ProductDetailsFragment : Fragment() {
         "duplicated"
     )
 
-    lateinit var categoryList: List<Category>
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initProductsViewModel()
         initSimilarProductsRecyclerView()
@@ -76,6 +69,7 @@ class ProductDetailsFragment : Fragment() {
         initSimilarProductsObserve(arguments.productId)
         toggleDescription()
         initRefresh()
+        return binding.root
     }
 
     private fun initRefresh() {
@@ -138,7 +132,6 @@ class ProductDetailsFragment : Fragment() {
                             startActivity(browserIntent)
                         }
                         initCategorySpinnerAdapter()
-                        binding.categoryId.text = product.category_id.toString()
                         setLineChart(product.prices)
                         initStatusSpinnerAdapter(product.status)
                         binding.updateProductBtn.setOnClickListener {
@@ -157,7 +150,9 @@ class ProductDetailsFragment : Fragment() {
                                 params
                             ).observe(viewLifecycleOwner) {
                                 when (it.status) {
-                                    Status.SUCCESS -> {}
+                                    Status.SUCCESS -> {
+                                        Toast.makeText(requireContext(), "تم تعديل المنتج", Toast.LENGTH_SHORT).show()
+                                    }
                                     Status.LOADING -> {}
                                     Status.FAILURE -> {}
                                 }
@@ -225,6 +220,7 @@ class ProductDetailsFragment : Fragment() {
             this,
             CategoryViewModelFactory(categoryRepo)
         )[CategoryViewModel::class.java]
+
         categoryViewModel.getAllCategories().observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -232,8 +228,8 @@ class ProductDetailsFragment : Fragment() {
                         categoryList = list
                         val categorySpinnerAdapter =
                             CategorySpinnerAdapter(requireContext(), categoryList)
-                        categorySpinnerAdapter.setCategory(categoryList)
                         binding.categorySpinner.adapter = categorySpinnerAdapter
+
                         val selectedCategory =
                             categoryList.find { it.id == productInstance.category_id }
                         binding.categorySpinner.setSelection(categoryList.indexOf(selectedCategory))
