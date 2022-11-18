@@ -61,6 +61,11 @@ class ProductDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initProductsViewModel()
         initSimilarProductsRecyclerView()
@@ -69,7 +74,7 @@ class ProductDetailsFragment : Fragment() {
         initSimilarProductsObserve(arguments.productId)
         toggleDescription()
         initRefresh()
-        return binding.root
+        hideProductFilters()
     }
 
     private fun initRefresh() {
@@ -241,6 +246,16 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
+    private fun hideProductFilters(){
+        val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
+        if (!filtersEnabled){
+            binding.apply {
+                spinnerLayout.visibility = View.GONE
+                updateProductBtn.visibility = View.GONE
+            }
+        }
+    }
+
     private fun onProductClicked(position: Int) {
         val productId = similarList[position].id
         val productPrice = similarList[position].price
@@ -274,6 +289,7 @@ class ProductDetailsFragment : Fragment() {
             setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             animateXY(1000, 1000)
         }
+        requireView().drawingCache.recycle()
     }
 
     private fun toggleDescription() {
@@ -285,7 +301,6 @@ class ProductDetailsFragment : Fragment() {
         }
         Constants.toggleArrow(binding.btToggleDescription)
     }
-
 
     private fun toggleSection(bt: View, lyt: View) {
         val show = Constants.toggleArrow(bt)
