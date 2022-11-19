@@ -136,9 +136,12 @@ class ProductDetailsFragment : Fragment() {
                                 Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
                             startActivity(browserIntent)
                         }
-                        initCategorySpinnerAdapter()
+
                         setLineChart(product.prices)
+
+                        initCategorySpinnerAdapter()
                         initStatusSpinnerAdapter(product.status)
+
                         binding.updateProductBtn.setOnClickListener {
                             val status = statusList[binding.statusSpinner.selectedItemPosition]
                             val categoryId =
@@ -156,7 +159,11 @@ class ProductDetailsFragment : Fragment() {
                             ).observe(viewLifecycleOwner) {
                                 when (it.status) {
                                     Status.SUCCESS -> {
-                                        Toast.makeText(requireContext(), "تم تعديل المنتج", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "تم تعديل المنتج",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                     Status.LOADING -> {}
                                     Status.FAILURE -> {}
@@ -246,9 +253,9 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
-    private fun hideProductFilters(){
+    private fun hideProductFilters() {
         val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
-        if (!filtersEnabled){
+        if (!filtersEnabled) {
             binding.apply {
                 spinnerLayout.visibility = View.GONE
                 updateProductBtn.visibility = View.GONE
@@ -289,7 +296,6 @@ class ProductDetailsFragment : Fragment() {
             setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             animateXY(1000, 1000)
         }
-        requireView().drawingCache.recycle()
     }
 
     private fun toggleDescription() {
