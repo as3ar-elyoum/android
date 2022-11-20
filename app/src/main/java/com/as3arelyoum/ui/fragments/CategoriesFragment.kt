@@ -2,13 +2,11 @@ package com.as3arelyoum.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,12 +19,11 @@ import com.as3arelyoum.ui.factory.CategoryViewModelFactory
 import com.as3arelyoum.ui.repositories.CategoryRepository
 import com.as3arelyoum.ui.viewModel.CategoryViewModel
 import com.as3arelyoum.utils.PrefUtil
-import com.as3arelyoum.utils.status.Status
+import com.google.android.material.snackbar.Snackbar
 
 class CategoriesFragment : Fragment() {
     private var _binding: FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
-    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categoryAdapter: CategoryAdapter
 
@@ -45,47 +42,48 @@ class CategoriesFragment : Fragment() {
         initRecyclerView()
         initRepository()
         initCategoryObserve()
-        addUserToApi()
         initRefresh()
+        sendUserToApi()
     }
 
     private fun initRefresh() {
         binding.refresh.setOnRefreshListener {
             binding.refresh.isRefreshing = false
-            addUserToApi()
+            initCategoryObserve()
+            sendUserToApi()
         }
     }
 
     @SuppressLint("HardwareIds")
-    private fun addUserToApi() {
+    private fun sendUserToApi() {
         val deviceId =
             Settings.Secure.getString(activity?.contentResolver, Settings.Secure.ANDROID_ID)
         val userToken = PrefUtil.getData("token")
         val userInfo = UserInfo(deviceId, userToken)
-
         if (userToken.isNotEmpty()) {
-            categoryViewModel.addDevice(userInfo).observe(viewLifecycleOwner) {
-                when (it.status) {
-                    Status.SUCCESS -> {}
-                    Status.FAILURE -> {}
-                    Status.LOADING -> {}
-                }
-            }
+            categoryViewModel.sendDevice(userInfo)
         }
     }
 
     private fun initCategoryObserve() {
-        categoryViewModel.getAllCategories().observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let { categoryList ->
-                        categoryAdapter.differ.submitList(categoryList)
-                    }
-                }
-                Status.FAILURE -> {}
-                Status.LOADING -> {}
-            }
+        categoryViewModel.categoriesList.observe(viewLifecycleOwner) {
+            categoryAdapter.differ.submitList(it)
         }
+
+        categoryViewModel.errorMessage.observe(viewLifecycleOwner) {
+            Snackbar.make(binding.progressBar, "No Internet Connection", Snackbar.LENGTH_LONG).show()
+        }
+
+        categoryViewModel.loading.observe(viewLifecycleOwner) {
+            hideProgressBar(it)
+        }
+
+        categoryViewModel.getAllCategories()
+    }
+
+    private fun hideProgressBar(it: Boolean) {
+        binding.progressBar.isVisible = it
+        binding.nestedContent.isVisible = !it
     }
 
     private fun initRepository() {
