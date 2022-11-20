@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -233,24 +234,29 @@ class ProductDetailsFragment : Fragment() {
             CategoryViewModelFactory(categoryRepo)
         )[CategoryViewModel::class.java]
 
-        categoryViewModel.getAllCategories().observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let { list ->
-                        categoryList = list
-                        val categorySpinnerAdapter =
-                            CategorySpinnerAdapter(requireContext(), categoryList)
-                        binding.categorySpinner.adapter = categorySpinnerAdapter
+        categoryViewModel.categoriesList.observe(viewLifecycleOwner){
+            categoryList = it
+            val categorySpinnerAdapter =
+                CategorySpinnerAdapter(requireContext(), categoryList)
+            binding.categorySpinner.adapter = categorySpinnerAdapter
 
-                        val selectedCategory =
-                            categoryList.find { it.id == productInstance.category_id }
-                        binding.categorySpinner.setSelection(categoryList.indexOf(selectedCategory))
-                    }
-                }
-                Status.FAILURE -> {}
-                Status.LOADING -> {}
+            val selectedCategory =
+                categoryList.find { it.id == productInstance.category_id }
+            binding.categorySpinner.setSelection(categoryList.indexOf(selectedCategory))
+        }
+
+        categoryViewModel.errorMessage.observe(viewLifecycleOwner) {
+            Log.e("error", it)
+        }
+
+        categoryViewModel.loading.observe(viewLifecycleOwner) {
+            if (it) {
+                Toast.makeText(requireContext(), "Loading Device.....", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireContext(), "Added Device", Toast.LENGTH_LONG).show()
             }
         }
+        categoryViewModel.getAllCategories()
     }
 
     private fun hideProductFilters() {
