@@ -14,5 +14,6 @@
     <color name="spinnerRipple">#DBE5EF</color>
     <color name="spinnerBg">#B3BCC6</color>
     <color name="dropDown">#FFFFFF</color>
+    <color name="chart_prices">#1D7FCD</color>
 
 </resources>

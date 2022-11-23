@@ -94,8 +94,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    // MPAndroidChart TODO: Don't Upgrade to Any Other Version
-    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    // MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Material Ripple
     implementation 'com.balysv:material-ripple:1.0.2'
     //Firebase Analytics
