@@ -2,6 +2,7 @@ package com.as3arelyoum.ui.fragments
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -36,10 +37,14 @@ import com.as3arelyoum.utils.Constants
 import com.as3arelyoum.utils.ViewAnimation
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.gson.JsonObject
+
 
 class ProductDetailsFragment : Fragment() {
     private var _binding: FragmentProductDetailsBinding? = null
@@ -50,6 +55,10 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var similarProductsViewModel: SimilarProductsViewModel
     private lateinit var productInstance: Product
     private lateinit var categoryList: List<Category>
+    private lateinit var lineList: ArrayList<String>
+    private lateinit var entries: ArrayList<Entry>
+    private lateinit var lineData: LineData
+    private var lineDataSet: LineDataSet? = null
     private val statusList = listOf(
         "inactive",
         "active",
@@ -138,10 +147,9 @@ class ProductDetailsFragment : Fragment() {
                             startActivity(browserIntent)
                         }
 
-                        setLineChart(product.prices)
-
                         initCategorySpinnerAdapter()
                         initStatusSpinnerAdapter(product.status)
+                        setLineChart(productInstance.prices)
 
                         binding.updateProductBtn.setOnClickListener {
                             val status = statusList[binding.statusSpinner.selectedItemPosition]
@@ -234,7 +242,7 @@ class ProductDetailsFragment : Fragment() {
             CategoryViewModelFactory(categoryRepo)
         )[CategoryViewModel::class.java]
 
-        categoryViewModel.categoriesList.observe(viewLifecycleOwner){
+        categoryViewModel.categoriesList.observe(viewLifecycleOwner) {
             categoryList = it
             val categorySpinnerAdapter =
                 CategorySpinnerAdapter(requireContext(), categoryList)
@@ -249,14 +257,49 @@ class ProductDetailsFragment : Fragment() {
             Log.e("error", it)
         }
 
-        categoryViewModel.loading.observe(viewLifecycleOwner) {
-            if (it) {
-                Toast.makeText(requireContext(), "Loading Device.....", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(requireContext(), "Added Device", Toast.LENGTH_LONG).show()
-            }
-        }
+        categoryViewModel.loading.observe(viewLifecycleOwner) {}
         categoryViewModel.getAllCategories()
+    }
+
+    private fun setLineChart(prices: Array<Array<String>>) {
+        try {
+            lineList = ArrayList()
+            entries = ArrayList()
+            if (prices.count() < 2) {
+                binding.graphCard.isVisible = false
+                return
+            }
+
+            prices.forEachIndexed { index, price ->
+                lineList.add(price.first())
+                entries.add(Entry(index.toFloat(), price.last().toFloat()))
+            }
+            val xAxis = binding.lineChart.xAxis
+            xAxis.position = XAxis.XAxisPosition.TOP
+            xAxis.valueFormatter = IndexAxisValueFormatter(lineList)
+            xAxis.setLabelCount(2, false)
+
+            lineDataSet = LineDataSet(entries, "الـسـعـر بـمـرور الـوقـت")
+            lineData = LineData(lineDataSet)
+            binding.lineChart.data = lineData
+            lineDataSet!!.apply {
+                valueTextColor = ContextCompat.getColor(requireContext(), R.color.chart_prices)
+                valueTextSize = 13f
+                fillColor = Color.BLACK
+                fillAlpha = 20
+                setColors(*ColorTemplate.JOYFUL_COLORS)
+                setDrawFilled(true)
+                setDrawCircles(true)
+                setDrawValues(true)
+            }
+            binding.lineChart.apply {
+                setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                animateXY(1000, 1000)
+            }
+
+        } catch (e: Exception) {
+            Log.d("LineChart Crash", e.message.toString())
+        }
     }
 
     private fun hideProductFilters() {
@@ -277,31 +320,6 @@ class ProductDetailsFragment : Fragment() {
             productPrice
         )
         findNavController().navigate(action)
-    }
-
-    private fun setLineChart(prices: Array<Array<String>>) {
-        if (prices.count() < 2) {
-            binding.graphCard.isVisible = false
-            return
-        }
-        val xAxisData = ArrayList<String>()
-        val entries = ArrayList<Entry>()
-        val lineDataSet = LineDataSet(entries, "السعر بمرور الوقت")
-        lineDataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-        lineDataSet.setDrawFilled(true)
-        lineDataSet.fillColor = ContextCompat.getColor(requireContext(), R.color.green)
-        lineDataSet.fillAlpha = 20
-        prices.forEachIndexed { index, price ->
-            xAxisData.add(price.first())
-            entries.add(Entry(price.last().toFloat(), index))
-        }
-
-        val data = LineData(xAxisData, lineDataSet)
-        binding.lineChart.data = data
-        binding.lineChart.apply {
-            setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-            animateXY(1000, 1000)
-        }
     }
 
     private fun toggleDescription() {
