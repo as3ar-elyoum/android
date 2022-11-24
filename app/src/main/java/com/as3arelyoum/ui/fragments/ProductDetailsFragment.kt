@@ -232,7 +232,8 @@ class ProductDetailsFragment : Fragment() {
     private fun initStatusSpinnerAdapter(status: String) {
         val statusSpinnerAdapter = StatusSpinnerAdapter(requireContext(), statusList)
         binding.statusSpinner.adapter = statusSpinnerAdapter
-        binding.statusSpinner.setSelection(statusList.indexOf(status))
+        val selectedStatus = statusList.find { it == status }
+        binding.statusSpinner.setSelection(statusList.indexOf(selectedStatus))
     }
 
     private fun initCategorySpinnerAdapter() {
