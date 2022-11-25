@@ -106,4 +106,6 @@ dependencies {
     //Google Ads
     implementation 'com.google.android.gms:play-services-ads:21.3.0'
     implementation 'com.google.android.gms:play-services-ads-lite:21.3.0'
+    //Circular Image View
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

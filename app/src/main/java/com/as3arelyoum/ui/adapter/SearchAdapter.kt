@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
 import com.as3arelyoum.data.model.Product
-import com.as3arelyoum.databinding.ProductCardBinding
+import com.as3arelyoum.databinding.SearchProductCardBinding
 import com.bumptech.glide.Glide
 
-class ProductsAdapter(
+class SearchAdapter(
     private val onItemClicked: (position: Int) -> Unit
-) : RecyclerView.Adapter<ProductsAdapter.CustomViewHolder>() {
+) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
@@ -30,7 +30,7 @@ class ProductsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
-            ProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            SearchProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CustomViewHolder(recyclerCard, onItemClicked)
     }
 
@@ -53,7 +53,7 @@ class ProductsAdapter(
     }
 
     inner class CustomViewHolder(
-        val binding: ProductCardBinding,
+        val binding: SearchProductCardBinding,
         private val onItemClicked: (position: Int) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
