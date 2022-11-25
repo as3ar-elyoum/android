@@ -193,6 +193,7 @@ class ProductDetailsFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let {
+                        similarList.clear()
                         similarList.addAll(it)
                         binding.rvSimilarProducts.adapter?.notifyDataSetChanged()
                     }
