@@ -63,7 +63,7 @@ class ProductDetailsFragment : Fragment() {
         "inactive",
         "active",
         "disabled",
-        "duplicated"
+        "duplicate"
     )
 
     override fun onCreateView(

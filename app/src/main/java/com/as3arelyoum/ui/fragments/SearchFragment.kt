@@ -62,11 +62,13 @@ class SearchFragment : Fragment() {
 
     private fun search() {
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
-            job?.cancel()
-            job = MainScope().launch {
-                searchViewModel.search(text.toString())
-                searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
-                    searchAdapter.differ.submitList(productList)
+            if (text!!.length > 3) {
+                job?.cancel()
+                job = MainScope().launch {
+                    searchViewModel.search(text.toString())
+                    searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
+                        searchAdapter.differ.submitList(productList)
+                    }
                 }
             }
         }
