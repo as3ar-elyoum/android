@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/categoriesFragment"
         android:label="@string/app_name"
-        android:name="com.as3arelyoum.ui.fragments.CategoriesFragment"
+        android:name="com.as3arelyoum.ui.category.CategoriesFragment"
         tools:layout="@layout/fragment_categories">
         <action
             android:id="@+id/action_categoriesFragment_to_productsFragment"
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/productsFragment"
-        android:name="com.as3arelyoum.ui.fragments.ProductsFragment"
+        android:name="com.as3arelyoum.ui.product.view.ProductsFragment"
         tools:layout="@layout/fragment_products">
 
         <action
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/productDetailsFragment"
         android:label="@string/product_details"
-        android:name="com.as3arelyoum.ui.fragments.ProductDetailsFragment"
+        android:name="com.as3arelyoum.ui.product.view.ProductDetailsFragment"
         tools:layout="@layout/fragment_product_details" >
         <action
             android:id="@+id/action_productDetailsFragment_self"
@@ -62,7 +62,7 @@
     <fragment
         android:id="@+id/searchFragment"
         tools:layout="@layout/fragment_search"
-        android:name="com.as3arelyoum.ui.fragments.SearchFragment"
+        android:name="com.as3arelyoum.ui.search.SearchFragment"
         android:label="SearchFragment" >
         <action
             android:id="@+id/action_searchFragment_to_productDetailsFragment"
