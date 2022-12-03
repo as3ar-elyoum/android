@@ -1,8 +1,6 @@
 package com.as3arelyoum.ui.fragments
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +22,8 @@ class ProductsFragment : Fragment() {
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
     private val arguments: ProductsFragmentArgs by navArgs()
-    private val handler = Handler(Looper.getMainLooper()!!)
     private lateinit var productsViewModel: ProductsViewModel
-    private lateinit var productsAdapter: ProductsAdapter
+    private var productsAdapter = ProductsAdapter { position -> onProductClicked(position) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +45,7 @@ class ProductsFragment : Fragment() {
     private fun initToolbar() {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.apply {
-            requireActivity().title = arguments.categoryName
+            requireActivity().title = arguments.category.name
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_ios_back)
@@ -71,7 +68,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initProductsObserve() {
-        productsViewModel.getAllProducts(arguments.categoryId).observe(viewLifecycleOwner) {
+        productsViewModel.getAllProducts(arguments.category.id).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { productsList ->
@@ -89,7 +86,6 @@ class ProductsFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerview.apply {
             setHasFixedSize(true)
-            productsAdapter = ProductsAdapter { position -> onProductClicked(position) }
             adapter = productsAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
