@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardCornerRadius="@dimen/_2sdp"
-    app:cardElevation="@dimen/_2sdp"
+    app:strokeColor="@color/black"
     app:cardUseCompatPadding="true">
 
     <com.balysv.materialripple.MaterialRippleLayout
@@ -73,4 +73,4 @@
 
         </RelativeLayout>
     </com.balysv.materialripple.MaterialRippleLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

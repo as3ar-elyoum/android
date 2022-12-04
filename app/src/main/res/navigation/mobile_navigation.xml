@@ -25,21 +25,14 @@
 
         <action
             android:id="@+id/action_productsFragment_to_productDetailsFragment"
-            app:destination="@id/productDetailsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/productDetailsFragment"/>
 
         <argument
-            android:name="categoryId"
-            app:argType="integer" />
-        <argument
-            android:name="categoryName"
-            app:argType="string" />
+            android:name="category"
+            app:argType="com.as3arelyoum.data.model.Category" />
 
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/productDetailsFragment"
         android:label="@string/product_details"
         android:name="com.as3arelyoum.ui.fragments.ProductDetailsFragment"
@@ -58,7 +51,7 @@
         <argument
             android:name="productPrice"
             app:argType="string" />
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/searchFragment"
         tools:layout="@layout/fragment_search"

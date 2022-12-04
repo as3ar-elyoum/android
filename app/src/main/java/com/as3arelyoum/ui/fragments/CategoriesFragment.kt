@@ -71,7 +71,8 @@ class CategoriesFragment : Fragment() {
         }
 
         categoryViewModel.errorMessage.observe(viewLifecycleOwner) {
-            Snackbar.make(binding.progressBar, "No Internet Connection", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.progressBar, "No Internet Connection", Snackbar.LENGTH_LONG)
+                .show()
         }
 
         categoryViewModel.loading.observe(viewLifecycleOwner) {
@@ -104,15 +105,10 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun onCategoryClicked(position: Int) {
-        val categoryId = categoryAdapter.differ.currentList[position].id
-        val categoryName = categoryAdapter.differ.currentList[position].name
-
-        val firmsFragment =
-            CategoriesFragmentDirections.actionCategoriesFragmentToProductsFragment(
-                categoryId,
-                categoryName,
-            )
-        findNavController().navigate(firmsFragment)
+        val category = categoryAdapter.differ.currentList[position]
+        val action =
+            CategoriesFragmentDirections.actionCategoriesFragmentToProductsFragment(category)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
