@@ -21,7 +21,7 @@ class ProductsFragment : Fragment() {
     private val binding get() = _binding!!
     private val arguments: ProductsFragmentArgs by navArgs()
     private val productsViewModel: ProductsViewModel by viewModels()
-    private lateinit var productsAdapter: ProductsAdapter
+    private var productsAdapter = ProductsAdapter { position -> onProductClicked(position) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +42,7 @@ class ProductsFragment : Fragment() {
     private fun initToolbar() {
         val activity = activity as AppCompatActivity
         activity.supportActionBar?.apply {
-            requireActivity().title = arguments.categoryName
+            requireActivity().title = arguments.category.name
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_ios_back)
@@ -57,7 +57,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initProductsObserve() {
-        productsViewModel.getAllProducts(arguments.categoryId).observe(viewLifecycleOwner) {
+        productsViewModel.getAllProducts(arguments.category.id).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { productsList ->
@@ -75,7 +75,6 @@ class ProductsFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerview.apply {
             setHasFixedSize(true)
-            productsAdapter = ProductsAdapter { position -> onProductClicked(position) }
             adapter = productsAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }

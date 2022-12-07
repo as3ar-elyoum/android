@@ -4,6 +4,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
 }
 
@@ -15,8 +16,8 @@ android {
         applicationId "com.as3arelyoum"
         minSdk 21
         targetSdk 33
-        versionCode 4
-        versionName "0.04"
+        versionCode 5
+        versionName "0.05"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -29,16 +29,12 @@ class CategoriesFragment : Fragment() {
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
         requireActivity().title = getString(R.string.app_name)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         PrefUtil.initPrefUtil(requireContext())
         initRecyclerView()
         initCategoryObserve()
         initRefresh()
         sendUserToApi()
+        return binding.root
     }
 
     private fun initRefresh() {
@@ -92,15 +88,10 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun onCategoryClicked(position: Int) {
-        val categoryId = categoryAdapter.differ.currentList[position].id
-        val categoryName = categoryAdapter.differ.currentList[position].name
-
-        val firmsFragment =
-            CategoriesFragmentDirections.actionCategoriesFragmentToProductsFragment(
-                categoryId,
-                categoryName,
-            )
-        findNavController().navigate(firmsFragment)
+        val category = categoryAdapter.differ.currentList[position]
+        val action =
+            CategoriesFragmentDirections.actionCategoriesFragmentToProductsFragment(category)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

@@ -10,10 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -32,15 +30,19 @@ import com.as3arelyoum.utils.helper.Constants
 import com.as3arelyoum.utils.helper.ViewAnimation
 import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.JsonObject
+import java.util.*
 
-class ProductDetailsFragment : Fragment() {
+class ProductDetailsFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentProductDetailsBinding? = null
     private val binding get() = _binding!!
     private val similarList: ArrayList<ProductDTO> = ArrayList()
@@ -48,18 +50,12 @@ class ProductDetailsFragment : Fragment() {
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
+    private var lineDataSet: LineDataSet? = null
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
     private lateinit var lineList: ArrayList<String>
     private lateinit var entries: ArrayList<Entry>
     private lateinit var lineData: LineData
-    private var lineDataSet: LineDataSet? = null
-    private val statusList = listOf(
-        "inactive",
-        "active",
-        "disabled",
-        "duplicate"
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,30 +67,30 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initToolbar()
         initSimilarProductsRecyclerView()
         initSimilarProductsRepository()
         initProductDetailsObserve(arguments.productId)
         initSimilarProductsObserve(arguments.productId)
         toggleDescription()
-        initRefresh()
         hideProductFilters()
+        initProductSheet()
     }
 
-    private fun initRefresh() {
-        binding.refresh.setOnRefreshListener {
-            binding.refresh.isRefreshing = false
-            initProductDetailsObserve(arguments.productId)
+    private fun initProductSheet() {
+        val bottomSheet =
+            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.setBackgroundResource(R.drawable.rounded_corners)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
+            state = BottomSheetBehavior.STATE_EXPANDED
+            isHideable = true
+            skipCollapsed = true
+            isDraggable = true
         }
-    }
-
-    private fun initToolbar() {
-        val activity = activity as AppCompatActivity
-        activity.supportActionBar?.apply {
-            requireActivity().title = getString(R.string.product_details)
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_ios_back)
+        val layoutParams = bottomSheet.layoutParams
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        bottomSheet.layoutParams = layoutParams
+        binding.productPopupBack.setOnClickListener {
+            behavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
 
@@ -239,10 +235,13 @@ class ProductDetailsFragment : Fragment() {
         categoryViewModel.getAllCategories()
     }
 
-    private fun setLineChart(prices: Array<Array<String>>) {
+    private fun setLineChart(prices: List<List<String>>) {
+        val greenColor = ContextCompat.getColor(requireContext(), R.color.green)
+
         try {
             lineList = ArrayList()
             entries = ArrayList()
+
             if (prices.count() < 2) {
                 binding.graphCard.isVisible = false
                 return
@@ -252,32 +251,51 @@ class ProductDetailsFragment : Fragment() {
                 lineList.add(price.first())
                 entries.add(Entry(index.toFloat(), price.last().toFloat()))
             }
-            val xAxis = binding.lineChart.xAxis
-            xAxis.position = XAxis.XAxisPosition.TOP
-            xAxis.valueFormatter = IndexAxisValueFormatter(lineList)
-            xAxis.setLabelCount(2, false)
+
+            binding.lineChart.xAxis.apply {
+                position = XAxis.XAxisPosition.TOP
+                valueFormatter = IndexAxisValueFormatter(lineList)
+                setLabelCount(4, true)
+                setDrawGridLines(true)
+                setDrawAxisLine(true)
+                setDrawLabels(true)
+                textColor = Color.BLACK
+                textSize = 10F
+            }
 
             lineDataSet = LineDataSet(entries, "الـسـعـر بـمـرور الـوقـت")
-            lineData = LineData(lineDataSet)
-            binding.lineChart.data = lineData
             lineDataSet!!.apply {
-                valueTextColor = ContextCompat.getColor(requireContext(), R.color.chart_prices)
-                valueTextSize = 13f
-                fillColor = Color.BLACK
+                valueTextColor = greenColor
+                valueTextSize = 18F
+                fillColor = randomColor()
                 fillAlpha = 20
-                setColors(*ColorTemplate.JOYFUL_COLORS)
+                setColors(greenColor)
                 setDrawFilled(true)
                 setDrawCircles(true)
                 setDrawValues(true)
             }
+
+            lineData = LineData(lineDataSet)
+            binding.lineChart.data = lineData
             binding.lineChart.apply {
-                setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                description.isEnabled = false
+                setTouchEnabled(true)
+                setPinchZoom(true)
+                legend.textSize = 12F
+                legend.form = Legend.LegendForm.CIRCLE
                 animateXY(1000, 1000)
             }
+
+
 
         } catch (e: Exception) {
             Log.d("LineChart Crash", e.message.toString())
         }
+    }
+
+    private fun randomColor(): Int {
+        val rnd = Random()
+        return ColorTemplate.MATERIAL_COLORS[rnd.nextInt(ColorTemplate.MATERIAL_COLORS.size)]
     }
 
     private fun hideProductFilters() {
@@ -319,6 +337,15 @@ class ProductDetailsFragment : Fragment() {
         } else {
             ViewAnimation.collapse(lyt)
         }
+    }
+
+    companion object {
+        val statusList = listOf(
+            "inactive",
+            "active",
+            "disabled",
+            "duplicate"
+        )
     }
 
     override fun onDestroyView() {
