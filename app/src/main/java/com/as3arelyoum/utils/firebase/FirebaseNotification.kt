@@ -10,10 +10,10 @@ import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.as3arelyoum.ui.activity.LauncherActivity
-import com.as3arelyoum.utils.Constants.CHANNEL_ID
-import com.as3arelyoum.utils.PrefUtil
-import com.as3arelyoum.utils.PrefUtil.initPrefUtil
+import com.as3arelyoum.ui.main.MainActivity
+import com.as3arelyoum.utils.helper.Constants.CHANNEL_ID
+import com.as3arelyoum.utils.helper.PrefUtil
+import com.as3arelyoum.utils.helper.PrefUtil.initPrefUtil
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -34,7 +34,7 @@ class FirebaseNotification : FirebaseMessagingService() {
         val title = remoteMessage.data["title"] ?: remoteMessage.notification?.title
         val body = remoteMessage.data["body"] ?: remoteMessage.notification?.body
 
-        val notificationIntent = Intent(this, LauncherActivity::class.java).apply {
+        val notificationIntent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
 
