@@ -11,12 +11,19 @@ object Constants {
     const val CHANNEL_ID = "firebase_channel_id"
     const val PREF_FILE = "pref_file"
     const val SEARCH = "search"
+    val statusList = listOf("inactive", "active", "disabled", "duplicate")
 
     fun displayProductDetails(str: String, source: String): String {
         return "$str $source"
     }
 
-    fun displayProductPrice(buyFrom: String, source: String, b: String, price: String, egp:String): String {
+    fun displayProductPrice(
+        buyFrom: String,
+        source: String,
+        b: String,
+        price: String,
+        egp: String
+    ): String {
         return "$buyFrom $source $b $price $egp"
     }
 

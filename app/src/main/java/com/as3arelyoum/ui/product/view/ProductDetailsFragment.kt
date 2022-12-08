@@ -1,6 +1,7 @@
 package com.as3arelyoum.ui.product.view
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -27,8 +28,8 @@ import com.as3arelyoum.ui.product.adapter.StatusSpinnerAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductDetailsViewModel
 import com.as3arelyoum.ui.product.viewmodel.SimilarProductsViewModel
 import com.as3arelyoum.utils.helper.Constants
+import com.as3arelyoum.utils.helper.Constants.statusList
 import com.as3arelyoum.utils.helper.ViewAnimation
-import com.as3arelyoum.utils.status.Status
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -50,29 +51,31 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private var lineDataSet: LineDataSet? = null
+    private val similarProductAdapter =
+        SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
+
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
     private lateinit var lineList: ArrayList<String>
     private lateinit var entries: ArrayList<Entry>
     private lateinit var lineData: LineData
+    private var lineDataSet: LineDataSet? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+        initSimilarProductsRecyclerView()
+        initProductDetailsObserve(arguments.productId)
+        initSimilarProductsObserve(arguments.productId)
+        toggleDescription()
+        hideProductFilters()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initSimilarProductsRecyclerView()
-        initSimilarProductsRepository()
-        initProductDetailsObserve(arguments.productId)
-        initSimilarProductsObserve(arguments.productId)
-        toggleDescription()
-        hideProductFilters()
         initProductSheet()
     }
 
@@ -95,115 +98,86 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun initProductDetailsObserve(productId: Int) {
-        productDetailsViewModel.getProductDetails(productId).observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let { product ->
-                        productDTOInstance = product
-                        Glide.with(this)
-                            .load(product.image_url)
-                            .placeholder(R.drawable.ic_downloading)
-                            .into(binding.productImage)
 
-                        binding.nameTv.text = product.name
-                        binding.productSource.text =
-                            Constants.displayProductDetails(
-                                getString(R.string.from),
-                                product.source
-                            )
-                        binding.productBtn.text =
-                            Constants.displayProductPrice(
-                                getString(R.string.buy_from),
-                                product.source,
-                                getString(R.string.b),
-                                arguments.productPrice,
-                                getString(R.string.egp)
-                            )
-                        var description = product.description
-                        description =
-                            if (description.contains("  ") || description.contains("   ")) {
-                                description.replace("   ", "\n")
-                                    .removePrefix(getString(R.string.amazon_first_line))
-                                    .trim()
-                            } else {
-                                description.removePrefix(getString(R.string.amazon_first_line))
-                                    .trim()
-                            }
-                        binding.descriptionTv.text = description
-
-                        binding.productBtn.setOnClickListener {
-                            val browserIntent =
-                                Intent(Intent.ACTION_VIEW, Uri.parse(product.url))
-                            startActivity(browserIntent)
-                        }
-
-                        initCategorySpinnerAdapter()
-                        initStatusSpinnerAdapter(product.status)
-                        setLineChart(productDTOInstance.prices)
-
-                        binding.updateProductBtn.setOnClickListener {
-                            val status = statusList[binding.statusSpinner.selectedItemPosition]
-                            val categoryId =
-                                categoryDTOList[binding.categorySpinner.selectedItemPosition].id
-
-                            val params = JsonObject()
-                            val productObject = JsonObject()
-                            productObject.addProperty("category_id", categoryId)
-                            productObject.addProperty("status", status)
-                            params.add("product", productObject)
-
-                            productDetailsViewModel.updateProductDetails(
-                                product.id,
-                                params
-                            ).observe(viewLifecycleOwner) {
-                                when (it.status) {
-                                    Status.SUCCESS -> {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "تم تعديل المنتج",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                    Status.LOADING -> {}
-                                    Status.FAILURE -> {}
-                                }
-                            }
-                        }
+        productDetailsViewModel.productDetails.observe(viewLifecycleOwner){
+            productDTOInstance = it
+            Glide.with(this)
+                .load(productDTOInstance.image_url)
+                .placeholder(R.drawable.ic_downloading)
+                .into(binding.productImage)
+            binding.apply {
+                nameTv.text = productDTOInstance.name
+                productSource.text = Constants.displayProductDetails(getString(R.string.from), productDTOInstance.source)
+                productBtn.text = Constants.displayProductPrice(
+                    getString(R.string.buy_from),
+                    productDTOInstance.source,
+                    getString(R.string.b),
+                    arguments.productPrice,
+                    getString(R.string.egp)
+                )
+                var description = productDTOInstance.description
+                description =
+                    if (description.contains("  ") || description.contains("   ")) {
+                        description.replace("   ", "\n")
+                            .removePrefix(getString(R.string.amazon_first_line))
+                            .trim()
+                    } else {
+                        description.removePrefix(getString(R.string.amazon_first_line))
+                            .trim()
                     }
+                descriptionTv.text = description
+
+                productBtn.setOnClickListener {
+                    val browserIntent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse(productDTOInstance.url))
+                    startActivity(browserIntent)
                 }
-                Status.LOADING -> {}
-                Status.FAILURE -> {}
+
+                initCategorySpinnerAdapter()
+                initStatusSpinnerAdapter(productDTOInstance.status)
+                setLineChart(productDTOInstance.prices)
             }
         }
+
+        binding.updateProductBtn.setOnClickListener {
+            val status = statusList[binding.statusSpinner.selectedItemPosition]
+            val categoryId =
+                categoryDTOList[binding.categorySpinner.selectedItemPosition].id
+
+            val params = JsonObject()
+            val productObject = JsonObject()
+            productObject.addProperty("category_id", categoryId)
+            productObject.addProperty("status", status)
+            params.add("product", productObject)
+
+            productDetailsViewModel.updateProductDetails(productId, params)
+        }
+
+        productDetailsViewModel.getProductDetails(productId)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initSimilarProductsObserve(productId: Int) {
-        similarProductsViewModel.getSimilarProducts(productId).observe(viewLifecycleOwner) { it ->
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let {
-                        similarList.clear()
-                        similarList.addAll(it)
-                        binding.rvSimilarProducts.adapter?.notifyDataSetChanged()
-                    }
-                }
-                Status.LOADING -> {}
-                Status.FAILURE -> {}
-            }
+        similarProductsViewModel.similarProductList.observe(viewLifecycleOwner) {
+            similarList.addAll(it)
+            similarProductAdapter.notifyDataSetChanged()
         }
-    }
 
-    private fun initSimilarProductsRepository() {
-        binding.rvSimilarProducts.apply {
-            adapter = SimilarProductAdapter(similarList)
-            { position -> onProductClicked(position) }
+        similarProductsViewModel.errorMessage.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
+
+        similarProductsViewModel.loading.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+        similarProductsViewModel.getSimilarProducts(productId)
     }
 
     private fun initSimilarProductsRecyclerView() {
         binding.rvSimilarProducts.apply {
             setHasFixedSize(true)
+            adapter = similarProductAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
@@ -286,8 +260,6 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
                 animateXY(1000, 1000)
             }
 
-
-
         } catch (e: Exception) {
             Log.d("LineChart Crash", e.message.toString())
         }
@@ -337,15 +309,6 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         } else {
             ViewAnimation.collapse(lyt)
         }
-    }
-
-    companion object {
-        val statusList = listOf(
-            "inactive",
-            "active",
-            "disabled",
-            "duplicate"
-        )
     }
 
     override fun onDestroyView() {
