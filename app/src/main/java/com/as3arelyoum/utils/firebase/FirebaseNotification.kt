@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.as3arelyoum.R
 import com.as3arelyoum.ui.main.MainActivity
 import com.as3arelyoum.utils.helper.Constants.CHANNEL_ID
 import com.as3arelyoum.utils.helper.PrefUtil
@@ -50,17 +51,16 @@ class FirebaseNotification : FirebaseMessagingService() {
 
         Notification.Builder(this, CHANNEL_ID)
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.as3ar_elyoum)
+            .setColorized(true)
             .setContentTitle(title)
             .setContentText(body)
-            .setSmallIcon(android.R.drawable.stat_notify_chat)
             .setLights(NotificationCompat.FLAG_SHOW_LIGHTS, 3000, 1000)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setStyle(NotificationCompat.BigTextStyle())
-            .setColor(Color.BLUE)
-            .setLights(Color.BLUE, 3000, 1000)
             .build()
 
         val notificationManager =

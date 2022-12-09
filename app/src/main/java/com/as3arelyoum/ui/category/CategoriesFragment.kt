@@ -15,7 +15,6 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
 import com.as3arelyoum.utils.helper.PrefUtil
-import com.google.android.material.snackbar.Snackbar
 
 class CategoriesFragment : Fragment() {
     private var _binding: FragmentCategoriesBinding? = null
@@ -62,8 +61,7 @@ class CategoriesFragment : Fragment() {
         }
 
         categoryViewModel.errorMessage.observe(viewLifecycleOwner) {
-            Snackbar.make(binding.progressBar, "No Internet Connection", Snackbar.LENGTH_LONG)
-                .show()
+
         }
 
         categoryViewModel.loading.observe(viewLifecycleOwner) {

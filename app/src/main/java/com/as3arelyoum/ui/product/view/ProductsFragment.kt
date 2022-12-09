@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +15,6 @@ import com.as3arelyoum.R
 import com.as3arelyoum.databinding.FragmentProductsBinding
 import com.as3arelyoum.ui.product.adapter.ProductsAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductsViewModel
-import com.as3arelyoum.utils.status.Status
 
 class ProductsFragment : Fragment() {
     private var _binding: FragmentProductsBinding? = null
@@ -28,15 +28,11 @@ class ProductsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initRecyclerView()
         initProductsObserve()
         initRefresh()
+        return binding.root
     }
 
     private fun initToolbar() {
@@ -57,19 +53,19 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initProductsObserve() {
-        productsViewModel.getAllProducts(arguments.category.id).observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.let { productsList ->
-                        productsAdapter.differ.submitList(productsList)
-                    }
-                }
-                Status.FAILURE -> {
-                }
-                Status.LOADING -> {
-                }
-            }
+
+        productsViewModel.productList.observe(viewLifecycleOwner) {
+            productsAdapter.differ.submitList(it)
         }
+
+        productsViewModel.errorMessage.observe(viewLifecycleOwner) {
+        }
+
+        productsViewModel.loading.observe(viewLifecycleOwner) {
+            hideProgressBar(it)
+        }
+
+        productsViewModel.getAllProducts(arguments.category.id)
     }
 
     private fun initRecyclerView() {
@@ -78,6 +74,11 @@ class ProductsFragment : Fragment() {
             adapter = productsAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
+    }
+
+    private fun hideProgressBar(it: Boolean) {
+        binding.progressBar.isVisible = it
+        binding.refresh.isVisible = !it
     }
 
     private fun onProductClicked(position: Int) {
