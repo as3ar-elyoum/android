@@ -20,5 +20,6 @@ class AssarRepository {
 
     suspend fun getSimilarProducts(product_id: Int) = assarApi.getSimilarProducts(product_id)
 
-    suspend fun sendDevice(userInfoDTO: UserInfoDTO) = assarApi.sendDevice(userInfoDTO)
+    suspend fun sendDevice(userInfoDTO: UserInfoDTO, deviceId: String) =
+        assarApi.sendDevice(userInfoDTO, deviceId)
 }

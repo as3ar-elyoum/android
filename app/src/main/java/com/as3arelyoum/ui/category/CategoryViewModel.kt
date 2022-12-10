@@ -36,9 +36,9 @@ class CategoryViewModel : ViewModel() {
         }
     }
 
-    fun sendDevice(userInfoDTO: UserInfoDTO) {
+    fun sendDevice(userInfoDTO: UserInfoDTO, deviceId: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.sendDevice(userInfoDTO)
+            val response = repository.sendDevice(userInfoDTO, deviceId)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     userData.postValue(response.body())

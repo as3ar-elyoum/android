@@ -32,8 +32,12 @@ class CategoriesFragment : Fragment() {
         initRecyclerView()
         initCategoryObserve()
         initRefresh()
-        sendUserToApi()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sendUserToApi()
     }
 
     private fun initRefresh() {
@@ -51,7 +55,7 @@ class CategoriesFragment : Fragment() {
         val userToken = PrefUtil.getData("token")
         val userInfoDTO = UserInfoDTO(deviceId, userToken)
         if (userToken.isNotEmpty()) {
-            categoryViewModel.sendDevice(userInfoDTO)
+            categoryViewModel.sendDevice(userInfoDTO, deviceId)
         }
     }
 
