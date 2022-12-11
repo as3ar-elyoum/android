@@ -22,7 +22,10 @@ interface AssarApiService {
     suspend fun getProductDetails(@Path("product_id") id: Int): Response<ProductDTO>
 
     @PUT(PRODUCT_DETAILS)
-    suspend fun updateProductDetails(@Path("product_id") id: Int, @Body product: JsonObject): Response<ProductDTO>
+    suspend fun updateProductDetails(
+        @Path("product_id") id: Int,
+        @Body product: JsonObject
+    ): Response<ProductDTO>
 
     @GET(SEARCH)
     suspend fun search(@Query("query[q]") query: String): Response<List<ProductDTO>>
@@ -31,5 +34,8 @@ interface AssarApiService {
     suspend fun getSimilarProducts(@Path("product_id") product_id: Int): Response<List<ProductDTO>>
 
     @POST("devices")
-    suspend fun sendDevice(@Body userInfoDTO: UserInfoDTO): Response<UserInfoDTO>
+    suspend fun sendDevice(
+        @Body userInfoDTO: UserInfoDTO,
+        @Header("deviceid") deviceId: String
+    ): Response<UserInfoDTO>
 }
