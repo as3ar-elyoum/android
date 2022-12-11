@@ -1,7 +1,6 @@
 package com.as3arelyoum.ui.product.view
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -51,8 +49,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private val similarProductAdapter =
-        SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
+    private val similarProductAdapter = SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
 
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
@@ -82,16 +79,16 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private fun initProductSheet() {
         val bottomSheet =
             dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheet?.setBackgroundResource(R.drawable.rounded_corners)
         val behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
-            state = BottomSheetBehavior.STATE_EXPANDED
+            state = BottomSheetBehavior.STATE_COLLAPSED
             isHideable = true
-            skipCollapsed = true
-            isDraggable = true
+            skipCollapsed = false
         }
+
         val layoutParams = bottomSheet.layoutParams
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         bottomSheet.layoutParams = layoutParams
+
         binding.productPopupBack.setOnClickListener {
             behavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
@@ -99,7 +96,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
 
     private fun initProductDetailsObserve(productId: Int) {
 
-        productDetailsViewModel.productDetails.observe(viewLifecycleOwner){
+        productDetailsViewModel.productDetails.observe(viewLifecycleOwner) {
             productDTOInstance = it
             Glide.with(this)
                 .load(productDTOInstance.image_url)
@@ -107,7 +104,10 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
                 .into(binding.productImage)
             binding.apply {
                 nameTv.text = productDTOInstance.name
-                productSource.text = Constants.displayProductDetails(getString(R.string.from), productDTOInstance.source)
+                productSource.text = Constants.displayProductDetails(
+                    getString(R.string.from),
+                    productDTOInstance.source
+                )
                 productBtn.text = Constants.displayProductPrice(
                     getString(R.string.buy_from),
                     productDTOInstance.source,
@@ -164,11 +164,9 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         }
 
         similarProductsViewModel.errorMessage.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
 
         similarProductsViewModel.loading.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
 
         similarProductsViewModel.getSimilarProducts(productId)
