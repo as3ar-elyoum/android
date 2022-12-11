@@ -15,7 +15,20 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp">
+        android:padding="@dimen/_8sdp">
+
+        <TextView
+            android:id="@+id/source_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:padding="@dimen/_4sdp"
+            android:textColor="@color/source_color"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="من أمازون" />
 
         <ImageView
             android:id="@+id/product_image"
@@ -28,7 +41,7 @@
             android:padding="@dimen/_6sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/source_tv"
             tools:src="@drawable/as3ar_elyoum" />
 
         <TextView
@@ -42,7 +55,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/source_tv"
+            app:layout_constraintBottom_toTopOf="@+id/price_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/product_image"
@@ -50,32 +63,17 @@
 
         <TextView
             android:id="@+id/price_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_margin="@dimen/_10sdp"
             android:fontFamily="sans-serif-black"
-            android:gravity="end"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/black"
+            android:gravity="center"
+            android:textColor="@color/green"
             android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/product_details_btn"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="7000.0 جنيه مصري" />
-
-        <TextView
-            android:id="@+id/source_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:fontFamily="sans-serif-black"
-            android:padding="@dimen/_10sdp"
-            android:textColor="@color/source_color"
-            android:textSize="@dimen/_10ssp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/product_details_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="من أمازون" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/product_details_btn"
