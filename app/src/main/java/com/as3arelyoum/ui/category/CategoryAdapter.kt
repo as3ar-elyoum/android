@@ -57,7 +57,7 @@ class CategoryAdapter(
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-            binding.categoryCard.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {

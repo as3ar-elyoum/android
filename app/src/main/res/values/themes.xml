@@ -4,6 +4,7 @@
         <item name="android:statusBarColor">@color/toolbar</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -12,4 +13,7 @@
         <item name="postSplashScreenTheme">@style/Theme.As3arElYoum</item>
     </style>
 
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+    </style>
 </resources>

@@ -12,7 +12,7 @@ class SplashScreenViewModel : ViewModel() {
     val isLoading = _isLoading.asStateFlow()
     init {
         viewModelScope.launch {
-            delay(1000)
+            delay(500)
             _isLoading.value = false
         }
     }

@@ -16,14 +16,14 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.as3arelyoum.R
-import com.as3arelyoum.databinding.ActivityLauncherBinding
+import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.splach.SplashScreenViewModel
 import com.as3arelyoum.utils.ads.Banner
 import com.as3arelyoum.utils.ads.Interstitial
 import com.google.android.gms.ads.AdView
 
 class MainActivity : AppCompatActivity() {
-    private var _binding: ActivityLauncherBinding? = null
+    private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     private val splashViewModel: SplashScreenViewModel by viewModels()
     private val handler = Handler(Looper.getMainLooper())
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply { setKeepOnScreenCondition { splashViewModel.isLoading.value } }
         super.onCreate(savedInstanceState)
-        _binding = ActivityLauncherBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupNavController()
         adView()

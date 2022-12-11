@@ -1,6 +1,7 @@
 package com.as3arelyoum.ui.product.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.ProductDTO
 import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
+import java.util.*
 
 class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
@@ -59,11 +61,18 @@ class ProductsAdapter(
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-            binding.productCard.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
+            binding.productDetailsBtn.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             onItemClicked(absoluteAdapterPosition)
         }
+    }
+
+
+    private fun randomColor(): Int {
+        val rnd = Random()
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
     }
 }

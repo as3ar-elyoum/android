@@ -64,9 +64,7 @@ class CategoriesFragment : Fragment() {
             categoryAdapter.differ.submitList(it)
         }
 
-        categoryViewModel.errorMessage.observe(viewLifecycleOwner) {
-
-        }
+        categoryViewModel.errorMessage.observe(viewLifecycleOwner) {}
 
         categoryViewModel.loading.observe(viewLifecycleOwner) {
             hideProgressBar(it)
