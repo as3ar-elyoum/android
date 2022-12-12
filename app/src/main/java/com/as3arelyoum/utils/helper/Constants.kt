@@ -1,5 +1,8 @@
 package com.as3arelyoum.utils.helper
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.provider.Settings
 import android.view.View
 import androidx.core.widget.NestedScrollView
 
@@ -39,5 +42,10 @@ object Constants {
 
     fun nestedScrollTo(nested: NestedScrollView, targetView: View) {
         nested.post { nested.scrollTo(500, targetView.top) }
+    }
+
+    @SuppressLint("HardwareIds")
+    fun getDeviceId(context: Context): String {
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }

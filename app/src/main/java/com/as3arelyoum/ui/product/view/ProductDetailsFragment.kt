@@ -49,8 +49,9 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private val similarProductAdapter = SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
-
+    private val similarProductAdapter =
+        SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
+    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
     private lateinit var lineList: ArrayList<String>
@@ -150,10 +151,10 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
             productObject.addProperty("status", status)
             params.add("product", productObject)
 
-            productDetailsViewModel.updateProductDetails(productId, params)
+            productDetailsViewModel.updateProductDetails(productId, params, deviceId)
         }
 
-        productDetailsViewModel.getProductDetails(productId)
+        productDetailsViewModel.getProductDetails(productId, deviceId)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -169,7 +170,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         similarProductsViewModel.loading.observe(viewLifecycleOwner) {
         }
 
-        similarProductsViewModel.getSimilarProducts(productId)
+        similarProductsViewModel.getSimilarProducts(productId, deviceId)
     }
 
     private fun initSimilarProductsRecyclerView() {
