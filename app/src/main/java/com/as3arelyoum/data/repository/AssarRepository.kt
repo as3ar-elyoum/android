@@ -9,16 +9,19 @@ class AssarRepository {
 
     suspend fun getAllCategories() = assarApi.getAllCategories()
 
-    suspend fun getAllProducts(category_id: Int) = assarApi.getAllProducts(category_id)
+    suspend fun getAllProducts(category_id: Int, deviceId: String) =
+        assarApi.getAllProducts(category_id, deviceId)
 
-    suspend fun getProductDetails(product_id: Int) = assarApi.getProductDetails(product_id)
+    suspend fun getProductDetails(product_id: Int, deviceId: String) =
+        assarApi.getProductDetails(product_id, deviceId)
 
-    suspend fun updateProductDetails(product_id: Int, params: JsonObject) =
-        assarApi.updateProductDetails(product_id, params)
+    suspend fun updateProductDetails(product_id: Int, params: JsonObject, deviceId: String) =
+        assarApi.updateProductDetails(product_id, params, deviceId)
 
-    suspend fun search(query: String) = assarApi.search(query)
+    suspend fun search(query: String, deviceId: String) = assarApi.search(query, deviceId)
 
-    suspend fun getSimilarProducts(product_id: Int) = assarApi.getSimilarProducts(product_id)
+    suspend fun getSimilarProducts(product_id: Int, deviceId: String) =
+        assarApi.getSimilarProducts(product_id, deviceId)
 
     suspend fun sendDevice(userInfoDTO: UserInfoDTO, deviceId: String) =
         assarApi.sendDevice(userInfoDTO, deviceId)

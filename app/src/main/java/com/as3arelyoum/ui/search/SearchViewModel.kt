@@ -16,9 +16,9 @@ class SearchViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun search(query: String) {
+    fun search(query: String, device_id: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.search(query)
+            val response = repository.search(query, device_id)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     searchList.postValue(response.body())

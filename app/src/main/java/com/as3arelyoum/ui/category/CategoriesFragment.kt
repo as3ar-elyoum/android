@@ -2,7 +2,7 @@ package com.as3arelyoum.ui.category
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +14,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
+import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil
 
 class CategoriesFragment : Fragment() {
     private var _binding: FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private lateinit var categoryAdapter: CategoryAdapter
+    private val categoryAdapter = CategoryAdapter { position -> onCategoryClicked(position) }
+    private val deviceId: String by lazy { getDeviceId(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +40,8 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sendUserToApi()
+
+        Log.d("TAG", "onViewCreated: ${deviceId}")
     }
 
     private fun initRefresh() {
@@ -50,8 +54,6 @@ class CategoriesFragment : Fragment() {
 
     @SuppressLint("HardwareIds")
     private fun sendUserToApi() {
-        val deviceId =
-            Settings.Secure.getString(activity?.contentResolver, Settings.Secure.ANDROID_ID)
         val userToken = PrefUtil.getData("token")
         val userInfoDTO = UserInfoDTO(deviceId, userToken)
         if (userToken.isNotEmpty()) {
@@ -79,7 +81,6 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        categoryAdapter = CategoryAdapter { position -> onCategoryClicked(position) }
         binding.recyclerview.apply {
             setHasFixedSize(true)
             adapter = categoryAdapter

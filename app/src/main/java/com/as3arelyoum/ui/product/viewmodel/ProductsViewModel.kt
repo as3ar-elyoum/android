@@ -18,9 +18,9 @@ class ProductsViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getAllProducts(category_id: Int) {
+    fun getAllProducts(category_id: Int, device_id: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getAllProducts(category_id)
+            val response = repository.getAllProducts(category_id, device_id)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     productList.postValue(response.body())

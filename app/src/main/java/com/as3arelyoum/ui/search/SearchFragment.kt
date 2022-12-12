@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.databinding.FragmentSearchBinding
+import com.as3arelyoum.utils.helper.Constants
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ class SearchFragment : Fragment() {
     private var job: Job? = null
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels()
+    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private lateinit var searchAdapter: SearchAdapter
 
 
@@ -63,7 +65,7 @@ class SearchFragment : Fragment() {
             if (text!!.length > 3) {
                 job?.cancel()
                 job = MainScope().launch {
-                    searchViewModel.search(text.toString())
+                    searchViewModel.search(text.toString(), deviceId)
                     searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
                         searchAdapter.differ.submitList(productList)
                     }
