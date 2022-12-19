@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardElevation="@dimen/_1sdp"
-    app:cardBackgroundColor="@color/white"
-    app:rippleColor="#B1B1B1"
-    app:cardCornerRadius="@dimen/_6sdp"
-    app:cardUseCompatPadding="true">
+    android:padding="@dimen/_6sdp"
+    android:layout_margin="@dimen/_1sdp"
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/_8sdp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/source_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
-            android:padding="@dimen/_4sdp"
             android:textColor="@color/source_color"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="من أمازون" />
+            tools:text="أمازون" />
 
         <ImageView
             android:id="@+id/product_image"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_120sdp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_100sdp"
             android:layout_gravity="center"
             android:contentDescription="@string/products"
             android:padding="@dimen/_6sdp"
@@ -51,9 +44,9 @@
             android:layout_below="@id/product_image"
             android:gravity="center"
             android:maxLines="1"
-            android:padding="@dimen/_8sdp"
+            android:padding="@dimen/_2sdp"
             android:textColor="@color/black"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/price_tv"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,15 +56,16 @@
 
         <TextView
             android:id="@+id/price_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:textColor="@color/green"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/product_details_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="7000.0 جنيه مصري" />
 
@@ -80,10 +74,10 @@
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_6sdp"
+            android:layout_margin="@dimen/_6sdp"
             android:text="@string/product_details_btn"
             android:textColor="@color/black"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,5 +85,4 @@
             app:rippleColor="#B1B1B1"
             app:strokeColor="@color/black" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
-
+</LinearLayout>

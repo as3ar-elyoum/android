@@ -9,8 +9,10 @@ class AssarRepository {
 
     suspend fun getAllCategories() = assarApi.getAllCategories()
 
-    suspend fun getAllProducts(category_id: Int, deviceId: String) =
-        assarApi.getAllProducts(category_id, deviceId)
+    suspend fun getAllProducts() = assarApi.getAllProducts()
+
+    suspend fun getCategoryProducts(category_id: Int, deviceId: String) =
+        assarApi.getCategoryProducts(category_id, deviceId)
 
     suspend fun getProductDetails(product_id: Int, deviceId: String) =
         assarApi.getProductDetails(product_id, deviceId)

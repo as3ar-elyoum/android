@@ -16,7 +16,10 @@ interface AssarApiService {
     suspend fun getAllCategories(): Response<List<CategoryDTO>>
 
     @GET(PRODUCTS)
-    suspend fun getAllProducts(
+    suspend fun getAllProducts(): Response<List<ProductDTO>>
+
+    @GET(PRODUCTS)
+    suspend fun getCategoryProducts(
         @Query("category_id") category_id: Int,
         @Header("deviceid") deviceId: String
     ): Response<List<ProductDTO>>

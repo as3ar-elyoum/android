@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.category
+package com.as3arelyoum.ui.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.databinding.CategoryCardBinding
+import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
-class CategoryAdapter(
+class CategoriesAdapter(
     private val onItemClicked: (position: Int) -> Unit
-) : RecyclerView.Adapter<CategoryAdapter.CustomViewHolder>() {
+) : RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<CategoryDTO>() {
         override fun areItemsTheSame(oldItem: CategoryDTO, newItem: CategoryDTO): Boolean {
@@ -28,16 +29,16 @@ class CategoryAdapter(
 
     val differ = AsyncListDiffer(this, diffCallback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val recyclerCard =
             CategoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CustomViewHolder(recyclerCard, onItemClicked)
+        return CategoryViewHolder(recyclerCard, onItemClicked)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val categoryItems = differ.currentList[position]
         holder.binding.apply {
-            Glide.with(holder.binding.root.context)
+            Glide.with(root.context)
                 .load(categoryItems.icon)
                 .placeholder(R.drawable.ic_downloading)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -50,8 +51,23 @@ class CategoryAdapter(
         return differ.currentList.size
     }
 
-    inner class CustomViewHolder(
+    inner class CategoryViewHolder(
         val binding: CategoryCardBinding,
+        private val onItemClicked: (position: Int) -> Unit
+    ) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+
+        init {
+            binding.root.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            onItemClicked(absoluteAdapterPosition)
+        }
+    }
+
+    inner class ProductsViewHolder(
+        val binding: ProductCardBinding,
         private val onItemClicked: (position: Int) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {

@@ -1,11 +1,11 @@
 package com.as3arelyoum.ui.search
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,15 +22,16 @@ class SearchFragment : Fragment() {
     private var job: Job? = null
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels()
+    private val searchAdapter = SearchAdapter { position -> onProductClicked(position) }
     private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
-    private lateinit var searchAdapter: SearchAdapter
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        initRecyclerView()
+        initSearch()
         return binding.root
     }
 
@@ -39,28 +40,16 @@ class SearchFragment : Fragment() {
 
         if (binding.searchInput.requestFocus()) {
             val imm =
-                requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+                requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
         }
 
-        initRecyclerView()
-        search()
         binding.rippleBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
-    }
-
-    private fun search() {
+    private fun initSearch() {
         binding.searchInput.doOnTextChanged { text, _, _, _ ->
             if (text!!.length > 3) {
                 job?.cancel()
@@ -77,7 +66,6 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         binding.searchRecyclerview.apply {
             setHasFixedSize(true)
-            searchAdapter = SearchAdapter { position -> onProductClicked(position) }
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
@@ -86,7 +74,6 @@ class SearchFragment : Fragment() {
     private fun onProductClicked(position: Int) {
         val productId = searchAdapter.differ.currentList[position].id
         val productPrice = searchAdapter.differ.currentList[position].price
-
         val action = SearchFragmentDirections.actionSearchFragmentToProductDetailsFragment(
             productId,
             productPrice
@@ -98,4 +85,5 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

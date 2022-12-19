@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.as3arelyoum.R
 import com.as3arelyoum.databinding.FragmentProductsBinding
 import com.as3arelyoum.ui.product.adapter.ProductsAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductsViewModel
@@ -20,8 +18,8 @@ import com.as3arelyoum.utils.helper.Constants.getDeviceId
 class ProductsFragment : Fragment() {
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
-    private val arguments: ProductsFragmentArgs by navArgs()
     private val productsViewModel: ProductsViewModel by viewModels()
+    private val arguments: ProductsFragmentArgs by navArgs()
     private var productsAdapter = ProductsAdapter { position -> onProductClicked(position) }
     private val deviceId: String by lazy { getDeviceId(requireContext()) }
 
@@ -30,21 +28,16 @@ class ProductsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
-        initToolbar()
+        binding.titleTv.text = arguments.category.name
         initRecyclerView()
         initProductsObserve()
         initRefresh()
-        return binding.root
-    }
 
-    private fun initToolbar() {
-        val activity = activity as AppCompatActivity
-        activity.supportActionBar?.apply {
-            requireActivity().title = arguments.category.name
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_ios_back)
+        binding.backBtn.setOnClickListener {
+            findNavController().navigateUp()
         }
+
+        return binding.root
     }
 
     private fun initRefresh() {
@@ -67,7 +60,7 @@ class ProductsFragment : Fragment() {
             hideProgressBar(it)
         }
 
-        productsViewModel.getAllProducts(arguments.category.id, deviceId)
+        productsViewModel.getCategoryProducts(arguments.category.id, deviceId)
     }
 
     private fun initRecyclerView() {
@@ -80,7 +73,7 @@ class ProductsFragment : Fragment() {
 
     private fun hideProgressBar(it: Boolean) {
         binding.progressBar.isVisible = it
-        binding.refresh.isVisible = !it
+        binding.nestedContent.isVisible = !it
     }
 
     private fun onProductClicked(position: Int) {

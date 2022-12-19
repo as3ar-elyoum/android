@@ -20,7 +20,7 @@ import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.data.remote.dto.ProductDTO
 import com.as3arelyoum.databinding.FragmentProductDetailsBinding
 import com.as3arelyoum.ui.category.CategorySpinnerAdapter
-import com.as3arelyoum.ui.category.CategoryViewModel
+import com.as3arelyoum.ui.home.HomeViewModel
 import com.as3arelyoum.ui.product.adapter.SimilarProductAdapter
 import com.as3arelyoum.ui.product.adapter.StatusSpinnerAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductDetailsViewModel
@@ -48,7 +48,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private val arguments: ProductDetailsFragmentArgs by navArgs()
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
-    private val categoryViewModel: CategoryViewModel by viewModels()
+    private val categoryViewModel: HomeViewModel by viewModels()
     private val similarProductAdapter =
         SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
     private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
@@ -200,12 +200,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
             binding.categorySpinner.setSelection(categoryDTOList.indexOf(selectedCategory))
         }
 
-        categoryViewModel.errorMessage.observe(viewLifecycleOwner) {
-            Log.e("error", it)
-        }
-
-        categoryViewModel.loading.observe(viewLifecycleOwner) {}
-        categoryViewModel.getAllCategories()
+        categoryViewModel.getCategoriesSpinner()
     }
 
     private fun setLineChart(prices: List<List<String>>) {
