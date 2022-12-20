@@ -10,17 +10,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
 
     private val retrofit: Retrofit by lazy {
-        val mHttpLoggingInterceptor = HttpLoggingInterceptor()
+        val logging = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
-        val mOkHttpClient = OkHttpClient
-            .Builder()
-            .addInterceptor(mHttpLoggingInterceptor)
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(logging)
             .build()
 
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(mOkHttpClient)
+            .baseUrl(BASE_URL)
+            .client(client)
             .build()
     }
 

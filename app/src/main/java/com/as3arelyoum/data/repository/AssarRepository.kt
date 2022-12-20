@@ -7,10 +7,9 @@ import com.google.gson.JsonObject
 class AssarRepository {
     private val assarApi = RetrofitInstance.assarApiService
 
-    suspend fun getAllCategories() = assarApi.getAllCategories()
+    suspend fun getAllCategories(deviceId: String) = assarApi.getAllCategories(deviceId)
 
-    suspend fun getAllProducts(category_id: Int, deviceId: String) =
-        assarApi.getAllProducts(category_id, deviceId)
+    suspend fun getCategoryProducts(category_id: Int, deviceId: String) = assarApi.getCategoryProducts(category_id, deviceId)
 
     suspend fun getProductDetails(product_id: Int, deviceId: String) =
         assarApi.getProductDetails(product_id, deviceId)
@@ -23,6 +22,6 @@ class AssarRepository {
     suspend fun getSimilarProducts(product_id: Int, deviceId: String) =
         assarApi.getSimilarProducts(product_id, deviceId)
 
-    suspend fun sendDevice(userInfoDTO: UserInfoDTO, deviceId: String) =
-        assarApi.sendDevice(userInfoDTO, deviceId)
+    suspend fun sendDevice(userInfoDTO: UserInfoDTO) =
+        assarApi.sendDevice(userInfoDTO)
 }

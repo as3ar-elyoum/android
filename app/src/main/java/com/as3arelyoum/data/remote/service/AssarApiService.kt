@@ -13,10 +13,12 @@ import retrofit2.http.*
 
 interface AssarApiService {
     @GET(CATEGORIES)
-    suspend fun getAllCategories(): Response<List<CategoryDTO>>
+    suspend fun getAllCategories(
+        @Header("deviceid") deviceId: String
+    ): Response<List<CategoryDTO>>
 
     @GET(PRODUCTS)
-    suspend fun getAllProducts(
+    suspend fun getCategoryProducts(
         @Query("category_id") category_id: Int,
         @Header("deviceid") deviceId: String
     ): Response<List<ProductDTO>>
@@ -49,6 +51,5 @@ interface AssarApiService {
     @POST("devices")
     suspend fun sendDevice(
         @Body userInfoDTO: UserInfoDTO,
-        @Header("deviceid") deviceId: String
     ): Response<UserInfoDTO>
 }

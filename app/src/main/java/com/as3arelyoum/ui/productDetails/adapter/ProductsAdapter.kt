@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.product.adapter
+package com.as3arelyoum.ui.productDetails.adapter
 
 import android.annotation.SuppressLint
 import android.graphics.Color

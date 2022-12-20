@@ -22,4 +22,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="product_details_btn">تفاصيل المنتج</string>
+    <string name="best_products">أفضل المنتجات</string>
+    <string name="search">بـحـث</string>
+    <string name="debug_mode">Debug Mode</string>
 </resources>
