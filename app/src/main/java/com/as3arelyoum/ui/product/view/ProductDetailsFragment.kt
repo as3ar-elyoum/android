@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +40,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.JsonObject
+import kotlinx.coroutines.launch
 import java.util.*
 
 class ProductDetailsFragment : BottomSheetDialogFragment() {
@@ -189,18 +191,17 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun initCategorySpinnerAdapter() {
-        categoryViewModel.categoriesList.observe(viewLifecycleOwner) {
-            categoryDTOList = it
-            val categorySpinnerAdapter =
-                CategorySpinnerAdapter(requireContext(), categoryDTOList)
-            binding.categorySpinner.adapter = categorySpinnerAdapter
+       lifecycleScope.launch {
+           val categories = categoryViewModel.fetchCategoryData(deviceId)
+           categoryDTOList = categories
+           val categorySpinnerAdapter =
+               CategorySpinnerAdapter(requireContext(), categoryDTOList)
+           binding.categorySpinner.adapter = categorySpinnerAdapter
 
-            val selectedCategory =
-                categoryDTOList.find { it.id == productDTOInstance.category_id }
-            binding.categorySpinner.setSelection(categoryDTOList.indexOf(selectedCategory))
-        }
-
-        categoryViewModel.getCategoriesSpinner()
+           val selectedCategory =
+               categoryDTOList.find { it.id == productDTOInstance.category_id }
+           binding.categorySpinner.setSelection(categoryDTOList.indexOf(selectedCategory))
+       }
     }
 
     private fun setLineChart(prices: List<List<String>>) {

@@ -11,7 +11,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.as3arelyoum.R
-import com.as3arelyoum.ui.main.MainActivity
+import com.as3arelyoum.ui.home.HomeActivity
 import com.as3arelyoum.utils.helper.Constants.CHANNEL_ID
 import com.as3arelyoum.utils.helper.PrefUtil
 import com.as3arelyoum.utils.helper.PrefUtil.initPrefUtil
@@ -35,7 +35,7 @@ class FirebaseNotification : FirebaseMessagingService() {
         val title = remoteMessage.data["title"] ?: remoteMessage.notification?.title
         val body = remoteMessage.data["body"] ?: remoteMessage.notification?.body
 
-        val notificationIntent = Intent(this, MainActivity::class.java).apply {
+        val notificationIntent = Intent(this, HomeActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
 

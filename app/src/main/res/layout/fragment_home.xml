@@ -17,31 +17,6 @@
         android:indeterminateTint="@color/black"
         android:layout_height="match_parent"/>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/toolbar">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/toolbarTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/app_name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_14ssp"
-                android:textStyle="bold" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_content"
         android:layout_width="match_parent"
@@ -49,7 +24,7 @@
         android:background="@color/mainBg"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:scrollbars="none"
         android:scrollingCache="true">
@@ -59,53 +34,6 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                app:cardCornerRadius="@dimen/_10sdp"
-                app:cardElevation="@dimen/_10sdp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/_8sdp"
-                    android:gravity="right|center_vertical"
-                    android:hint="@string/search"
-                    android:padding="@dimen/_7sdp"
-                    android:textColorHint="#434343"
-                    app:drawableRightCompat="@drawable/ic_search"
-                    app:drawableTint="#737373" />
-
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:fontFamily="sans-serif-black"
-                android:padding="@dimen/_5sdp"
-                android:text="@string/categories"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_14ssp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categories_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_10sdp"
-                android:scrollbars="none"
-                android:scrollingCache="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="2"
-                tools:listitem="@layout/category_card" />
 
             <TextView
                 android:layout_width="wrap_content"

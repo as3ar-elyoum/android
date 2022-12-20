@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.ProductDTO
@@ -17,17 +15,13 @@ class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<ProductDTO>() {
-        override fun areItemsTheSame(oldItem: ProductDTO, newItem: ProductDTO): Boolean {
-            return oldItem.id == newItem.id
-        }
+    val productList = mutableListOf<ProductDTO>()
 
-        override fun areContentsTheSame(oldItem: ProductDTO, newItem: ProductDTO): Boolean {
-            return oldItem == newItem
-        }
+    fun setProductsList(products: List<ProductDTO>) {
+        productList.clear()
+        productList.addAll(products)
+        notifyDataSetChanged()
     }
-
-    val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
         val recyclerCard =
@@ -37,7 +31,7 @@ class ProductsAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
-        val productItems = differ.currentList[position]
+        val productItems = productList[position]
         holder.binding.apply {
             Glide.with(root.context)
                 .load(productItems.image_url)
@@ -49,9 +43,7 @@ class ProductsAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount() = productList.size
 
     inner class ProductsViewHolder(
         val binding: ProductCardBinding,
