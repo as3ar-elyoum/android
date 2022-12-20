@@ -24,4 +24,5 @@
     <string name="product_details_btn">تفاصيل المنتج</string>
     <string name="best_products">أفضل المنتجات</string>
     <string name="search">بـحـث</string>
+    <string name="debug_mode">Debug Mode</string>
 </resources>

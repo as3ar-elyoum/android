@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.home
+package com.as3arelyoum.ui.home.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

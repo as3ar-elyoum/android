@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.home
+package com.as3arelyoum.ui.home.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

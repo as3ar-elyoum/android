@@ -31,11 +31,11 @@ object Constants {
     }
 
     fun toggleArrow(view: View): Boolean {
-        return if (view.rotation == 0f) {
-            view.animate().setDuration(200).rotation(180f)
+        return if (view.rotation == 180f) {
+            view.animate().setDuration(200).rotation(0f)
             true
         } else {
-            view.animate().setDuration(200).rotation(0f)
+            view.animate().setDuration(200).rotation(180f)
             false
         }
     }

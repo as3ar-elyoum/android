@@ -1,5 +1,6 @@
-package com.as3arelyoum.ui.product.adapter
+package com.as3arelyoum.ui.productDetails.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +12,22 @@ import com.as3arelyoum.utils.helper.Constants.displayProductDetails
 import com.bumptech.glide.Glide
 
 class SimilarProductAdapter(
-    private var similarProductsList: List<ProductDTO>,
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<SimilarProductAdapter.CustomViewHolder>() {
+
+    val similarProductsList = mutableListOf<ProductDTO>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
             SimilarProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CustomViewHolder(recyclerCard, onItemClicked)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setSimilarProductsList(products: List<ProductDTO>) {
+        similarProductsList.clear()
+        similarProductsList.addAll(products)
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
@@ -27,10 +36,10 @@ class SimilarProductAdapter(
             Glide.with(holder.binding.root.context)
                 .load(productItems.image_url)
                 .into(productImage)
-            nameTv.text = "${productItems.id} - ${productItems.name}"
+            nameTv.text = productItems.name
             priceTv.text =
                 displayProductDetails(productItems.price, root.context.getString(R.string.egp))
-            sourceTv.text = displayProductDetails(root.context.getString(R.string.from), productItems.source)
+            sourceTv.text = productItems.source
         }
     }
 

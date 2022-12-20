@@ -1,33 +1,29 @@
-package com.as3arelyoum.ui.product.view
+package com.as3arelyoum.ui.productDetails.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.databinding.FragmentProductDetailsBinding
-import com.as3arelyoum.ui.category.CategorySpinnerAdapter
-import com.as3arelyoum.ui.home.HomeViewModel
-import com.as3arelyoum.ui.product.adapter.SimilarProductAdapter
-import com.as3arelyoum.ui.product.adapter.StatusSpinnerAdapter
-import com.as3arelyoum.ui.product.viewmodel.ProductDetailsViewModel
-import com.as3arelyoum.ui.product.viewmodel.SimilarProductsViewModel
+import com.as3arelyoum.databinding.ActivityProductDetailsBinding
+import com.as3arelyoum.ui.home.viewModel.HomeViewModel
+import com.as3arelyoum.ui.productDetails.adapter.CategorySpinnerAdapter
+import com.as3arelyoum.ui.productDetails.adapter.SimilarProductAdapter
+import com.as3arelyoum.ui.productDetails.adapter.StatusSpinnerAdapter
+import com.as3arelyoum.ui.productDetails.viewModels.ProductDetailsViewModel
+import com.as3arelyoum.ui.productDetails.viewModels.SimilarProductsViewModel
 import com.as3arelyoum.utils.helper.Constants
-import com.as3arelyoum.utils.helper.Constants.statusList
 import com.as3arelyoum.utils.helper.ViewAnimation
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.components.Legend
@@ -37,23 +33,22 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.JsonObject
 import kotlinx.coroutines.launch
 import java.util.*
 
-class ProductDetailsFragment : BottomSheetDialogFragment() {
-    private var _binding: FragmentProductDetailsBinding? = null
+class ProductDetailsActivity : AppCompatActivity() {
+    private var _binding: ActivityProductDetailsBinding? = null
     private val binding get() = _binding!!
-    private val similarList: ArrayList<ProductDTO> = ArrayList()
-    private val arguments: ProductDetailsFragmentArgs by navArgs()
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
     private val categoryViewModel: HomeViewModel by viewModels()
     private val similarProductAdapter =
-        SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
-    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
+        SimilarProductAdapter { position -> onProductClicked(position) }
+    private val deviceId: String by lazy { Constants.getDeviceId(this) }
+    private val productId: Int by lazy { intent.getIntExtra("productId", 0) }
+    private val productPrice: String by lazy { intent.getStringExtra("productPrice")!! }
+
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
     private lateinit var lineList: ArrayList<String>
@@ -61,45 +56,26 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private lateinit var lineData: LineData
     private var lineDataSet: LineDataSet? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentProductDetailsBinding.inflate(inflater, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _binding = ActivityProductDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initSimilarProductsRecyclerView()
-        initProductDetailsObserve(arguments.productId)
-        initSimilarProductsObserve(arguments.productId)
+        initProductDetailsObserve(productId)
+        initSimilarProductsObserve(productId)
         toggleDescription()
         hideProductFilters()
-        return binding.root
+        initClick()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initProductSheet()
-    }
-
-    private fun initProductSheet() {
-        val bottomSheet =
-            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        val behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
-            state = BottomSheetBehavior.STATE_COLLAPSED
-            isHideable = true
-            skipCollapsed = false
-        }
-
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
-
-        binding.productPopupBack.setOnClickListener {
-            behavior.state = BottomSheetBehavior.STATE_HIDDEN
+    private fun initClick() {
+        binding.backBtn.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun initProductDetailsObserve(productId: Int) {
-
-        productDetailsViewModel.productDetails.observe(viewLifecycleOwner) {
+        productDetailsViewModel.productDetails.observe(this) {
             productDTOInstance = it
             Glide.with(this)
                 .load(productDTOInstance.image_url)
@@ -107,15 +83,12 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
                 .into(binding.productImage)
             binding.apply {
                 nameTv.text = productDTOInstance.name
-                productSource.text = Constants.displayProductDetails(
-                    getString(R.string.from),
-                    productDTOInstance.source
-                )
+                productSource.text = productDTOInstance.source
                 productBtn.text = Constants.displayProductPrice(
                     getString(R.string.buy_from),
                     productDTOInstance.source,
                     getString(R.string.b),
-                    arguments.productPrice,
+                    productPrice,
                     getString(R.string.egp)
                 )
                 var description = productDTOInstance.description
@@ -143,7 +116,8 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         }
 
         binding.updateProductBtn.setOnClickListener {
-            val status = statusList[binding.statusSpinner.selectedItemPosition]
+            val productName = productDTOInstance.name.substring(0, 12)
+            val status = Constants.statusList[binding.statusSpinner.selectedItemPosition]
             val categoryId =
                 categoryDTOList[binding.categorySpinner.selectedItemPosition].id
 
@@ -152,24 +126,22 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
             productObject.addProperty("category_id", categoryId)
             productObject.addProperty("status", status)
             params.add("product", productObject)
-
             productDetailsViewModel.updateProductDetails(productId, params, deviceId)
+            Toast.makeText(this, "$productName Updated Successfully", Toast.LENGTH_SHORT).show()
         }
 
         productDetailsViewModel.getProductDetails(productId, deviceId)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun initSimilarProductsObserve(productId: Int) {
-        similarProductsViewModel.similarProductList.observe(viewLifecycleOwner) {
-            similarList.addAll(it)
-            similarProductAdapter.notifyDataSetChanged()
+        similarProductsViewModel.similarProductList.observe(this) {
+            similarProductAdapter.setSimilarProductsList(it)
         }
 
-        similarProductsViewModel.errorMessage.observe(viewLifecycleOwner) {
+        similarProductsViewModel.errorMessage.observe(this) {
         }
 
-        similarProductsViewModel.loading.observe(viewLifecycleOwner) {
+        similarProductsViewModel.loading.observe(this) {
         }
 
         similarProductsViewModel.getSimilarProducts(productId, deviceId)
@@ -179,34 +151,33 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         binding.rvSimilarProducts.apply {
             setHasFixedSize(true)
             adapter = similarProductAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(this@ProductDetailsActivity)
         }
     }
 
     private fun initStatusSpinnerAdapter(status: String) {
-        val statusSpinnerAdapter = StatusSpinnerAdapter(requireContext(), statusList)
+        val statusSpinnerAdapter = StatusSpinnerAdapter(this, Constants.statusList)
         binding.statusSpinner.adapter = statusSpinnerAdapter
-        val selectedStatus = statusList.find { it == status }
-        binding.statusSpinner.setSelection(statusList.indexOf(selectedStatus))
+        val selectedStatus = Constants.statusList.find { it == status }
+        binding.statusSpinner.setSelection(Constants.statusList.indexOf(selectedStatus))
     }
 
     private fun initCategorySpinnerAdapter() {
-       lifecycleScope.launch {
-           val categories = categoryViewModel.fetchCategoryData(deviceId)
-           categoryDTOList = categories
-           val categorySpinnerAdapter =
-               CategorySpinnerAdapter(requireContext(), categoryDTOList)
-           binding.categorySpinner.adapter = categorySpinnerAdapter
+        lifecycleScope.launch {
+            val categories = categoryViewModel.fetchCategoryData(deviceId)
+            categoryDTOList = categories
+            val categorySpinnerAdapter =
+                CategorySpinnerAdapter(this@ProductDetailsActivity, categoryDTOList)
+            binding.categorySpinner.adapter = categorySpinnerAdapter
 
-           val selectedCategory =
-               categoryDTOList.find { it.id == productDTOInstance.category_id }
-           binding.categorySpinner.setSelection(categoryDTOList.indexOf(selectedCategory))
-       }
+            val selectedCategory =
+                categoryDTOList.find { it.id == productDTOInstance.category_id }
+            binding.categorySpinner.setSelection(categoryDTOList.indexOf(selectedCategory))
+        }
     }
 
     private fun setLineChart(prices: List<List<String>>) {
-        val greenColor = ContextCompat.getColor(requireContext(), R.color.green)
-
+        val greenColor = ContextCompat.getColor(this, R.color.green)
         try {
             lineList = ArrayList()
             entries = ArrayList()
@@ -266,23 +237,15 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun hideProductFilters() {
-        val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
+        val filtersEnabled = resources.getBoolean(R.bool.ENABLE_FILTERS)
         if (!filtersEnabled) {
-            binding.apply {
-                spinnerLayout.visibility = View.GONE
-                updateProductBtn.visibility = View.GONE
-            }
+            binding.debugCard.isVisible = false
         }
     }
 
     private fun onProductClicked(position: Int) {
-        val productId = similarList[position].id
-        val productPrice = similarList[position].price
-        val action = ProductDetailsFragmentDirections.actionProductDetailsFragmentSelf(
-            productId,
-            productPrice
-        )
-        findNavController().navigate(action)
+        val similarProduct = similarProductAdapter.similarProductsList[position]
+        Toast.makeText(this, similarProduct.name, Toast.LENGTH_SHORT).show()
     }
 
     private fun toggleDescription() {
@@ -306,8 +269,8 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 }

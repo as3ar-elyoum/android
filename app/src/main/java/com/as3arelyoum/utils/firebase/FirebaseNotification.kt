@@ -11,7 +11,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.as3arelyoum.R
-import com.as3arelyoum.ui.home.HomeActivity
+import com.as3arelyoum.ui.home.activity.HomeActivity
 import com.as3arelyoum.utils.helper.Constants.CHANNEL_ID
 import com.as3arelyoum.utils.helper.PrefUtil
 import com.as3arelyoum.utils.helper.PrefUtil.initPrefUtil

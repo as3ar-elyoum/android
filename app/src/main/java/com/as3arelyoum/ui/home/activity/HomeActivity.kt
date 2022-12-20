@@ -1,8 +1,8 @@
-package com.as3arelyoum.ui.home
+package com.as3arelyoum.ui.home.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.ActivityMainBinding
+import com.as3arelyoum.ui.home.adapters.CategoriesAdapter
+import com.as3arelyoum.ui.home.viewModel.HomeViewModel
+import com.as3arelyoum.ui.home.adapters.ProductsAdapter
+import com.as3arelyoum.ui.productDetails.activity.ProductDetailsActivity
+import com.as3arelyoum.ui.search.SearchActivity
 import com.as3arelyoum.ui.splach.SplashScreenViewModel
 import com.as3arelyoum.utils.ads.Banner
 import com.as3arelyoum.utils.helper.Constants.getDeviceId
@@ -41,9 +46,16 @@ class HomeActivity : AppCompatActivity() {
         initCategoriesRV()
         initProductsRV()
         initHomeDataObserve()
-        onBackPress()
-        backToTopButton()
+        initSearchFragment()
         sendUserInfoToServer()
+        backToTopButton()
+        onBackPress()
+    }
+
+    private fun initSearchFragment(){
+        binding.searchView.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+        }
     }
 
     private fun bannerAdView() {
@@ -103,27 +115,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun onProductClicked(position: Int) {
-        val product = productsAdapter.productList[position]
-        Toast.makeText(this, product.name, Toast.LENGTH_SHORT).show()
+        val productId = productsAdapter.productList[position].id
+        val productPrice = productsAdapter.productList[position].price
+        val intent = Intent(this, ProductDetailsActivity::class.java)
+        intent.putExtra("productId", productId)
+        intent.putExtra("productPrice", productPrice)
+        startActivity(intent)
     }
-
-    private fun hideProductsProgressBar() {
-        binding.productsProgressBar.isVisible = false
-        binding.categoriesTv.isVisible = true
-        binding.productsRv.isVisible = true
-    }
-
-    private fun showProductsProgressBar() {
-        binding.productsProgressBar.isVisible = true
-        binding.categoriesTv.isVisible = false
-        binding.productsRv.isVisible = false
-    }
-
-    private fun hideCategoriesProgressBar() {
-        binding.categoriesProgress.isVisible = false
-        binding.categoriesRv.isVisible = true
-    }
-
 
     private fun onBackPress() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -147,6 +145,23 @@ class HomeActivity : AppCompatActivity() {
         binding.toTopBtn.setOnClickListener {
             binding.nestedScrollView.smoothScrollTo(0, 0, 2000)
         }
+    }
+
+    private fun hideProductsProgressBar() {
+        binding.productsProgressBar.isVisible = false
+        binding.categoriesTv.isVisible = true
+        binding.productsRv.isVisible = true
+    }
+
+    private fun showProductsProgressBar() {
+        binding.productsProgressBar.isVisible = true
+        binding.categoriesTv.isVisible = false
+        binding.productsRv.isVisible = false
+    }
+
+    private fun hideCategoriesProgressBar() {
+        binding.categoriesProgress.isVisible = false
+        binding.categoriesRv.isVisible = true
     }
 
     override fun onDestroy() {
