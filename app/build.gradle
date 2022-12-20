@@ -6,12 +6,15 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
     namespace 'com.as3arelyoum'
     compileSdk 33
 
+    def localProperties = new Properties()
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
     defaultConfig {
         applicationId "com.as3arelyoum"
         minSdk 21
@@ -20,6 +23,7 @@ android {
         versionName "0.07"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", localProperties['BaseUrl']
     }
 
     buildTypes {
@@ -48,6 +52,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -71,7 +78,7 @@ dependencies {
     //Splash Screen
     implementation 'androidx.core:core-splashscreen:1.0.0'
     //Fragments
-    implementation 'androidx.fragment:fragment-ktx:1.5.4'
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
     //Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0-alpha04'
     implementation 'androidx.navigation:navigation-ui-ktx:2.6.0-alpha04'
@@ -83,7 +90,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
-    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.7"
     implementation 'com.google.code.gson:gson:2.9.1'
 
     //kotlin coroutine
@@ -100,13 +107,16 @@ dependencies {
     // Material Ripple
     implementation 'com.balysv:material-ripple:1.0.2'
     //Firebase Analytics
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.2.0'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
     //Google Ads
-    implementation 'com.google.android.gms:play-services-ads:21.3.0'
-    implementation 'com.google.android.gms:play-services-ads-lite:21.3.0'
+    implementation 'com.google.android.gms:play-services-ads:21.4.0'
+    implementation 'com.google.android.gms:play-services-ads-lite:21.4.0'
     //Circular Image View
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    // Hilt
+    implementation 'com.google.dagger:hilt-android:2.44'
+    kapt 'com.google.dagger:hilt-compiler:2.44'
 }

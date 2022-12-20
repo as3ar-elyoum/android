@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.as3arelyoum.data.remote.dto.CategoryDTO
+import com.as3arelyoum.data.remote.response.dto.CategoryDTO
 import com.as3arelyoum.databinding.SpinnerItemsBinding
 import com.bumptech.glide.Glide
 

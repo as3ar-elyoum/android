@@ -16,8 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.CategoryDTO
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.remote.response.dto.CategoryDTO
+import com.as3arelyoum.data.remote.response.dto.ProductDTO
 import com.as3arelyoum.databinding.FragmentProductDetailsBinding
 import com.as3arelyoum.ui.category.CategorySpinnerAdapter
 import com.as3arelyoum.ui.category.CategoryViewModel

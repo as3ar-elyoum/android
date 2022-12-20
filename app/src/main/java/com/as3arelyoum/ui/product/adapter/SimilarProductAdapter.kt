@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.remote.response.dto.ProductDTO
 import com.as3arelyoum.databinding.SimilarProductCardBinding
 import com.as3arelyoum.utils.helper.Constants.displayProductDetails
 import com.bumptech.glide.Glide

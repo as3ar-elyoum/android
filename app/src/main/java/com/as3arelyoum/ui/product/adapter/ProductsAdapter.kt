@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.remote.response.dto.ProductDTO
 import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
 import java.util.*

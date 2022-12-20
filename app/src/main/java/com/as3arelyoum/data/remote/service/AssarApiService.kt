@@ -1,54 +1,63 @@
 package com.as3arelyoum.data.remote.service
 
-import com.as3arelyoum.data.remote.dto.CategoryDTO
-import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.data.remote.dto.UserInfoDTO
-import com.as3arelyoum.utils.helper.Constants.CATEGORIES
-import com.as3arelyoum.utils.helper.Constants.PRODUCTS
-import com.as3arelyoum.utils.helper.Constants.PRODUCT_DETAILS
-import com.as3arelyoum.utils.helper.Constants.SEARCH
+import com.as3arelyoum.data.remote.response.base.BaseResponse
+import com.as3arelyoum.data.remote.response.dto.CategoryDTO
+import com.as3arelyoum.data.remote.response.dto.ProductDTO
+import com.as3arelyoum.data.remote.response.dto.UserInfoDTO
 import com.google.gson.JsonObject
-import retrofit2.Response
 import retrofit2.http.*
 
 interface AssarApiService {
-    @GET(CATEGORIES)
-    suspend fun getAllCategories(): Response<List<CategoryDTO>>
 
-    @GET(PRODUCTS)
+    /**
+     * Categories
+     */
+    @GET("categories")
+    suspend fun getAllCategories(): BaseResponse<CategoryDTO>
+
+    /**
+     * Products
+     */
+    @GET("products")
     suspend fun getAllProducts(
         @Query("category_id") category_id: Int,
         @Header("deviceid") deviceId: String
-    ): Response<List<ProductDTO>>
-
-    @GET(PRODUCT_DETAILS)
-    suspend fun getProductDetails(
-        @Path("product_id") id: Int,
-        @Header("deviceid") deviceId: String
-    ): Response<ProductDTO>
-
-    @PUT(PRODUCT_DETAILS)
-    suspend fun updateProductDetails(
-        @Path("product_id") id: Int,
-        @Body product: JsonObject,
-        @Header("deviceid") deviceId: String
-    ): Response<ProductDTO>
-
-    @GET(SEARCH)
-    suspend fun search(
-        @Query("query[q]") query: String,
-        @Header("deviceid") deviceId: String
-    ): Response<List<ProductDTO>>
+    ): BaseResponse<ProductDTO>
 
     @GET("products/{product_id}/similar")
     suspend fun getSimilarProducts(
         @Path("product_id") product_id: Int,
         @Header("deviceid") deviceId: String
-    ): Response<List<ProductDTO>>
+    ): BaseResponse<ProductDTO>
 
+    @GET("products/{product_id}")
+    suspend fun getProductDetails(
+        @Path("product_id") id: Int,
+        @Header("deviceid") deviceId: String
+    ): ProductDTO
+
+    @PUT("products/{product_id}")
+    suspend fun updateProductDetails(
+        @Path("product_id") id: Int,
+        @Body product: JsonObject,
+        @Header("deviceid") deviceId: String
+    ): ProductDTO
+
+    /**
+     * Search
+     */
+    @GET("search")
+    suspend fun search(
+        @Query("query[q]") query: String,
+        @Header("deviceid") deviceId: String
+    ): BaseResponse<ProductDTO>
+
+    /**
+     * User
+     */
     @POST("devices")
-    suspend fun sendDevice(
+    suspend fun sendDeviceId(
         @Body userInfoDTO: UserInfoDTO,
         @Header("deviceid") deviceId: String
-    ): Response<UserInfoDTO>
+    ): UserInfoDTO
 }

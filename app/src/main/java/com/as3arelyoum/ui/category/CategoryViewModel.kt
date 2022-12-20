@@ -2,8 +2,8 @@ package com.as3arelyoum.ui.category
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.as3arelyoum.data.remote.dto.CategoryDTO
-import com.as3arelyoum.data.remote.dto.UserInfoDTO
+import com.as3arelyoum.data.remote.response.dto.CategoryDTO
+import com.as3arelyoum.data.remote.response.dto.UserInfoDTO
 import com.as3arelyoum.data.repository.AssarRepository
 import kotlinx.coroutines.*
 

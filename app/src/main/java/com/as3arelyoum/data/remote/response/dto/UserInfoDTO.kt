@@ -1,4 +1,4 @@
-package com.as3arelyoum.data.remote.dto
+package com.as3arelyoum.data.remote.response.dto
 
 data class UserInfoDTO(
     val device_id: String,

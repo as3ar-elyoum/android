@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.UserInfoDTO
+import com.as3arelyoum.data.remote.response.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
 import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil
