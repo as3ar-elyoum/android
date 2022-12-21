@@ -3,6 +3,7 @@ package com.as3arelyoum.ui.home.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +16,8 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.home.adapters.CategoriesAdapter
-import com.as3arelyoum.ui.home.viewModel.HomeViewModel
 import com.as3arelyoum.ui.home.adapters.ProductsAdapter
+import com.as3arelyoum.ui.home.viewModel.HomeViewModel
 import com.as3arelyoum.ui.productDetails.activity.ProductDetailsActivity
 import com.as3arelyoum.ui.search.SearchActivity
 import com.as3arelyoum.ui.splach.SplashScreenViewModel
@@ -52,7 +53,7 @@ class HomeActivity : AppCompatActivity() {
         onBackPress()
     }
 
-    private fun initSearchFragment(){
+    private fun initSearchFragment() {
         binding.searchView.setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
         }
@@ -65,7 +66,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun sendUserInfoToServer() {
         val fcmToken = getData("token")
-        val userInfo = UserInfoDTO(fcmToken, deviceId)
+        val userInfo = UserInfoDTO(deviceId, fcmToken)
         lifecycleScope.launch {
             if (fcmToken.isNotEmpty()) {
                 homeViewModel.sendDevice(userInfo)
@@ -74,14 +75,34 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initHomeDataObserve() {
-        lifecycleScope.launch {
-            val categories = homeViewModel.fetchCategoryData(deviceId)
-            categoryAdapter.setCategoriesList(categories)
-            val products = homeViewModel.getSpecificCategoryData(categories[0].id, deviceId)
-            productsAdapter.setProductsList(products)
-            binding.categoriesTv.text = categories[0].name
-            hideCategoriesProgressBar()
-            hideProductsProgressBar()
+        homeViewModel.apply {
+            categoryList.observe(this@HomeActivity) {
+                categoryAdapter.setCategoriesList(it)
+                initProductsData(it[0].id, it[0].name)
+            }
+
+            errorMessage.observe(this@HomeActivity) {
+                Toast.makeText(this@HomeActivity, it, Toast.LENGTH_SHORT).show()
+            }
+
+            loading.observe(this@HomeActivity) { hideCategoriesProgressBar(it) }
+
+            fetchCategoryData(deviceId)
+        }
+    }
+
+    private fun initProductsData(categoryId: Int, categoryName: String) {
+        homeViewModel.apply {
+            productList.observe(this@HomeActivity) { productsAdapter.setProductsList(it) }
+
+            errorMessage.observe(this@HomeActivity) {
+                Toast.makeText(this@HomeActivity, it, Toast.LENGTH_SHORT).show()
+            }
+            loading.observe(this@HomeActivity) { hideProductsProgressBar(it) }
+
+            getSpecificCategoryData(categoryId, deviceId)
+
+            binding.categoriesTv.text = categoryName
         }
     }
 
@@ -104,13 +125,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun onCategoryClicked(position: Int) {
         showProductsProgressBar()
-        val category = categoryAdapter.categoryList[position]
-        lifecycleScope.launch {
-            val getSpecificCategoryProducts =
-                homeViewModel.getSpecificCategoryData(category.id, deviceId)
-            productsAdapter.setProductsList(getSpecificCategoryProducts)
-            binding.categoriesTv.text = category.name
-            hideProductsProgressBar()
+        homeViewModel.apply {
+            categoryList.value?.get(position)?.let {
+                getSpecificCategoryData(it.id, deviceId)
+                binding.categoriesTv.text = it.name
+            }
         }
     }
 
@@ -147,10 +166,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideProductsProgressBar() {
-        binding.productsProgressBar.isVisible = false
-        binding.categoriesTv.isVisible = true
-        binding.productsRv.isVisible = true
+    private fun hideProductsProgressBar(it: Boolean) {
+        binding.productsProgressBar.isVisible = it
+        binding.categoriesTv.isVisible = !it
+        binding.productsRv.isVisible = !it
     }
 
     private fun showProductsProgressBar() {
@@ -159,9 +178,14 @@ class HomeActivity : AppCompatActivity() {
         binding.productsRv.isVisible = false
     }
 
-    private fun hideCategoriesProgressBar() {
-        binding.categoriesProgress.isVisible = false
-        binding.categoriesRv.isVisible = true
+    private fun hideCategoriesProgressBar(it: Boolean) {
+        binding.categoriesProgress.isVisible = it
+        binding.categoriesRv.isVisible = !it
+    }
+
+    private fun showCategoriesProgressBar(it: Boolean) {
+        binding.categoriesProgress.isVisible = !it
+        binding.categoriesRv.isVisible = it
     }
 
     override fun onDestroy() {
