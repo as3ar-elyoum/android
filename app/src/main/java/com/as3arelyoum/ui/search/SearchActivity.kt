@@ -1,13 +1,14 @@
 package com.as3arelyoum.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.databinding.ActivitySearchBinding
+import com.as3arelyoum.ui.productDetails.activity.ProductDetailsActivity
 import com.as3arelyoum.utils.helper.Constants
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -61,8 +62,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onProductClicked(position: Int) {
-        val product = searchAdapter.differ.currentList[position]
-        Toast.makeText(this, product.name, Toast.LENGTH_SHORT).show()
+        val productId = searchAdapter.differ.currentList[position].id
+        val productPrice = searchAdapter.differ.currentList[position].price
+        val intent = Intent(this, ProductDetailsActivity::class.java)
+        intent.putExtra("productId", productId)
+        intent.putExtra("productPrice", productPrice)
+        startActivity(intent)
     }
 
     override fun onDestroy() {

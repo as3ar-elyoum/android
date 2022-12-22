@@ -166,7 +166,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             categoryViewModel.fetchCategoryData(deviceId)
 
-            categoryViewModel.categoryList.observe(this@ProductDetailsActivity){
+            categoryViewModel.categoryList.observe(this@ProductDetailsActivity) {
                 categoryDTOList = it
                 val categorySpinnerAdapter = CategorySpinnerAdapter(this@ProductDetailsActivity, it)
                 binding.categorySpinner.adapter = categorySpinnerAdapter
@@ -244,8 +244,12 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     private fun onProductClicked(position: Int) {
-        val similarProduct = similarProductAdapter.similarProductsList[position]
-        Toast.makeText(this, similarProduct.name, Toast.LENGTH_SHORT).show()
+        val similarProductId = similarProductAdapter.similarProductsList[position].id
+        val similarProductPrice = similarProductAdapter.similarProductsList[position].price
+        val intent = Intent(this, ProductDetailsActivity::class.java)
+        intent.putExtra("productId", similarProductId)
+        intent.putExtra("productPrice", similarProductPrice)
+        startActivity(intent)
     }
 
     private fun toggleDescription() {
