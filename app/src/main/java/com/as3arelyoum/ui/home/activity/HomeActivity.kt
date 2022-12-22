@@ -3,6 +3,7 @@ package com.as3arelyoum.ui.home.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -78,7 +79,7 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.apply {
             categoryList.observe(this@HomeActivity) {
                 categoryAdapter.setCategoriesList(it)
-                initProductsData(it[0].id, it[0].name)
+                initProductsData(null, "أفضل المنتجات")
             }
 
             errorMessage.observe(this@HomeActivity) {
@@ -91,16 +92,25 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun initProductsData(categoryId: Int, categoryName: String) {
+    private fun initProductsData(categoryId: Int?, categoryName: String) {
         homeViewModel.apply {
-            productList.observe(this@HomeActivity) { productsAdapter.setProductsList(it) }
+            productList.observe(this@HomeActivity) {
+                Log.d("LOADING...", "Loaded 1")
+                hideProductsProgressBar(false)
+                productsAdapter.setProductsList(it)
+
+                Log.d("LOADING...", "Data is presented")
+            }
 
             errorMessage.observe(this@HomeActivity) {
                 Toast.makeText(this@HomeActivity, it, Toast.LENGTH_SHORT).show()
             }
-            loading.observe(this@HomeActivity) { hideProductsProgressBar(it) }
+//            loading.observe(this@HomeActivity) {
+//                Log.d("LOADING...", "Hide progress")
+//                hideProductsProgressBar(it)
+//            }
 
-            getSpecificCategoryData(categoryId, deviceId)
+            loadProducts(categoryId, deviceId)
 
             binding.categoriesTv.text = categoryName
         }
@@ -127,7 +137,7 @@ class HomeActivity : AppCompatActivity() {
         showProductsProgressBar()
         homeViewModel.apply {
             categoryList.value?.get(position)?.let {
-                getSpecificCategoryData(it.id, deviceId)
+                loadProducts(it.id, deviceId)
                 binding.categoriesTv.text = it.name
             }
         }
@@ -170,6 +180,8 @@ class HomeActivity : AppCompatActivity() {
         binding.productsProgressBar.isVisible = it
         binding.categoriesTv.isVisible = !it
         binding.productsRv.isVisible = !it
+
+        Log.d("LOADING...", "Progress is hidden")
     }
 
     private fun showProductsProgressBar() {

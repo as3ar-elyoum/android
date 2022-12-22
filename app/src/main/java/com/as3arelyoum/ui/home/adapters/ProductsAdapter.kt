@@ -9,18 +9,21 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.ProductDTO
 import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
-import java.util.*
 
 class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
 
-    val productList = mutableListOf<ProductDTO>()
+    var productList: List<ProductDTO> = ArrayList()
 
     fun setProductsList(products: List<ProductDTO>) {
-        productList.clear()
-        productList.addAll(products)
+        productList = products
         notifyDataSetChanged()
+//        productList.clear()
+//        productList.addAll(products)
+//        notifyDataSetChanged()
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {

@@ -1,5 +1,7 @@
 package com.as3arelyoum.ui.home.viewModel
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,13 +37,14 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun getSpecificCategoryData(categoryId: Int, deviceId: String){
+    fun loadProducts(categoryId: Int?, deviceId: String) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val response = async { repository.getCategoryProducts(categoryId, deviceId) }
             withContext(Dispatchers.Main) {
                 if (response.await().isSuccessful) {
+                    Log.d("LOADING...", "Loaded 2")
                     productList.postValue(response.await().body())
-                    loading.postValue(false)
+//                    loading.postValue(false)
                 } else {
                     onError("Error: ${response.await().message()}")
                 }
