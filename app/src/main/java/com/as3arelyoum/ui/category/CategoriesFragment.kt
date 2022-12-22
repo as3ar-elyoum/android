@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
@@ -25,8 +26,7 @@ class CategoriesFragment : Fragment() {
     private val deviceId: String by lazy { getDeviceId(requireContext()) }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
         requireActivity().title = getString(R.string.app_name)
@@ -84,7 +84,8 @@ class CategoriesFragment : Fragment() {
         binding.recyclerview.apply {
             setHasFixedSize(true)
             adapter = categoryAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
