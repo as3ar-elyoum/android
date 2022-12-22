@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
+import com.as3arelyoum.ui.product.adapter.ProductsAdapter
 import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil
 
@@ -24,6 +25,8 @@ class CategoriesFragment : Fragment() {
     private val categoryViewModel: CategoryViewModel by viewModels()
     private val categoryAdapter = CategoryAdapter { position -> onCategoryClicked(position) }
     private val deviceId: String by lazy { getDeviceId(requireContext()) }
+    private var productsAdapter =
+        ProductsAdapter { position -> Log.d("Clicked", position.toString()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,11 +48,11 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun initRefresh() {
-        binding.refresh.setOnRefreshListener {
-            binding.refresh.isRefreshing = false
-            initCategoryObserve()
-            sendUserToApi()
-        }
+//        binding.refresh.setOnRefreshListener {
+//            binding.refresh.isRefreshing = false
+//            initCategoryObserve()
+//            sendUserToApi()
+//        }
     }
 
     @SuppressLint("HardwareIds")
@@ -76,12 +79,12 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun hideProgressBar(it: Boolean) {
-        binding.progressBar.isVisible = it
-        binding.nestedContent.isVisible = !it
+        binding.categoriesProgress.isVisible = it
+        binding.categoriesRv.isVisible = !it
     }
 
     private fun initRecyclerView() {
-        binding.recyclerview.apply {
+        binding.categoriesRv.apply {
             setHasFixedSize(true)
             adapter = categoryAdapter
             layoutManager =
