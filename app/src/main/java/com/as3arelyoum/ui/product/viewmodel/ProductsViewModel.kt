@@ -18,7 +18,7 @@ class ProductsViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getAllProducts(category_id: Int, device_id: String) {
+    fun getAllProducts(category_id: Int?, device_id: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = repository.getAllProducts(category_id, device_id)
             withContext(Dispatchers.Main) {

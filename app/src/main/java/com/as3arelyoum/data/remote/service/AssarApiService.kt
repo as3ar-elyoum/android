@@ -17,7 +17,7 @@ interface AssarApiService {
 
     @GET(PRODUCTS)
     suspend fun getAllProducts(
-        @Query("category_id") category_id: Int,
+        @Query("category_id") category_id: Int?,
         @Header("deviceid") deviceId: String
     ): Response<List<ProductDTO>>
 
