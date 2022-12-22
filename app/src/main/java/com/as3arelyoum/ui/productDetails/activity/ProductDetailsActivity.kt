@@ -164,15 +164,15 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     private fun initCategorySpinnerAdapter() {
         lifecycleScope.launch {
-            val categories = categoryViewModel.fetchCategoryData(deviceId)
-            categoryDTOList = categories
-            val categorySpinnerAdapter =
-                CategorySpinnerAdapter(this@ProductDetailsActivity, categoryDTOList)
-            binding.categorySpinner.adapter = categorySpinnerAdapter
+            categoryViewModel.fetchCategoryData(deviceId)
 
-            val selectedCategory =
-                categoryDTOList.find { it.id == productDTOInstance.category_id }
-            binding.categorySpinner.setSelection(categoryDTOList.indexOf(selectedCategory))
+            categoryViewModel.categoryList.observe(this@ProductDetailsActivity){
+                categoryDTOList = it
+                val categorySpinnerAdapter = CategorySpinnerAdapter(this@ProductDetailsActivity, it)
+                binding.categorySpinner.adapter = categorySpinnerAdapter
+                val selectedCategory = it.find { it.id == productDTOInstance.category_id }
+                binding.categorySpinner.setSelection(it.indexOf(selectedCategory))
+            }
         }
     }
 

@@ -144,7 +144,6 @@
                     android:scrollbars="none"
                     android:padding="@dimen/_2sdp"
                     android:scrollingCache="true"
-                    android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@+id/frameLayout"
                     app:layout_constraintTop_toBottomOf="@+id/textView2"
                     tools:itemCount="5"
