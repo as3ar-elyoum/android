@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.productDetails.activity
+package com.as3arelyoum.ui.activities
 
 import android.content.Intent
 import android.graphics.Color
@@ -14,15 +14,15 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.CategoryDTO
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.models.Category
+import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.databinding.ActivityProductDetailsBinding
-import com.as3arelyoum.ui.home.viewModel.HomeViewModel
-import com.as3arelyoum.ui.productDetails.adapter.CategorySpinnerAdapter
-import com.as3arelyoum.ui.productDetails.adapter.SimilarProductAdapter
-import com.as3arelyoum.ui.productDetails.adapter.StatusSpinnerAdapter
-import com.as3arelyoum.ui.productDetails.viewModels.ProductDetailsViewModel
-import com.as3arelyoum.ui.productDetails.viewModels.SimilarProductsViewModel
+import com.as3arelyoum.ui.adapters.CategorySpinnerAdapter
+import com.as3arelyoum.ui.adapters.SimilarProductAdapter
+import com.as3arelyoum.ui.adapters.StatusSpinnerAdapter
+import com.as3arelyoum.ui.viewModels.ProductDetailsViewModel
+import com.as3arelyoum.ui.viewModels.SimilarProductsViewModel
+import com.as3arelyoum.ui.viewModels.HomeViewModel
 import com.as3arelyoum.utils.helper.Constants
 import com.as3arelyoum.utils.helper.ViewAnimation
 import com.bumptech.glide.Glide
@@ -49,8 +49,8 @@ class ProductDetailsActivity : AppCompatActivity() {
     private val productId: Int by lazy { intent.getIntExtra("productId", 0) }
     private val productPrice: String by lazy { intent.getStringExtra("productPrice")!! }
 
-    private lateinit var productDTOInstance: ProductDTO
-    private lateinit var categoryDTOList: List<CategoryDTO>
+    private lateinit var productInstance: Product
+    private lateinit var categoryList: List<Category>
     private lateinit var lineList: ArrayList<String>
     private lateinit var entries: ArrayList<Entry>
     private lateinit var lineData: LineData
@@ -76,22 +76,22 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     private fun initProductDetailsObserve(productId: Int) {
         productDetailsViewModel.productDetails.observe(this) {
-            productDTOInstance = it
+            productInstance = it
             Glide.with(this)
-                .load(productDTOInstance.image_url)
+                .load(productInstance.image_url)
                 .placeholder(R.drawable.ic_downloading)
                 .into(binding.productImage)
             binding.apply {
-                nameTv.text = productDTOInstance.name
-                productSource.text = productDTOInstance.source
+                nameTv.text = productInstance.name
+                productSource.text = productInstance.source
                 productBtn.text = Constants.displayProductPrice(
                     getString(R.string.buy_from),
-                    productDTOInstance.source,
+                    productInstance.source,
                     getString(R.string.b),
                     productPrice,
                     getString(R.string.egp)
                 )
-                var description = productDTOInstance.description
+                var description = productInstance.description
                 description =
                     if (description.contains("  ") || description.contains("   ")) {
                         description.replace("   ", "\n")
@@ -105,21 +105,21 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                 productBtn.setOnClickListener {
                     val browserIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse(productDTOInstance.url))
+                        Intent(Intent.ACTION_VIEW, Uri.parse(productInstance.url))
                     startActivity(browserIntent)
                 }
 
                 initCategorySpinnerAdapter()
-                initStatusSpinnerAdapter(productDTOInstance.status)
-                setLineChart(productDTOInstance.prices)
+                initStatusSpinnerAdapter(productInstance.status)
+                setLineChart(productInstance.prices)
             }
         }
 
         binding.updateProductBtn.setOnClickListener {
-            val productName = productDTOInstance.name.substring(0, 12)
+            val productName = productInstance.name.substring(0, 12)
             val status = Constants.statusList[binding.statusSpinner.selectedItemPosition]
             val categoryId =
-                categoryDTOList[binding.categorySpinner.selectedItemPosition].id
+                categoryList[binding.categorySpinner.selectedItemPosition].id
 
             val params = JsonObject()
             val productObject = JsonObject()
@@ -167,10 +167,10 @@ class ProductDetailsActivity : AppCompatActivity() {
             categoryViewModel.fetchCategoryData(deviceId)
 
             categoryViewModel.categoryList.observe(this@ProductDetailsActivity) {
-                categoryDTOList = it
+                categoryList = it
                 val categorySpinnerAdapter = CategorySpinnerAdapter(this@ProductDetailsActivity, it)
                 binding.categorySpinner.adapter = categorySpinnerAdapter
-                val selectedCategory = it.find { it.id == productDTOInstance.category_id }
+                val selectedCategory = it.find { it.id == productInstance.category_id }
                 binding.categorySpinner.setSelection(it.indexOf(selectedCategory))
             }
         }

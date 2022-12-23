@@ -1,6 +1,7 @@
-package com.as3arelyoum.ui.search
+package com.as3arelyoum.ui.adapters
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,20 +9,21 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.databinding.SearchProductCardBinding
+import com.as3arelyoum.data.models.Product
+import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
+import java.util.*
 
-class SearchAdapter(
+class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
-) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
+) : RecyclerView.Adapter<ProductsAdapter.CustomViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<ProductDTO>() {
-        override fun areItemsTheSame(oldItem: ProductDTO, newItem: ProductDTO): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ProductDTO, newItem: ProductDTO): Boolean {
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
     }
@@ -30,7 +32,7 @@ class SearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
-            SearchProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CustomViewHolder(recyclerCard, onItemClicked)
     }
 
@@ -42,8 +44,8 @@ class SearchAdapter(
                 .load(productItems.image_url)
                 .placeholder(R.drawable.ic_downloading)
                 .into(productImage)
-            nameTv.text = "${productItems.id} - ${productItems.name}"
-            priceTv.text =  productItems.price + " " + "جنيه مصري"
+            nameTv.text = productItems.name
+            priceTv.text = productItems.price + " " + "جنيه مصري"
             sourceTv.text = "من" + " " + productItems.source
         }
     }
@@ -53,17 +55,24 @@ class SearchAdapter(
     }
 
     inner class CustomViewHolder(
-        val binding: SearchProductCardBinding,
+        val binding: ProductCardBinding,
         private val onItemClicked: (position: Int) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-            binding.productCard.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
+            binding.productDetailsBtn.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             onItemClicked(absoluteAdapterPosition)
         }
+    }
+
+
+    private fun randomColor(): Int {
+        val rnd = Random()
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
     }
 }

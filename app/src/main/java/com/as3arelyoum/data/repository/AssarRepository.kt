@@ -1,7 +1,7 @@
 package com.as3arelyoum.data.repository
 
-import com.as3arelyoum.data.remote.dto.UserInfoDTO
-import com.as3arelyoum.data.remote.network.RetrofitInstance
+import com.as3arelyoum.data.models.User
+import com.as3arelyoum.data.network.RetrofitInstance
 import com.google.gson.JsonObject
 
 class AssarRepository {
@@ -22,6 +22,6 @@ class AssarRepository {
     suspend fun getSimilarProducts(product_id: Int, deviceId: String) =
         assarApi.getSimilarProducts(product_id, deviceId)
 
-    suspend fun sendDevice(userInfoDTO: UserInfoDTO) =
-        assarApi.sendDevice(userInfoDTO)
+    suspend fun sendDevice(user: User) =
+        assarApi.sendDevice(user)
 }

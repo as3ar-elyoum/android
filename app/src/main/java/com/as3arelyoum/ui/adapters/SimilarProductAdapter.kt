@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.productDetails.adapter
+package com.as3arelyoum.ui.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.databinding.SimilarProductCardBinding
 import com.as3arelyoum.utils.helper.Constants.displayProductDetails
 import com.bumptech.glide.Glide
@@ -15,7 +15,7 @@ class SimilarProductAdapter(
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<SimilarProductAdapter.CustomViewHolder>() {
 
-    val similarProductsList = mutableListOf<ProductDTO>()
+    val similarProductsList = mutableListOf<Product>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
@@ -24,7 +24,7 @@ class SimilarProductAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setSimilarProductsList(products: List<ProductDTO>) {
+    fun setSimilarProductsList(products: List<Product>) {
         similarProductsList.clear()
         similarProductsList.addAll(products)
         notifyDataSetChanged()

@@ -1,15 +1,16 @@
-package com.as3arelyoum.ui.productDetails.viewModels
+package com.as3arelyoum.ui.viewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.data.repository.AssarRepository
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 
-class SimilarProductsViewModel : ViewModel() {
+class ProductDetailsViewModel : ViewModel() {
     private val repository = AssarRepository()
     var job: Job? = null
-    val similarProductList = MutableLiveData<List<ProductDTO>>()
+    val productDetails = MutableLiveData<Product>()
     val errorMessage = MutableLiveData<String>()
     val loading = MutableLiveData<Boolean>()
 
@@ -17,12 +18,26 @@ class SimilarProductsViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getSimilarProducts(product_id: Int, device_id: String) {
+    fun getProductDetails(product_id: Int, device_id: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getSimilarProducts(product_id, device_id)
+            val response = repository.getProductDetails(product_id, device_id)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    similarProductList.postValue(response.body())
+                    productDetails.postValue(response.body())
+                    loading.postValue(false)
+                } else {
+                    onError("Error: ${response.message()}")
+                }
+            }
+        }
+    }
+
+    fun updateProductDetails(product_id: Int, params: JsonObject, deviceId: String) {
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            val response = repository.updateProductDetails(product_id, params, deviceId)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    productDetails.postValue(response.body())
                     loading.postValue(false)
                 } else {
                     onError("Error: ${response.message()}")

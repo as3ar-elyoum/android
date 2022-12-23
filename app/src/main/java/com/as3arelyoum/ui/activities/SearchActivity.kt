@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.search
+package com.as3arelyoum.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.as3arelyoum.databinding.ActivitySearchBinding
-import com.as3arelyoum.ui.productDetails.activity.ProductDetailsActivity
+import com.as3arelyoum.ui.adapters.SearchAdapter
+import com.as3arelyoum.ui.viewModels.SearchViewModel
 import com.as3arelyoum.utils.helper.Constants
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope

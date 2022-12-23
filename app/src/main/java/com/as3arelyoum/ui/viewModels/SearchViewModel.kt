@@ -1,8 +1,8 @@
-package com.as3arelyoum.ui.search
+package com.as3arelyoum.ui.viewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.data.repository.AssarRepository
 import kotlinx.coroutines.*
 
@@ -10,7 +10,7 @@ class SearchViewModel : ViewModel() {
     private val repository = AssarRepository()
     var job: Job? = null
     private val errorMessage = MutableLiveData<String>()
-    val searchList = MutableLiveData<List<ProductDTO>>()
+    val searchList = MutableLiveData<List<Product>>()
     val loading = MutableLiveData<Boolean>()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
