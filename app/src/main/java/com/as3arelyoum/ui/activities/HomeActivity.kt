@@ -84,12 +84,12 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.apply {
             productList.observe(this@HomeActivity) {
                 productsAdapter.differ.submitList(it)
-                hideProductsProgressBar()
             }
             errorMessage.observe(this@HomeActivity) {
                 Toast.makeText(this@HomeActivity, it, Toast.LENGTH_SHORT).show()
             }
             getSpecificCategoryData(categoryId, deviceId)
+            hideProductsProgressBar()
         }
     }
 
@@ -115,6 +115,7 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.categoryList.value?.get(position)?.let {
             homeViewModel.getSpecificCategoryData(it.id, deviceId)
             binding.categoriesTv.text = it.name
+            hideProductsProgressBar()
         }
     }
 
