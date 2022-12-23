@@ -5,8 +5,6 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
 import com.as3arelyoum.data.models.Product
@@ -18,17 +16,13 @@ class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<ProductsAdapter.CustomViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
-        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.id == newItem.id
-        }
+    var productList: List<Product> = ArrayList()
 
-        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem == newItem
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    fun setProducts(products: List<Product>) {
+        productList = products
+        notifyDataSetChanged()
     }
-
-    val differ = AsyncListDiffer(this, diffCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
@@ -38,7 +32,7 @@ class ProductsAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val productItems = differ.currentList[position]
+        val productItems = productList[position]
         holder.binding.apply {
             Glide.with(holder.binding.root.context)
                 .load(productItems.image_url)
@@ -51,7 +45,7 @@ class ProductsAdapter(
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return productList.size
     }
 
     inner class CustomViewHolder(
@@ -68,11 +62,5 @@ class ProductsAdapter(
         override fun onClick(v: View?) {
             onItemClicked(absoluteAdapterPosition)
         }
-    }
-
-
-    private fun randomColor(): Int {
-        val rnd = Random()
-        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
     }
 }

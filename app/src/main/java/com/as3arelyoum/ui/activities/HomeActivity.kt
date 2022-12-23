@@ -83,13 +83,13 @@ class HomeActivity : AppCompatActivity() {
         binding.categoriesTv.text = categoryName
         homeViewModel.apply {
             productList.observe(this@HomeActivity) {
-                productsAdapter.differ.submitList(it)
+                productsAdapter.setProducts(it)
+                hideProductsProgressBar()
             }
             errorMessage.observe(this@HomeActivity) {
                 Toast.makeText(this@HomeActivity, it, Toast.LENGTH_SHORT).show()
             }
             getSpecificCategoryData(categoryId, deviceId)
-            hideProductsProgressBar()
         }
     }
 
@@ -115,12 +115,12 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.categoryList.value?.get(position)?.let {
             homeViewModel.getSpecificCategoryData(it.id, deviceId)
             binding.categoriesTv.text = it.name
-            hideProductsProgressBar()
+
         }
     }
 
     private fun onProductClicked(position: Int) {
-        val product = productsAdapter.differ.currentList[position]
+        val product = productsAdapter.productList[position]
         val intent = Intent(this, ProductDetailsActivity::class.java)
         intent.putExtra("productId", product.id)
         intent.putExtra("productPrice", product.price)
