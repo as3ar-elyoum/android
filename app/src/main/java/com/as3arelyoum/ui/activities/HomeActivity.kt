@@ -3,6 +3,7 @@ package com.as3arelyoum.ui.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -22,6 +23,11 @@ import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil.getData
 import com.as3arelyoum.utils.helper.PrefUtil.initPrefUtil
 import com.google.android.gms.ads.AdView
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.suddenh4x.ratingdialog.AppRating
+import com.suddenh4x.ratingdialog.preferences.RatingThreshold
 import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
@@ -46,6 +52,19 @@ class HomeActivity : AppCompatActivity() {
         onBackPress()
         initPrefUtil(this)
         bannerAdView()
+        inAppRating()
+        inAppUpdate()
+    }
+
+    private fun inAppRating() {
+        AppRating.Builder(this)
+            .setMinimumLaunchTimes(3)
+            .setMinimumDays(3)
+            .useGoogleInAppReview()
+            .setMinimumLaunchTimesToShowAgain(10)
+            .setMinimumDaysToShowAgain(7)
+            .setRatingThreshold(RatingThreshold.FOUR)
+            .showIfMeetsConditions()
     }
 
     private fun initSearchFragment() {
@@ -166,6 +185,35 @@ class HomeActivity : AppCompatActivity() {
     private fun hideCategoriesProgressBar() {
         binding.categoriesProgress.isVisible = false
         binding.categoriesRv.isVisible = true
+    }
+
+    private fun inAppUpdate() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && (appUpdateInfo.clientVersionStalenessDays() ?: -1) >= 3
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    0
+                )
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0) {
+            if (resultCode != RESULT_OK) {
+                Log.e("MY_APP", "Update flow failed! Result code: $resultCode")
+                inAppUpdate()
+            }
+        }
     }
 
     override fun onDestroy() {

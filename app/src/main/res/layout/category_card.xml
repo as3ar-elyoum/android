@@ -5,14 +5,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="@dimen/_4sdp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/_4sdp">
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="@dimen/_42sdp"
         android:layout_height="@dimen/_42sdp"
         android:layout_gravity="center"
-        app:cardBackgroundColor="#F3FBFF"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_30sdp">
 
         <ImageView
@@ -21,7 +22,6 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/categories"
             android:padding="@dimen/_10sdp"
-            android:scaleType="centerCrop"
             tools:src="@mipmap/ic_launcher_round" />
 
     </com.google.android.material.card.MaterialCardView>
@@ -30,9 +30,9 @@
         android:id="@+id/category_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_4sdp"
+        android:textColor="@color/black"
         android:textSize="@dimen/_8ssp"
         android:textStyle="bold"
         tools:text="الإلكترونيات" />

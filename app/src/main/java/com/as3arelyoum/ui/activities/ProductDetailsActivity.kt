@@ -20,9 +20,9 @@ import com.as3arelyoum.databinding.ActivityProductDetailsBinding
 import com.as3arelyoum.ui.adapters.CategorySpinnerAdapter
 import com.as3arelyoum.ui.adapters.SimilarProductAdapter
 import com.as3arelyoum.ui.adapters.StatusSpinnerAdapter
+import com.as3arelyoum.ui.viewModels.HomeViewModel
 import com.as3arelyoum.ui.viewModels.ProductDetailsViewModel
 import com.as3arelyoum.ui.viewModels.SimilarProductsViewModel
-import com.as3arelyoum.ui.viewModels.HomeViewModel
 import com.as3arelyoum.utils.helper.Constants
 import com.as3arelyoum.utils.helper.ViewAnimation
 import com.bumptech.glide.Glide
@@ -66,6 +66,15 @@ class ProductDetailsActivity : AppCompatActivity() {
         toggleDescription()
         hideProductFilters()
         initClick()
+        initRefresh()
+    }
+
+    private fun initRefresh(){
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = false
+            initProductDetailsObserve(productId)
+            initSimilarProductsObserve(productId)
+        }
     }
 
     private fun initClick() {

@@ -44,7 +44,7 @@ class SearchAdapter(
                 .into(productImage)
             nameTv.text = "${productItems.id} - ${productItems.name}"
             priceTv.text =  productItems.price + " " + "جنيه مصري"
-            sourceTv.text = "من" + " " + productItems.source
+            sourceTv.text = productItems.source
         }
     }
 

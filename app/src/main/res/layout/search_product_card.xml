@@ -11,66 +11,70 @@
 
     <com.balysv.materialripple.MaterialRippleLayout
         android:id="@+id/product_card"
+        android:padding="@dimen/_4sdp"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/product_image"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="@dimen/_120sdp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:contentDescription="@string/products"
-                android:padding="@dimen/_5sdp"
-                tools:src="@drawable/as3ar_elyoum_logo" />
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:contentDescription="@string/product_details"
+                android:padding="@dimen/_4sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@mipmap/ic_launcher_round" />
 
             <TextView
                 android:id="@+id/name_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/product_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:maxLines="3"
-                android:padding="@dimen/_6sdp"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10ssp"
                 android:textStyle="bold"
-                tools:text="معالج كور أي فايف سداسي النواة 12 ثريد" />
+                app:layout_constraintBottom_toTopOf="@+id/source_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/product_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Product Name" />
 
-            <TextView
-                android:id="@+id/price_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:fontFamily="sans-serif-black"
-                android:gravity="end"
-                android:padding="@dimen/_10sdp"
-                android:textColor="@color/price_color"
-                android:textSize="@dimen/_10ssp"
-                android:textStyle="bold"
-                tools:text="7000.0 جنيه مصري" />
 
             <TextView
                 android:id="@+id/source_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@id/price_tv"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:fontFamily="sans-serif-black"
-                android:padding="@dimen/_10sdp"
-                android:textColor="@color/source_color"
+                android:padding="@dimen/_2sdp"
+                android:textColor="#1384B6"
                 android:textSize="@dimen/_10ssp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/price_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/product_image"
                 tools:text="من أمازون" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/price_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                android:textColor="#F44336"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/product_image"
+                tools:text="90000 جنيه مصري" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.balysv.materialripple.MaterialRippleLayout>
 </androidx.cardview.widget.CardView>

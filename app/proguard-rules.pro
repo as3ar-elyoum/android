@@ -20,5 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.as3arelyoum.data.remote.dto.* { *; }
--keep class com.as3arelyoum.data.remote.service.* { *; }
+-keep class com.as3arelyoum.data.api.* { *; }
+-keep class com.as3arelyoum.data.models.* { *; }

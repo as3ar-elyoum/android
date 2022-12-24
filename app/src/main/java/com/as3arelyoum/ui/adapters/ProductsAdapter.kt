@@ -1,7 +1,6 @@
 package com.as3arelyoum.ui.adapters
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +39,7 @@ class ProductsAdapter(
                 .into(productImage)
             nameTv.text = productItems.name
             priceTv.text = productItems.price + " " + "جنيه مصري"
-            sourceTv.text = "من" + " " + productItems.source
+            sourceTv.text = productItems.source
         }
     }
 
