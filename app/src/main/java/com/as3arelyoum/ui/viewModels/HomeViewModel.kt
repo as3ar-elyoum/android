@@ -7,7 +7,7 @@ import com.as3arelyoum.data.models.Category
 import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.data.models.User
 import com.as3arelyoum.data.repository.AssarRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val repository = AssarRepository()
@@ -16,50 +16,33 @@ class HomeViewModel : ViewModel() {
     val productList = MutableLiveData<List<Product>>()
     val errorMessage = MutableLiveData<String>()
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onError("Exception handled: ${throwable.localizedMessage}")
-    }
-
     fun fetchCategoryData(deviceId: String) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val response = async { repository.getAllCategories(deviceId) }
-            withContext(Dispatchers.Main) {
-                if (response.await().isSuccessful) {
-                    categoryList.postValue(response.await().body())
-                } else {
-                    onError("Error: ${response.await().message()}")
-                }
+        viewModelScope.launch {
+            try {
+                categoryList.postValue(repository.getAllCategories(deviceId).body())
+            } catch (e: Exception) {
+                errorMessage.postValue(e.message)
             }
         }
     }
 
-    fun getSpecificCategoryData(categoryId: Int?, deviceId: String){
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val response = async { repository.getCategoryProducts(categoryId, deviceId) }
-            withContext(Dispatchers.Main) {
-                if (response.await().isSuccessful) {
-                    productList.postValue(response.await().body())
-                } else {
-                    onError("Error: ${response.await().message()}")
-                }
+    fun getSpecificCategoryData(categoryId: Int?, deviceId: String) {
+        viewModelScope.launch {
+            try {
+                productList.postValue(repository.getCategoryProducts(categoryId, deviceId).body())
+            } catch (e: Exception) {
+                errorMessage.postValue(e.message)
             }
         }
     }
 
     fun sendDevice(user: User) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val response = repository.sendDevice(user)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    userData.postValue(response.body())
-                } else {
-                    onError("Error: ${response.message()}")
-                }
+        viewModelScope.launch {
+            try {
+                userData.postValue(repository.sendDevice(user).body())
+            } catch (e: Exception) {
+                errorMessage.postValue(e.message)
             }
         }
-    }
-
-    private fun onError(message: String) {
-        errorMessage.postValue(message)
     }
 }
