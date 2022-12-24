@@ -27,7 +27,7 @@ class ProductDetailsViewModel : ViewModel() {
                 )
                 _loading.postValue(false)
             } catch (e: Exception) {
-                _errorMessage.postValue(e.message)
+                onError(e.message ?: "Error while fetching data")
             }
         }
     }
@@ -40,8 +40,13 @@ class ProductDetailsViewModel : ViewModel() {
                 )
                 _loading.postValue(false)
             } catch (e: Exception) {
-                _errorMessage.postValue(e.message)
+                onError(e.message ?: "Error while fetching data")
             }
         }
+    }
+
+    private fun onError(message: String) {
+        _errorMessage.postValue(message)
+        _loading.postValue(false)
     }
 }

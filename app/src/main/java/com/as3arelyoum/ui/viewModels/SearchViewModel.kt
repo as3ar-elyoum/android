@@ -1,42 +1,38 @@
 package com.as3arelyoum.ui.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.data.repository.AssarRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel() {
     private val repository = AssarRepository()
-    var job: Job? = null
-    private val errorMessage = MutableLiveData<String>()
-    val searchList = MutableLiveData<List<Product>>()
-    val loading = MutableLiveData<Boolean>()
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onError("Exception handled: ${throwable.localizedMessage}")
-    }
+    private val _searchList = MutableLiveData<List<Product>>()
+    val searchList: LiveData<List<Product>> = _searchList
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> = _loading
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> = _errorMessage
 
     fun search(query: String, device_id: String) {
-        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.search(query, device_id)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    searchList.postValue(response.body())
-                    loading.postValue(false)
-                } else {
-                    onError("Error: ${response.message()}")
-                }
+        viewModelScope.launch {
+            try {
+                _searchList.postValue(
+                    repository.search(query, device_id).body()
+                )
+                _loading.postValue(false)
+            } catch (e: Exception) {
+                onError(e.message ?: "Error while fetching data")
             }
         }
     }
 
     private fun onError(message: String) {
-        errorMessage.postValue(message)
-        loading.postValue(false)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        job?.cancel()
+        _errorMessage.postValue(message)
+        _loading.postValue(false)
     }
 }
