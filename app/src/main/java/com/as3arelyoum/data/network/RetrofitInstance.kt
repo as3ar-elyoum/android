@@ -1,6 +1,6 @@
-package com.as3arelyoum.data.remote.network
+package com.as3arelyoum.data.network
 
-import com.as3arelyoum.data.remote.service.AssarApiService
+import com.as3arelyoum.data.api.AssarApiService
 import com.as3arelyoum.utils.helper.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

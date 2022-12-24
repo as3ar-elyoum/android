@@ -1,6 +1,6 @@
-package com.as3arelyoum.data.remote.dto
+package com.as3arelyoum.data.models
 
-data class ProductDTO(
+data class Product(
     var id: Int,
     var name: String,
     var description: String,

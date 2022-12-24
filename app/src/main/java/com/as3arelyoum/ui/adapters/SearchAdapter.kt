@@ -1,4 +1,4 @@
-package com.as3arelyoum.ui.search
+package com.as3arelyoum.ui.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.databinding.SearchProductCardBinding
 import com.bumptech.glide.Glide
 
@@ -16,12 +16,12 @@ class SearchAdapter(
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<SearchAdapter.CustomViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<ProductDTO>() {
-        override fun areItemsTheSame(oldItem: ProductDTO, newItem: ProductDTO): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ProductDTO, newItem: ProductDTO): Boolean {
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
     }

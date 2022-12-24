@@ -1,14 +1,16 @@
-package com.as3arelyoum.ui.productDetails.adapter
+package com.as3arelyoum.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import com.as3arelyoum.data.models.Category
 import com.as3arelyoum.databinding.SpinnerItemsBinding
+import com.bumptech.glide.Glide
 
-class StatusSpinnerAdapter(context: Context, product: List<String>) :
-    ArrayAdapter<String>(context, 0, product) {
+class CategorySpinnerAdapter(context: Context, product: List<Category>) :
+    ArrayAdapter<Category>(context, 0, product) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return initView(position, parent)
@@ -19,14 +21,15 @@ class StatusSpinnerAdapter(context: Context, product: List<String>) :
     }
 
     private fun initView(position: Int, parent: ViewGroup): View {
-        val product = getItem(position)
+        val category = getItem(position)
         val binding = SpinnerItemsBinding.inflate(LayoutInflater.from(context), parent, false)
 
         binding.apply {
-            spinnerName.text = product
-            binding.spinnerImage.visibility = View.GONE
+            Glide.with(context)
+                .load(category?.icon)
+                .into(spinnerImage)
+            spinnerName.text = category?.name
         }
-
         return binding.root
     }
 }
