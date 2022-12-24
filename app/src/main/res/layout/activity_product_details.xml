@@ -19,21 +19,21 @@
             app:contentScrim="#2683C8"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/product_image"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_220sdp"
-                android:layout_gravity="center"
-                android:padding="@dimen/_45sdp"
-                app:layout_collapseMode="pin"
-                tools:src="@mipmap/as3ar_elyoum" />
-
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
                 app:layout_scrollFlags="scroll|enterAlways" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_220sdp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                app:layout_collapseMode="pin"
+                tools:src="@mipmap/as3ar_elyoum" />
 
             <ImageButton
                 android:id="@+id/back_btn"
@@ -70,8 +70,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nested_scroll_view"
