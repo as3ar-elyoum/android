@@ -20,6 +20,7 @@ class HomeViewModel : ViewModel() {
     val productList: LiveData<List<Product>> get() = _productList
 
     private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
 
     fun fetchCategoryData(deviceId: String) {
         viewModelScope.launch {
