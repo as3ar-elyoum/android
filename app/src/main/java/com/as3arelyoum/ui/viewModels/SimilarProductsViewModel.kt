@@ -1,43 +1,33 @@
 package com.as3arelyoum.ui.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.as3arelyoum.data.models.Product
 import com.as3arelyoum.data.repository.AssarRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 class SimilarProductsViewModel : ViewModel() {
     private val repository = AssarRepository()
-    var job: Job? = null
-    val similarProductList = MutableLiveData<List<Product>>()
-    val errorMessage = MutableLiveData<String>()
-    val loading = MutableLiveData<Boolean>()
+    private val _similarProductList = MutableLiveData<List<Product>>()
+    val similarProductList: LiveData<List<Product>> get() = _similarProductList
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onError("Exception handled: ${throwable.localizedMessage}")
-    }
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
 
     fun getSimilarProducts(product_id: Int, device_id: String) {
-        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getSimilarProducts(product_id, device_id)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    similarProductList.postValue(response.body())
-                    loading.postValue(false)
-                } else {
-                    onError("Error: ${response.message()}")
-                }
+        viewModelScope.launch {
+            try {
+                _similarProductList.postValue(
+                    repository.getSimilarProducts(product_id, device_id).body()
+                )
+                _loading.postValue(false)
+            } catch (e: Exception) {
+                _errorMessage.postValue(e.message)
             }
         }
-    }
-
-    private fun onError(message: String) {
-        errorMessage.postValue(message)
-        loading.postValue(false)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        job?.cancel()
     }
 }
