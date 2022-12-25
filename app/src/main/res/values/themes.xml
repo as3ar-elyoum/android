@@ -5,6 +5,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
+        <item name="drawerArrowStyle">@style/drawerToggle</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">

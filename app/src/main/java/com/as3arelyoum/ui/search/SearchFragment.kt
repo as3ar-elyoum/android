@@ -31,33 +31,23 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        showKeyboard()
+        initRecyclerView()
+        search()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (binding.searchInput.requestFocus()) {
-            val imm =
-                requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
-        }
-
-        initRecyclerView()
-        search()
         binding.rippleBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    private fun showKeyboard() {
+        binding.searchInput.requestFocus()
+        val imm = requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun search() {

@@ -2,7 +2,6 @@ package com.as3arelyoum.ui.category
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +28,6 @@ class CategoriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
-        requireActivity().title = getString(R.string.app_name)
         PrefUtil.initPrefUtil(requireContext())
         initRecyclerView()
         initCategoryObserve()
@@ -39,9 +37,8 @@ class CategoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().title = getString(R.string.categories)
         sendUserToApi()
-
-        Log.d("TAG", "onViewCreated: ${deviceId}")
     }
 
     private fun initRefresh() {

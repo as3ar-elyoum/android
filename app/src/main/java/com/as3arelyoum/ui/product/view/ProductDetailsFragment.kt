@@ -81,7 +81,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         val bottomSheet =
             dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         val behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
-            state = BottomSheetBehavior.STATE_COLLAPSED
+            state = BottomSheetBehavior.STATE_EXPANDED
             isHideable = true
             skipCollapsed = false
         }
