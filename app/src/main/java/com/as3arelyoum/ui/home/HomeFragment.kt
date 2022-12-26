@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +13,10 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.databinding.FragmentHomeBinding
 import com.as3arelyoum.ui.category.CategoryViewModel
+import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.utils.helper.Constants
-import com.as3arelyoum.utils.helper.PrefUtil
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
@@ -32,7 +32,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requireActivity().title = getString(R.string.home)
-        PrefUtil.initPrefUtil(requireContext())
         loadCategories()
         loadProducts()
         setUpRefresh()
@@ -62,6 +61,10 @@ class HomeFragment : Fragment() {
         homeViewModel.loading.observe(viewLifecycleOwner) {
             homeAdapter.setProductsLists(homeViewModel.productsLists)
             binding.progressBar.isVisible = it
+        }
+
+        homeViewModel.failure.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "لا يوجد إنترنت", Toast.LENGTH_SHORT).show()
         }
     }
 

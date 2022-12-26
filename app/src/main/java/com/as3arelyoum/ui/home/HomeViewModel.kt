@@ -12,6 +12,7 @@ class HomeViewModel : ViewModel() {
     private val repository = AssarRepository()
     var productsLists: MutableList<List<ProductDTO>> = ArrayList()
     var productList: List<ProductDTO> = ArrayList()
+    val failure = MutableLiveData<String>()
     val loading = MutableLiveData<Boolean>()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -24,7 +25,6 @@ class HomeViewModel : ViewModel() {
             if (response.isSuccessful) {
                 productList = response.body()?.let { ArrayList(it) }!!
                 productsLists.add(productList)
-
                 loading.postValue(false)
             } else {
                 onError("Error: ${response.message()}")
@@ -33,6 +33,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun onError(message: String) {
+        failure.postValue(message)
         loading.postValue(false)
     }
 }

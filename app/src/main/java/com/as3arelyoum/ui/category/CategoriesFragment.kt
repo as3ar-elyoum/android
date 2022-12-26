@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
+import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil
 
-class CategoriesFragment : Fragment() {
+class CategoriesFragment : BaseFragment() {
     private var _binding: FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
     private val categoryViewModel: CategoryViewModel by viewModels()

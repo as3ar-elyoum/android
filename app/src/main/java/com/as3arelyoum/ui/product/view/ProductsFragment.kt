@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.databinding.FragmentProductsBinding
+import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.ui.product.adapter.ProductsAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductsViewModel
 import com.as3arelyoum.utils.helper.Constants.getDeviceId
 
-class ProductsFragment : Fragment() {
+class ProductsFragment : BaseFragment() {
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
     private val arguments: ProductsFragmentArgs by navArgs()
@@ -35,6 +35,11 @@ class ProductsFragment : Fragment() {
         initProductsObserve()
         initRefresh()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        hideBottomNavigation()
     }
 
     private fun initToolbar() {
@@ -95,6 +100,7 @@ class ProductsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        showBottomNavigation()
         _binding = null
     }
 }
