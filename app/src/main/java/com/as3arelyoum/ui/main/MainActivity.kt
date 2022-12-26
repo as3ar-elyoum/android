@@ -1,6 +1,5 @@
 package com.as3arelyoum.ui.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -20,8 +19,8 @@ import com.as3arelyoum.databinding.ActivityMainBinding
 import com.as3arelyoum.ui.splach.SplashScreenViewModel
 import com.as3arelyoum.utils.ads.Banner
 import com.as3arelyoum.utils.ads.Interstitial
+import com.as3arelyoum.utils.firebase.FirebaseEvents.Companion.sendFirebaseEvent
 import com.google.android.gms.ads.AdView
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -40,18 +39,9 @@ class MainActivity : AppCompatActivity() {
         adView()
     }
 
-    private fun setAppLocale(context: Context, language: String) {
-        val locale = Locale(language)
-        Locale.setDefault(locale)
-        val config = context.resources.configuration
-        config.setLocale(locale)
-        context.createConfigurationContext(config)
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-    }
-
     override fun onResume() {
         super.onResume()
-        handler.postDelayed(runnable, 120000)
+        handler.postDelayed(runnable, 180000)
     }
 
     override fun onPause() {
@@ -115,6 +105,8 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_url))
         startActivity(Intent.createChooser(intent, getString(R.string.share_app)))
+        val eventName = "ShareApp"
+        sendFirebaseEvent("ShareApp", eventName)
     }
 
     override fun onDestroy() {

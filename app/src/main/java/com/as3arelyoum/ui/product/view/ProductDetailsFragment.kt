@@ -25,6 +25,7 @@ import com.as3arelyoum.ui.product.adapter.SimilarProductAdapter
 import com.as3arelyoum.ui.product.adapter.StatusSpinnerAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductDetailsViewModel
 import com.as3arelyoum.ui.product.viewmodel.SimilarProductsViewModel
+import com.as3arelyoum.utils.firebase.FirebaseEvents.Companion.sendFirebaseEvent
 import com.as3arelyoum.utils.helper.Constants
 import com.as3arelyoum.utils.helper.Constants.statusList
 import com.as3arelyoum.utils.helper.ViewAnimation
@@ -83,7 +84,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         val behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
             state = BottomSheetBehavior.STATE_EXPANDED
             isHideable = true
-            skipCollapsed = false
+            skipCollapsed = true
         }
 
         val layoutParams = bottomSheet.layoutParams
@@ -129,6 +130,8 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
                 descriptionTv.text = description
 
                 productBtn.setOnClickListener {
+                    val eventName = "BuyProduct_${productDTOInstance.name}"
+                    sendFirebaseEvent("BuyProduct", eventName)
                     val browserIntent =
                         Intent(Intent.ACTION_VIEW, Uri.parse(productDTOInstance.url))
                     startActivity(browserIntent)

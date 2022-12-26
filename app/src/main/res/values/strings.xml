@@ -26,7 +26,7 @@
     <string name="search">البحث</string>
     <string name="share_app">مشاركة التطبيق</string>
     <string name="app_url">
-        تابع التغير في حركة أسعار المنتجات من الأبليكيشن ده
+        تابع التغير في حركة أسعار المنتجات من الأبليكيشن ده \n
         https://play.google.com/store/apps/details?id=com.as3arelyoum</string>
     <string name="mobiles">موبايلات</string>
 </resources>

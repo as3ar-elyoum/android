@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.as3arelyoum.data.remote.dto.ProductDTO
 import com.as3arelyoum.data.repository.AssarRepository
+import com.as3arelyoum.utils.firebase.FirebaseEvents.Companion.sendFirebaseEvent
 import kotlinx.coroutines.*
 
 class SearchViewModel : ViewModel() {
@@ -17,6 +18,9 @@ class SearchViewModel : ViewModel() {
     }
 
     fun search(query: String, device_id: String) {
+        val eventName = "search_${query}"
+        sendFirebaseEvent(eventName, query)
+
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = repository.search(query, device_id)
             withContext(Dispatchers.Main) {
