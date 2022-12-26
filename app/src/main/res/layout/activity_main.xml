@@ -26,7 +26,7 @@
                 android:gravity="end|center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp"
+                android:textSize="@dimen/_14ssp"
                 android:textStyle="bold"
                 tools:text="@string/app_name" />
 

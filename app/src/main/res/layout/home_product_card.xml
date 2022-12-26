@@ -22,14 +22,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:textColor="@color/source_color"
-            android:textSize="@dimen/_7ssp"
+            android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
             tools:text="أمازون" />
 
         <ImageView
             android:id="@+id/product_image"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_60sdp"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_70sdp"
             android:layout_gravity="center"
             android:contentDescription="@string/products"
             android:padding="@dimen/_6sdp"
@@ -42,7 +42,7 @@
             android:maxLength="30"
             android:padding="@dimen/_2sdp"
             android:textColor="@color/black"
-            android:textSize="@dimen/_7ssp"
+            android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
             tools:text="معالج كور أي فايف سداسي النواة 12 ثريد" />
 
@@ -53,7 +53,7 @@
             android:fontFamily="sans-serif-black"
             android:padding="@dimen/_2sdp"
             android:textColor="@color/green"
-            android:textSize="@dimen/_7ssp"
+            android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
             tools:text="7000.0 جنيه مصري" />
 
@@ -66,7 +66,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/product_details_btn"
             android:textColor="@color/black"
-            android:textSize="@dimen/_7ssp"
+            android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
             app:rippleColor="@color/common_google_signin_btn_text_light_focused"
             app:strokeColor="@color/black" />
