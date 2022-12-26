@@ -1,14 +1,15 @@
 package com.as3arelyoum.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.databinding.FragmentHomeBinding
 import com.as3arelyoum.ui.category.CategoryViewModel
@@ -30,15 +31,14 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        Log.d("FragmentLifeCycle", "onCreateView")
-        requireActivity().title = "الرئيسية"
+        requireActivity().title = getString(R.string.home)
         PrefUtil.initPrefUtil(requireContext())
         loadCategories()
         loadProducts()
         setUpRefresh()
         return binding.root
     }
-    
+
     private fun setUpRefresh() {
         binding.swipeRefresh.setOnRefreshListener {
             binding.swipeRefresh.isRefreshing = false
@@ -59,7 +59,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadProducts() {
-        homeAdapter.setProductsLists(homeViewModel.productsLists)
+        homeViewModel.loading.observe(viewLifecycleOwner) {
+            homeAdapter.setProductsLists(homeViewModel.productsLists)
+            binding.progressBar.isVisible = it
+        }
     }
 
     private fun setUpRecyclerView() {

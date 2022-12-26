@@ -74,7 +74,7 @@ class CategoriesFragment : Fragment() {
 
     private fun hideProgressBar(it: Boolean) {
         binding.progressBar.isVisible = it
-        binding.nestedContent.isVisible = !it
+        binding.refresh.isVisible = !it
     }
 
     private fun initRecyclerView() {

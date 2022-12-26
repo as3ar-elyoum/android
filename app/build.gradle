@@ -85,11 +85,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.google.code.gson:gson:2.9.1'
-
     //kotlin coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
-
     //Lifecycle
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
@@ -109,8 +107,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads-lite:21.3.0'
     //Circular Image View
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    //hilt
-    def hilt_version = "2.39.1"
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    // to avoid Android 12 errors
+    implementation 'androidx.work:work-runtime-ktx:2.8.0-rc01'
+    // in app rating
+    implementation 'com.suddenh4x.ratingdialog:awesome-app-rating:2.4.0'
+    // Google Play
+    implementation 'com.google.android.play:core:1.10.3'
+    //Shimmer Animation
+    implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
+    //Lottie Animation
+    implementation 'com.airbnb.android:lottie:5.2.0'
 }
