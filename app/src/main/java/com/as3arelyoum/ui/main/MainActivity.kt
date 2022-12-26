@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupNavController()
-        setAppLocale(this, "ar")
         adView()
     }
 
@@ -103,12 +102,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.shareApp -> { shareApp() }
+            R.id.shareApp -> {
+                shareApp()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun shareApp(){
+    private fun shareApp() {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))

@@ -1,5 +1,6 @@
 package com.as3arelyoum.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,32 +11,21 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val repository = AssarRepository()
-    val mobileList = MutableLiveData<List<ProductDTO>>()
-    val laptopList = MutableLiveData<List<ProductDTO>>()
-    val errorMessage = MutableLiveData<String>()
+    var productsLists: MutableList<List<ProductDTO>> = ArrayList()
+    var productList: List<ProductDTO> = ArrayList()
     val loading = MutableLiveData<Boolean>()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getMobiles(deviceId: String) {
+    fun getProducts(categoryId: Int, deviceId: String) {
         viewModelScope.launch(exceptionHandler) {
-            val response = repository.getAllProducts(1, deviceId)
+            val response = repository.getAllProducts(categoryId, deviceId)
             if (response.isSuccessful) {
-                mobileList.postValue(response.body())
-                loading.postValue(false)
-            } else {
-                onError("Error: ${response.message()}")
-            }
-        }
-    }
+                productList = ArrayList(response.body())
+                productsLists.add(productList)
 
-    fun getLaptops(deviceId: String) {
-        viewModelScope.launch(exceptionHandler) {
-            val response = repository.getAllProducts(16, deviceId)
-            if (response.isSuccessful) {
-                laptopList.postValue(response.body())
                 loading.postValue(false)
             } else {
                 onError("Error: ${response.message()}")
@@ -44,7 +34,6 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun onError(message: String) {
-        errorMessage.postValue(message)
         loading.postValue(false)
     }
 }

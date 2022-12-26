@@ -1,68 +1,73 @@
 package com.as3arelyoum.ui.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.as3arelyoum.R
+import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.databinding.HomeProductCardBinding
-import com.bumptech.glide.Glide
+import com.as3arelyoum.databinding.HomeCardBinding
 
-class HomeAdapter(
-    private val onItemClicked: (position: Int) -> Unit
-) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+class HomeAdapter(private val onItemClicked: (position: Int, position2: Int) -> Unit) :
+    RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+    var productLists: List<List<ProductDTO>> = ArrayList()
+    var categoriesList: List<CategoryDTO> = ArrayList()
 
-    var productList: List<ProductDTO> = ArrayList()
+    fun setCategories(categories: List<CategoryDTO>) {
+        categoriesList = categories
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setProducts(products: List<ProductDTO>) {
-        productList = products
+    fun setProductsLists(products: List<List<ProductDTO>>) {
+        productLists = products
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = productList.size
+    override fun getItemCount() = productLists.size
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        val product = productList[position]
-        holder.bind(product)
+        val products = productLists[position]
+        holder.bind(products)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val recyclerCard =
-            HomeProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return HomeViewHolder(recyclerCard, onItemClicked)
+            HomeCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return HomeViewHolder(recyclerCard)
     }
 
 
     inner class HomeViewHolder(
-        val binding: HomeProductCardBinding,
-        private val onItemClicked: (position: Int) -> Unit
-    ) :
-        ViewHolder(binding.root), View.OnClickListener {
-
-        init {
-            binding.root.setOnClickListener(this)
-            binding.productDetailsBtn.setOnClickListener(this)
-        }
+        val binding: HomeCardBinding
+    ) : ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(product: ProductDTO) {
-            binding.apply {
-                Glide.with(binding.root.context)
-                    .load(product.image_url)
-                    .placeholder(R.drawable.ic_downloading)
-                    .into(productImage)
-                nameTv.text = product.name
-                priceTv.text = product.price + " " + "جنيه مصري"
-                sourceTv.text = product.source
+        fun bind(products: List<ProductDTO>) {
+            val productAdapter = ProductsAdapter { position -> onProductClicked(position) }
+            productAdapter.setProducts(products)
+
+            val categoryId = products.first().category_id
+            val category = categoriesList.find { category -> category.id == categoryId }
+            binding.categoryNameTv.text = category?.name
+
+            binding.productsRecycler.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = productAdapter
             }
         }
 
-        override fun onClick(v: View?) {
-            onItemClicked(absoluteAdapterPosition)
+        private fun onClick(listPosition: Int, productPosition: Int) {
+            onItemClicked(listPosition, productPosition)
+        }
+
+        private fun onProductClicked(position: Int) {
+            onClick(absoluteAdapterPosition, position)
         }
     }
 

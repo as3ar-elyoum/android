@@ -1,6 +1,7 @@
 package com.as3arelyoum.ui.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.databinding.HomeLaptopsCardBinding
+import com.as3arelyoum.databinding.ProductCardBinding
 import com.bumptech.glide.Glide
 
-class LaptopsAdapter(
+class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
-) : RecyclerView.Adapter<LaptopsAdapter.HomeViewHolder>() {
+) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
 
     var productList: List<ProductDTO> = ArrayList()
 
@@ -25,20 +26,20 @@ class LaptopsAdapter(
 
     override fun getItemCount() = productList.size
 
-    override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
         holder.bind(product)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val recyclerCard =
-            HomeLaptopsCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return HomeViewHolder(recyclerCard, onItemClicked)
+            ProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ProductViewHolder(recyclerCard, onItemClicked)
     }
 
 
-    inner class HomeViewHolder(
-        val binding: HomeLaptopsCardBinding,
+    inner class ProductViewHolder(
+        val binding: ProductCardBinding,
         private val onItemClicked: (position: Int) -> Unit
     ) :
         ViewHolder(binding.root), View.OnClickListener {
@@ -50,6 +51,7 @@ class LaptopsAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(product: ProductDTO) {
+            Log.d("Product Is Binded", product.name)
             binding.apply {
                 Glide.with(binding.root.context)
                     .load(product.image_url)
