@@ -1,6 +1,7 @@
 package com.as3arelyoum.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,6 @@ import com.as3arelyoum.databinding.FragmentHomeBinding
 import com.as3arelyoum.ui.category.CategoryViewModel
 import com.as3arelyoum.utils.helper.Constants
 import com.as3arelyoum.utils.helper.PrefUtil
-import java.util.Locale.Category
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -21,7 +21,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private lateinit var categories: List<CategoryDTO>
+    private var categories: List<CategoryDTO>? = null
     private val homeAdapter =
         HomeAdapter { position1, position2 -> onProductClicked(position1, position2) }
 
@@ -30,31 +30,36 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        Log.d("FragmentLifeCycle", "onCreateView")
         requireActivity().title = "الرئيسية"
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setUpViewModel()
         PrefUtil.initPrefUtil(requireContext())
         loadCategories()
+        loadProducts()
+        setUpRefresh()
+        return binding.root
+    }
+    
+    private fun setUpRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = false
+            loadCategories()
+            loadProducts()
+        }
     }
 
     private fun loadCategories() {
         categoryViewModel.categoriesList.observe(viewLifecycleOwner) {
             categories = it
-            homeAdapter.setCategories(categories)
+            homeAdapter.setCategories(categories!!)
             setUpRecyclerView()
         }
-
-        categoryViewModel.getAllCategories()
+        if (categories.isNullOrEmpty()) {
+            categoryViewModel.getAllCategories()
+        }
     }
 
-    private fun setUpViewModel() {
-        homeViewModel.loading.observe(viewLifecycleOwner) {
-            homeAdapter.setProductsLists(homeViewModel.productsLists)
-        }
+    private fun loadProducts() {
+        homeAdapter.setProductsLists(homeViewModel.productsLists)
     }
 
     private fun setUpRecyclerView() {
@@ -64,8 +69,10 @@ class HomeFragment : Fragment() {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = homeAdapter
             }
-            categories.forEach { category ->
-                homeViewModel.getProducts(category.id, deviceId)
+            categories!!.forEach { category ->
+                if (homeViewModel.productsLists.isEmpty()) {
+                    homeViewModel.getProducts(category.id, deviceId)
+                }
             }
         }
     }

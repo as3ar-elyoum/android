@@ -1,17 +1,17 @@
 package com.as3arelyoum.ui.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.data.remote.dto.ProductDTO
 import com.as3arelyoum.databinding.HomeCardBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class HomeAdapter(private val onItemClicked: (position: Int, position2: Int) -> Unit) :
     RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
@@ -41,7 +41,6 @@ class HomeAdapter(private val onItemClicked: (position: Int, position2: Int) -> 
         return HomeViewHolder(recyclerCard)
     }
 
-
     inner class HomeViewHolder(
         val binding: HomeCardBinding
     ) : ViewHolder(binding.root) {
@@ -53,7 +52,14 @@ class HomeAdapter(private val onItemClicked: (position: Int, position2: Int) -> 
 
             val categoryId = products.first().category_id
             val category = categoriesList.find { category -> category.id == categoryId }
-            binding.categoryNameTv.text = category?.name
+            binding.apply {
+                Glide.with(root.context)
+                    .load(category?.icon)
+                    .placeholder(R.drawable.ic_downloading)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(categoryImage)
+                categoryNameTv.text = category?.name
+            }
 
             binding.productsRecycler.apply {
                 setHasFixedSize(true)
@@ -70,5 +76,4 @@ class HomeAdapter(private val onItemClicked: (position: Int, position2: Int) -> 
             onClick(absoluteAdapterPosition, position)
         }
     }
-
 }

@@ -23,7 +23,7 @@
                 android:id="@+id/toolBarTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start|center"
+                android:gravity="end|center"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"

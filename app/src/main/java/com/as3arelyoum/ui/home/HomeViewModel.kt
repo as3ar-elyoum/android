@@ -1,6 +1,5 @@
 package com.as3arelyoum.ui.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +22,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch(exceptionHandler) {
             val response = repository.getAllProducts(categoryId, deviceId)
             if (response.isSuccessful) {
-                productList = ArrayList(response.body())
+                productList = response.body()?.let { ArrayList(it) }!!
                 productsLists.add(productList)
 
                 loading.postValue(false)

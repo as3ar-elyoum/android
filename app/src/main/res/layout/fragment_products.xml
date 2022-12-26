@@ -28,7 +28,7 @@
             android:background="@color/mainBg"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="20"
-            tools:listitem="@layout/product_card" />
+            tools:listitem="@layout/home_product_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

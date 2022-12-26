@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.databinding.ProductCardBinding
+import com.as3arelyoum.databinding.HomeProductCardBinding
 import com.bumptech.glide.Glide
 
 class ProductsAdapter(
@@ -33,13 +33,13 @@ class ProductsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val recyclerCard =
-            ProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            HomeProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(recyclerCard, onItemClicked)
     }
 
 
     inner class ProductViewHolder(
-        val binding: ProductCardBinding,
+        val binding: HomeProductCardBinding,
         private val onItemClicked: (position: Int) -> Unit
     ) :
         ViewHolder(binding.root), View.OnClickListener {
