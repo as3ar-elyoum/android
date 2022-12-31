@@ -42,8 +42,8 @@ class SearchAdapter(
                 .load(productItems.image_url)
                 .placeholder(R.drawable.ic_downloading)
                 .into(productImage)
-            nameTv.text = "${productItems.id} - ${productItems.name}"
-            priceTv.text =  productItems.price + " " + "جنيه مصري"
+            nameTv.text = productItems.name
+            priceTv.text = productItems.price + " " + "جنيه مصري"
             sourceTv.text = "من" + " " + productItems.source
         }
     }

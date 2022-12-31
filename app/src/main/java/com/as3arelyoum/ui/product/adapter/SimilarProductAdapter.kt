@@ -27,7 +27,7 @@ class SimilarProductAdapter(
             Glide.with(holder.binding.root.context)
                 .load(productItems.image_url)
                 .into(productImage)
-            nameTv.text = "${productItems.id} - ${productItems.name}"
+            nameTv.text = productItems.name
             priceTv.text =
                 displayProductDetails(productItems.price, root.context.getString(R.string.egp))
             sourceTv.text = displayProductDetails(root.context.getString(R.string.from), productItems.source)

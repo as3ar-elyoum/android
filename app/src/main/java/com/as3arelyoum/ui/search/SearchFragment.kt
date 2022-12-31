@@ -7,57 +7,48 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.databinding.FragmentSearchBinding
+import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.utils.helper.Constants
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment() {
     private var _binding: FragmentSearchBinding? = null
     private var job: Job? = null
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels()
     private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
-    private lateinit var searchAdapter: SearchAdapter
-
+    private var searchAdapter = SearchAdapter { position -> onProductClicked(position) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        initRecyclerView()
+        search()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideBottomNavigation()
+        hideToolbar()
+        showKeyboard()
+        binding.rippleBack.setOnClickListener { findNavController().navigateUp() }
+    }
 
+    private fun showKeyboard() {
         if (binding.searchInput.requestFocus()) {
             val imm =
                 requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
         }
-
-        initRecyclerView()
-        search()
-        binding.rippleBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
     private fun search() {
@@ -77,9 +68,8 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView() {
         binding.searchRecyclerview.apply {
             setHasFixedSize(true)
-            searchAdapter = SearchAdapter { position -> onProductClicked(position) }
             adapter = searchAdapter
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = GridLayoutManager(requireContext(), 2)
         }
     }
 
@@ -96,6 +86,8 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        showBottomNavigation()
+        showToolbar()
         _binding = null
     }
 }

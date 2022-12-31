@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.ProductDTO
-import com.as3arelyoum.databinding.ProductCardBinding
+import com.as3arelyoum.databinding.CategoryProductCardBinding
 import com.bumptech.glide.Glide
 import java.util.*
 
@@ -32,7 +32,7 @@ class ProductsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val recyclerCard =
-            ProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            CategoryProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CustomViewHolder(recyclerCard, onItemClicked)
     }
 
@@ -55,7 +55,7 @@ class ProductsAdapter(
     }
 
     inner class CustomViewHolder(
-        val binding: ProductCardBinding,
+        val binding: CategoryProductCardBinding,
         private val onItemClicked: (position: Int) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {

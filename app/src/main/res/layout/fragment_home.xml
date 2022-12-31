@@ -3,32 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:indeterminateTint="@color/black"
-        android:visibility="visible"
-        android:scaleX="0.11"
-        android:scaleY="0.11" />
+        android:scaleX="0.08"
+        android:scaleY="0.08"
+        android:indeterminateTint="@color/black"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresh"
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:visibility="invisible"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview"
+            android:id="@+id/mainRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/mainBg"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:itemCount="20"
-            tools:listitem="@layout/home_product_card" />
+            android:orientation="vertical"
+            tools:listitem="@layout/home_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

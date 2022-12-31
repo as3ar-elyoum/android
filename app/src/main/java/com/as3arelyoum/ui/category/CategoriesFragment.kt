@@ -2,22 +2,21 @@ package com.as3arelyoum.ui.category
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
+import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil
 
-class CategoriesFragment : Fragment() {
+class CategoriesFragment : BaseFragment() {
     private var _binding: FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
     private val categoryViewModel: CategoryViewModel by viewModels()
@@ -29,7 +28,6 @@ class CategoriesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
-        requireActivity().title = getString(R.string.app_name)
         PrefUtil.initPrefUtil(requireContext())
         initRecyclerView()
         initCategoryObserve()
@@ -39,9 +37,8 @@ class CategoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().title = getString(R.string.categories)
         sendUserToApi()
-
-        Log.d("TAG", "onViewCreated: ${deviceId}")
     }
 
     private fun initRefresh() {
@@ -77,7 +74,7 @@ class CategoriesFragment : Fragment() {
 
     private fun hideProgressBar(it: Boolean) {
         binding.progressBar.isVisible = it
-        binding.nestedContent.isVisible = !it
+        binding.refresh.isVisible = !it
     }
 
     private fun initRecyclerView() {
