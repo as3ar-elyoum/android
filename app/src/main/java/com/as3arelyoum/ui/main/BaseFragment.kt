@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.as3arelyoum.R
 import com.as3arelyoum.utils.firebase.FirebaseEvents
+import com.as3arelyoum.utils.helper.PrefUtil
 import com.google.android.material.bottomappbar.BottomAppBar
 
 open class BaseFragment:Fragment() {
@@ -16,6 +17,10 @@ open class BaseFragment:Fragment() {
         super.onViewCreated(view, savedInstanceState)
         FirebaseEvents.sendScreenName(this::class.simpleName.toString())
         bottomNavigationView = activity?.findViewById(R.id.bottomAppBar) as BottomAppBar
+    }
+
+    fun getUserToken(): String {
+        return PrefUtil.getData("token")
     }
 
     fun showToolbar() {

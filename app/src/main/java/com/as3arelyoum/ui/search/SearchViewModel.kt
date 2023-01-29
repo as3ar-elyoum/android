@@ -17,12 +17,12 @@ class SearchViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun search(query: String, device_id: String) {
+    fun search(query: String, fcm_token: String) {
         val eventName = "search_${query}"
         sendFirebaseEvent(eventName, query)
 
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.search(query, device_id)
+            val response = repository.search(query, fcm_token)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     searchList.postValue(response.body())

@@ -14,13 +14,12 @@ import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.databinding.FragmentHomeBinding
 import com.as3arelyoum.ui.category.CategoryViewModel
 import com.as3arelyoum.ui.main.BaseFragment
-import com.as3arelyoum.utils.helper.Constants
+import com.as3arelyoum.utils.helper.PrefUtil
 
 class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
-    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private val categoryViewModel: CategoryViewModel by viewModels()
     private var categories: List<CategoryDTO>? = null
     private val homeAdapter =
@@ -77,7 +76,7 @@ class HomeFragment : BaseFragment() {
             }
             categories!!.forEach { category ->
                 if (homeViewModel.productsLists.isEmpty()) {
-                    homeViewModel.getProducts(category.id, deviceId)
+                    homeViewModel.getProducts(category.id, PrefUtil.getData("token"))
                 }
             }
         }

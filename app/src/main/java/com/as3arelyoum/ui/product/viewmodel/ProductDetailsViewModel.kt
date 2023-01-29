@@ -18,9 +18,9 @@ class ProductDetailsViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getProductDetails(product_id: Int, device_id: String) {
+    fun getProductDetails(product_id: Int, fcm_token: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getProductDetails(product_id, device_id)
+            val response = repository.getProductDetails(product_id, fcm_token)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     productDetails.postValue(response.body())
@@ -32,9 +32,9 @@ class ProductDetailsViewModel : ViewModel() {
         }
     }
 
-    fun updateProductDetails(product_id: Int, params: JsonObject, deviceId: String) {
+    fun updateProductDetails(product_id: Int, params: JsonObject, fcm_token: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.updateProductDetails(product_id, params, deviceId)
+            val response = repository.updateProductDetails(product_id, params, fcm_token)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     productDetails.postValue(response.body())

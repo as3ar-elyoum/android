@@ -9,20 +9,20 @@ class AssarRepository {
 
     suspend fun getAllCategories() = assarApi.getAllCategories()
 
-    suspend fun getAllProducts(category_id: Int, deviceId: String) =
-        assarApi.getAllProducts(category_id, deviceId)
+    suspend fun getAllProducts(category_id: Int, fcm_token: String) =
+        assarApi.getAllProducts(category_id, fcm_token)
 
     suspend fun getProductDetails(product_id: Int, deviceId: String) =
         assarApi.getProductDetails(product_id, deviceId)
 
-    suspend fun updateProductDetails(product_id: Int, params: JsonObject, deviceId: String) =
-        assarApi.updateProductDetails(product_id, params, deviceId)
+    suspend fun updateProductDetails(product_id: Int, params: JsonObject, fcm_token: String) =
+        assarApi.updateProductDetails(product_id, params, fcm_token)
 
-    suspend fun search(query: String, deviceId: String) = assarApi.search(query, deviceId)
+    suspend fun search(query: String, fcm_token: String) = assarApi.search(query, fcm_token)
 
-    suspend fun getSimilarProducts(product_id: Int, deviceId: String) =
-        assarApi.getSimilarProducts(product_id, deviceId)
+    suspend fun getSimilarProducts(product_id: Int, fcm_token: String) =
+        assarApi.getSimilarProducts(product_id, fcm_token)
 
-    suspend fun sendDevice(userInfoDTO: UserInfoDTO, deviceId: String) =
-        assarApi.sendDevice(userInfoDTO, deviceId)
+    suspend fun sendDevice(userInfoDTO: UserInfoDTO, fcm_token: String) =
+        assarApi.sendDevice(userInfoDTO, fcm_token)
 }

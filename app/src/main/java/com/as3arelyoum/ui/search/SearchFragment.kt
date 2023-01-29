@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.databinding.FragmentSearchBinding
 import com.as3arelyoum.ui.main.BaseFragment
-import com.as3arelyoum.utils.helper.Constants
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -22,7 +21,6 @@ class SearchFragment : BaseFragment() {
     private var job: Job? = null
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels()
-    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private var searchAdapter = SearchAdapter { position -> onProductClicked(position) }
 
     override fun onCreateView(
@@ -56,7 +54,7 @@ class SearchFragment : BaseFragment() {
             if (text!!.length > 3) {
                 job?.cancel()
                 job = MainScope().launch {
-                    searchViewModel.search(text.toString(), deviceId)
+                    searchViewModel.search(text.toString(), getUserToken())
                     searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
                         searchAdapter.differ.submitList(productList)
                     }

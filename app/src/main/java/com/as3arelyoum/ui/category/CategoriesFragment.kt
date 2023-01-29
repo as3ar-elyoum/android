@@ -13,7 +13,6 @@ import com.as3arelyoum.R
 import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
 import com.as3arelyoum.ui.main.BaseFragment
-import com.as3arelyoum.utils.helper.Constants.getDeviceId
 import com.as3arelyoum.utils.helper.PrefUtil
 
 class CategoriesFragment : BaseFragment() {
@@ -21,7 +20,6 @@ class CategoriesFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val categoryViewModel: CategoryViewModel by viewModels()
     private val categoryAdapter = CategoryAdapter { position -> onCategoryClicked(position) }
-    private val deviceId: String by lazy { getDeviceId(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,11 +49,8 @@ class CategoriesFragment : BaseFragment() {
 
     @SuppressLint("HardwareIds")
     private fun sendUserToApi() {
-        val userToken = PrefUtil.getData("token")
-        val userInfoDTO = UserInfoDTO(deviceId, userToken)
-        if (userToken.isNotEmpty()) {
-            categoryViewModel.sendDevice(userInfoDTO, deviceId)
-        }
+        val userInfoDTO = UserInfoDTO(getUserToken())
+        categoryViewModel.sendDevice(userInfoDTO, getUserToken())
     }
 
     private fun initCategoryObserve() {

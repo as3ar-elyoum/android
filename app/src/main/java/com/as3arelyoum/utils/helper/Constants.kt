@@ -1,10 +1,9 @@
 package com.as3arelyoum.utils.helper
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.provider.Settings
 import android.view.View
 import androidx.core.widget.NestedScrollView
+import com.google.firebase.messaging.FirebaseMessaging
 
 object Constants {
     const val BASE_URL = "https://price-index.magdi.work/api/"
@@ -44,8 +43,14 @@ object Constants {
         nested.post { nested.scrollTo(500, targetView.top) }
     }
 
-    @SuppressLint("HardwareIds")
-    fun getDeviceId(context: Context): String {
-        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    fun getToken(context: Context) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            PrefUtil.initPrefUtil(context)
+            PrefUtil.saveData("token", token)
+        }
     }
 }

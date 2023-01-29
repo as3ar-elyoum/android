@@ -18,37 +18,37 @@ interface AssarApiService {
     @GET(PRODUCTS)
     suspend fun getAllProducts(
         @Query("category_id") category_id: Int,
-        @Header("deviceid") deviceId: String
+        @Header("fcm_token") fcm_token: String
     ): Response<List<ProductDTO>>
 
     @GET(PRODUCT_DETAILS)
     suspend fun getProductDetails(
         @Path("product_id") id: Int,
-        @Header("deviceid") deviceId: String
+        @Header("fcm_token") fcm_token: String
     ): Response<ProductDTO>
 
     @PUT(PRODUCT_DETAILS)
     suspend fun updateProductDetails(
         @Path("product_id") id: Int,
         @Body product: JsonObject,
-        @Header("deviceid") deviceId: String
+        @Header("fcm_token") fcm_token: String
     ): Response<ProductDTO>
 
     @GET(SEARCH)
     suspend fun search(
         @Query("query[q]") query: String,
-        @Header("deviceid") deviceId: String
+        @Header("fcm_token") fcm_token: String
     ): Response<List<ProductDTO>>
 
     @GET("products/{product_id}/similar")
     suspend fun getSimilarProducts(
         @Path("product_id") product_id: Int,
-        @Header("deviceid") deviceId: String
+        @Header("fcm_token") fcm_token: String
     ): Response<List<ProductDTO>>
 
     @POST("devices")
     suspend fun sendDevice(
         @Body userInfoDTO: UserInfoDTO,
-        @Header("deviceid") deviceId: String
+        @Header("fcm_token") fcm_token: String
     ): Response<UserInfoDTO>
 }
