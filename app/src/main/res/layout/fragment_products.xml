@@ -25,7 +25,7 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/mainBg"
+            android:background="@color/background_bg"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:itemCount="20"
             tools:listitem="@layout/home_product_card" />
