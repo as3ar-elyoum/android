@@ -27,7 +27,7 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/products"
                 android:padding="@dimen/_5sdp"
-                tools:src="@drawable/as3ar_elyoum_logo" />
+                tools:src="@drawable/as3ar_elyoum" />
 
             <TextView
                 android:id="@+id/name_tv"

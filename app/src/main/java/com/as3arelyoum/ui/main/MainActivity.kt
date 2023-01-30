@@ -1,21 +1,14 @@
 package com.as3arelyoum.ui.main
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -29,7 +22,6 @@ import com.as3arelyoum.utils.ads.Banner
 import com.as3arelyoum.utils.ads.Interstitial
 import com.as3arelyoum.utils.firebase.FirebaseEvents.Companion.sendFirebaseEvent
 import com.google.android.gms.ads.AdView
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -38,8 +30,6 @@ class MainActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val interstitialAd = Interstitial()
     private lateinit var runnable: Runnable
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply { setKeepOnScreenCondition { splashViewModel.isLoading.value } }
@@ -74,52 +64,18 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.show()
 
         val bottomNavView = binding.bottomView
-        bottomNavView.background = null
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
         bottomNavView.setupWithNavController(navController)
-
-        /** Show the Up button in the action bar. **/
         NavigationUI.setupActionBarWithNavController(this, navController)
 
         return navController
     }
 
     private fun notificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    Log.e(NOTIFICATION, "onCreate: PERMISSION GRANTED")
-                }
-                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-                    Snackbar.make(
-                        binding.root,
-                        "السماح بظهور الإشعارات",
-                        Snackbar.LENGTH_INDEFINITE
-                    ).setAction("الإعدادات") {
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        val uri: Uri = Uri.fromParts("package", packageName, null)
-                        intent.data = uri
-                        startActivity(intent)
-                    }.show()
-                }
-                else -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        requestPermissionLauncher.launch(
-                            Manifest.permission.POST_NOTIFICATIONS
-                        )
-                    }
-                }
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         }
-    }
-
-    override fun setTitle(title: CharSequence?) {
-        binding.toolBarTv.text = title
     }
 
     override fun onSupportNavigateUp(): Boolean {

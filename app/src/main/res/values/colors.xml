@@ -2,12 +2,14 @@
 <resources>
     <color name="toolbar">#FFFFFF</color>
     <color name="splashScreenBg">#FFFFFF</color>
+    <color name="colorPrimary">#0083EC</color>
     <color name="green">#FF3B8A1B</color>
     <color name="purple_200">#881414</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="price">#4CAF50</color>
-    <color name="mainBg">#F4F4F4</color>
+    <color name="background_bg">#E6E6E6</color>
+    <color name="main_bg">#FFFFFF</color>
     <color name="price_color">#2196F3</color>
     <color name="source_color">#DC8E1B</color>
     <color name="overlay_dark_40">#66323232</color>

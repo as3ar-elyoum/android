@@ -7,15 +7,30 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.as3arelyoum.R
 import com.as3arelyoum.utils.firebase.FirebaseEvents
-import com.google.android.material.bottomappbar.BottomAppBar
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 open class BaseFragment:Fragment() {
-    private lateinit var bottomNavigationView: BottomAppBar
+    lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var appCompactActivity: AppCompatActivity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         FirebaseEvents.sendScreenName(this::class.simpleName.toString())
-        bottomNavigationView = activity?.findViewById(R.id.bottomAppBar) as BottomAppBar
+        appCompactActivity = activity as AppCompatActivity
+        bottomNavigationView = activity?.findViewById(R.id.bottomView) as BottomNavigationView
+        clearGlideMemory()
+        navigateUpIcon()
+    }
+
+    private fun clearGlideMemory() {
+        Glide.get(requireContext()).clearMemory()
+    }
+
+    private fun navigateUpIcon() {
+        appCompactActivity.supportActionBar?.apply {
+            setHomeAsUpIndicator(R.drawable.ic_navigate_up)
+        }
     }
 
     fun showToolbar() {

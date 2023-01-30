@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_corners"
+    android:fitsSystemWindows="true"
+    android:background="@color/main_bg"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -34,7 +35,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:padding="@dimen/_6sdp"
-                android:src="@drawable/ic_ios_back" />
+                android:src="@drawable/ic_navigate_up" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -318,7 +319,7 @@
                             android:id="@+id/rv_similar_products"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/mainBg"
+                            android:background="@color/background_bg"
                             tools:listitem="@layout/similar_product_card" />
 
                     </LinearLayout>

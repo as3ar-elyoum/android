@@ -1,25 +1,23 @@
 package com.as3arelyoum.ui.search
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doOnTextChanged
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.databinding.FragmentSearchBinding
 import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.utils.helper.Constants
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 
 class SearchFragment : BaseFragment() {
     private var _binding: FragmentSearchBinding? = null
-    private var job: Job? = null
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels()
     private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
@@ -31,36 +29,46 @@ class SearchFragment : BaseFragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
         initRecyclerView()
-        search()
+        searchProducts()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        hideBottomNavigation()
-        hideToolbar()
         showKeyboard()
-        binding.rippleBack.setOnClickListener { findNavController().navigateUp() }
     }
 
     private fun showKeyboard() {
-        if (binding.searchInput.requestFocus()) {
-            val imm =
-                requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
-        }
+        val imm =
+            requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.search, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    private fun search() {
-        binding.searchInput.doOnTextChanged { text, _, _, _ ->
-            if (text!!.length > 3) {
-                job?.cancel()
-                job = MainScope().launch {
-                    searchViewModel.search(text.toString(), deviceId)
-                    searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
-                        searchAdapter.differ.submitList(productList)
-                    }
+    private fun searchProducts() {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (!TextUtils.isEmpty(query)) {
+                    showProgressBar()
+                    performSearch(query)
+                }else{
+                    searchAdapter.differ.submitList(null)
+                    hideProgressBar()
                 }
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun performSearch(query: String?) {
+        if (query!!.length > 3) {
+            searchViewModel.search(query, deviceId)
+            searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
+                searchAdapter.differ.submitList(productList)
+                hideProgressBar()
             }
         }
     }
@@ -70,6 +78,20 @@ class SearchFragment : BaseFragment() {
             setHasFixedSize(true)
             adapter = searchAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+    }
+
+    private fun showProgressBar() {
+        binding.apply {
+            searchProgressbar.isVisible = true
+            searchRecyclerview.isVisible = false
+        }
+    }
+
+    private fun hideProgressBar() {
+        binding.apply {
+            searchProgressbar.isVisible = false
+            searchRecyclerview.isVisible = true
         }
     }
 
@@ -86,8 +108,6 @@ class SearchFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        showBottomNavigation()
-        showToolbar()
         _binding = null
     }
 }
