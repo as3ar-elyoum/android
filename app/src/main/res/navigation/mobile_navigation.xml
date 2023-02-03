@@ -49,9 +49,14 @@
             android:id="@+id/action_productsFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment"/>
 
+
         <argument
-            android:name="category"
-            app:argType="com.as3arelyoum.data.remote.dto.CategoryDTO" />
+            android:name="categoryId"
+            app:argType="integer" />
+
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
 
     </fragment>
     <dialog

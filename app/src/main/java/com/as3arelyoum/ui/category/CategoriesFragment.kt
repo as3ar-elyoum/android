@@ -83,7 +83,7 @@ class CategoriesFragment : BaseFragment() {
     private fun onCategoryClicked(position: Int) {
         val category = categoryAdapter.differ.currentList[position]
         val action =
-            CategoriesFragmentDirections.actionCategoriesFragmentToProductsFragment(category)
+            CategoriesFragmentDirections.actionCategoriesFragmentToProductsFragment(category.id, category.name)
         findNavController().navigate(action)
     }
 

@@ -1,39 +1,37 @@
 package com.as3arelyoum.ui.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.as3arelyoum.data.remote.dto.ProductDTO
+import com.as3arelyoum.data.remote.dto.CategoryDTO
 import com.as3arelyoum.data.repository.AssarRepository
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
     private val repository = AssarRepository()
-    var productsLists: MutableList<List<ProductDTO>> = ArrayList()
-    var productList: List<ProductDTO> = ArrayList()
-    val failure = MutableLiveData<String>()
-    val loading = MutableLiveData<Boolean>()
+    val categoriesList = MutableLiveData<List<CategoryDTO>>()
+//    var productsLists = MutableLiveData<List<ProductDTO>>()
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onError("Exception handled: ${throwable.localizedMessage}")
+    init {
+        getHomeData()
     }
 
-    fun getProducts(categoryId: Int, fcm_token: String) {
-        viewModelScope.launch(exceptionHandler) {
-            val response = repository.getAllProducts(categoryId, fcm_token)
-            if (response.isSuccessful) {
-                productList = response.body()?.let { ArrayList(it) }!!
-                productsLists.add(productList)
-                loading.postValue(false)
-            } else {
-                onError("Error: ${response.message()}")
+    private fun getHomeData() {
+        repository.getHomeData().enqueue(object : Callback<List<CategoryDTO>> {
+            override fun onResponse(
+                call: Call<List<CategoryDTO>>,
+                response: Response<List<CategoryDTO>>
+            ) {
+                if (response.isSuccessful) {
+                    categoriesList.value = response.body()
+                }
             }
-        }
-    }
 
-    private fun onError(message: String) {
-        failure.postValue(message)
-        loading.postValue(false)
+            override fun onFailure(call: Call<List<CategoryDTO>>, t: Throwable) {
+                Log.e("HomeViewModel", "onFailure: ${t.message}")
+            }
+        })
     }
 }

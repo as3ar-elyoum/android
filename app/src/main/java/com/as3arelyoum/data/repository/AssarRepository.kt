@@ -9,6 +9,8 @@ class AssarRepository {
 
     suspend fun getAllCategories() = assarApi.getAllCategories()
 
+    fun getHomeData() = assarApi.getHomeData()
+
     suspend fun getAllProducts(category_id: Int, fcm_token: String) =
         assarApi.getAllProducts(category_id, fcm_token)
 
