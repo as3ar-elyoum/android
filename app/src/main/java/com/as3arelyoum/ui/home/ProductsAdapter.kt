@@ -58,7 +58,7 @@ class ProductsAdapter(
                     .into(productImage)
                 nameTv.text = product.name
                 priceTv.text = product.price + " " + "جنيه مصري"
-                sourceTv.text = product.source
+                sourceTv.text = "من " + product.source
             }
         }
 

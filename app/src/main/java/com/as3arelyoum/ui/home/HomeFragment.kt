@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,6 @@ class HomeFragment : BaseFragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         requireActivity().title = getString(R.string.home)
         loadHomeData()
-        setUpRecyclerView()
         setUpRefresh()
         return binding.root
     }
@@ -40,26 +40,10 @@ class HomeFragment : BaseFragment() {
     private fun loadHomeData() {
         homeViewModel.categoriesList.observe(viewLifecycleOwner) { category ->
             homeAdapter.setCategories(category)
-//            homeAdapter.setProductsLists(listOf(category[0].products))
-
-//            it.forEach {
-//                Log.d("PRODUCTS", "LoadProducts: ${it.products}")
-//            }
-//
-//            Log.d("TAG", "loadCategories: ${it.size}")
+            binding.progressBar.isVisible = false
+            setUpRecyclerView()
         }
     }
-
-//    private fun loadProducts() {
-//        homeViewModel.productsLists.observe(viewLifecycleOwner) {
-//            homeAdapter.setProductsLists(it)
-//            binding.progressBar.isVisible = it
-//        }
-//
-//        homeViewModel.failure.observe(viewLifecycleOwner) {
-//            Toast.makeText(requireContext(), "لا يوجد إنترنت", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     private fun setUpRecyclerView() {
         binding.apply {

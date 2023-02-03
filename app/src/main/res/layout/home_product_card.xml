@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:rippleColor="@color/common_google_signin_btn_text_light_focused"
     app:cardBackgroundColor="@color/white"
     app:cardUseCompatPadding="true">
 
@@ -41,6 +39,8 @@
             android:layout_height="wrap_content"
             android:maxLength="30"
             android:padding="@dimen/_2sdp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
@@ -52,24 +52,23 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:padding="@dimen/_2sdp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:textColor="@color/green"
             android:textSize="@dimen/_9ssp"
             android:textStyle="bold"
             tools:text="7000.0 جنيه مصري" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/product_details_btn"
-            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:text="@string/product_details_btn"
             android:textColor="@color/black"
             android:textSize="@dimen/_9ssp"
-            android:textStyle="bold"
-            app:rippleColor="@color/common_google_signin_btn_text_light_focused"
-            app:strokeColor="@color/black" />
-
+            android:textStyle="bold" />
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>
