@@ -19,9 +19,9 @@ class HomeViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getProducts(categoryId: Int, deviceId: String) {
+    fun getProducts(categoryId: Int, fcm_token: String) {
         viewModelScope.launch(exceptionHandler) {
-            val response = repository.getAllProducts(categoryId, deviceId)
+            val response = repository.getAllProducts(categoryId, fcm_token)
             if (response.isSuccessful) {
                 productList = response.body()?.let { ArrayList(it) }!!
                 productsLists.add(productList)

@@ -14,13 +14,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.databinding.FragmentSearchBinding
 import com.as3arelyoum.ui.main.BaseFragment
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import com.as3arelyoum.utils.helper.Constants
 
 class SearchFragment : BaseFragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels()
-    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private var searchAdapter = SearchAdapter { position -> onProductClicked(position) }
 
     override fun onCreateView(
@@ -44,6 +46,7 @@ class SearchFragment : BaseFragment() {
         imm.showSoftInput(binding.search, InputMethodManager.SHOW_IMPLICIT)
     }
 
+
     private fun searchProducts() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(query: String?): Boolean {
@@ -65,7 +68,7 @@ class SearchFragment : BaseFragment() {
 
     private fun performSearch(query: String?) {
         if (query!!.length > 3) {
-            searchViewModel.search(query, deviceId)
+            searchViewModel.search(query, getUserToken())
             searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
                 searchAdapter.differ.submitList(productList)
                 hideProgressBar()

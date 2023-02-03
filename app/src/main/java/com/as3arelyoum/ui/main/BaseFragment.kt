@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.as3arelyoum.R
 import com.as3arelyoum.utils.firebase.FirebaseEvents
+import com.as3arelyoum.utils.helper.PrefUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -31,6 +32,10 @@ open class BaseFragment:Fragment() {
         appCompactActivity.supportActionBar?.apply {
             setHomeAsUpIndicator(R.drawable.ic_navigate_up)
         }
+    }
+
+    fun getUserToken(): String {
+        return PrefUtil.getData("token")
     }
 
     fun showToolbar() {

@@ -14,7 +14,6 @@ import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.ui.main.MainActivity
 import com.as3arelyoum.ui.product.adapter.ProductsAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductsViewModel
-import com.as3arelyoum.utils.helper.Constants.getDeviceId
 
 class ProductsFragment : BaseFragment() {
     private var _binding: FragmentProductsBinding? = null
@@ -22,7 +21,6 @@ class ProductsFragment : BaseFragment() {
     private val arguments: ProductsFragmentArgs by navArgs()
     private val productsViewModel: ProductsViewModel by viewModels()
     private var productsAdapter = ProductsAdapter { position -> onProductClicked(position) }
-    private val deviceId: String by lazy { getDeviceId(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +63,7 @@ class ProductsFragment : BaseFragment() {
             hideProgressBar(it)
         }
 
-        productsViewModel.getAllProducts(arguments.category.id, deviceId)
+        productsViewModel.getAllProducts(arguments.category.id, getUserToken())
     }
 
     private fun initRecyclerView() {

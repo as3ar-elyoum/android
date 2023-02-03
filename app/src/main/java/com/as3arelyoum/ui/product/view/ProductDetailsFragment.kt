@@ -28,6 +28,7 @@ import com.as3arelyoum.ui.product.viewmodel.SimilarProductsViewModel
 import com.as3arelyoum.utils.firebase.FirebaseEvents.Companion.sendFirebaseEvent
 import com.as3arelyoum.utils.helper.Constants
 import com.as3arelyoum.utils.helper.Constants.statusList
+import com.as3arelyoum.utils.helper.PrefUtil
 import com.as3arelyoum.utils.helper.ViewAnimation
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.components.Legend
@@ -52,7 +53,6 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private val categoryViewModel: CategoryViewModel by viewModels()
     private val similarProductAdapter =
         SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
-    private val deviceId: String by lazy { Constants.getDeviceId(requireContext()) }
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
     private lateinit var lineList: ArrayList<String>
@@ -154,10 +154,10 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
             productObject.addProperty("status", status)
             params.add("product", productObject)
 
-            productDetailsViewModel.updateProductDetails(productId, params, deviceId)
+            productDetailsViewModel.updateProductDetails(productId, params, getUserToken())
         }
 
-        productDetailsViewModel.getProductDetails(productId, deviceId)
+        productDetailsViewModel.getProductDetails(productId, getUserToken())
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -173,7 +173,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         similarProductsViewModel.loading.observe(viewLifecycleOwner) {
         }
 
-        similarProductsViewModel.getSimilarProducts(productId, deviceId)
+        similarProductsViewModel.getSimilarProducts(productId, getUserToken())
     }
 
     private fun initSimilarProductsRecyclerView() {
@@ -311,6 +311,10 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         } else {
             ViewAnimation.collapse(lyt)
         }
+    }
+
+    private fun getUserToken(): String {
+        return PrefUtil.getData("token")
     }
 
     override fun onDestroyView() {

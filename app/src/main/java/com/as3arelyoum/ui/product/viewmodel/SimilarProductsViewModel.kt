@@ -17,9 +17,9 @@ class SimilarProductsViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getSimilarProducts(product_id: Int, device_id: String) {
+    fun getSimilarProducts(product_id: Int, fcm_token: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getSimilarProducts(product_id, device_id)
+            val response = repository.getSimilarProducts(product_id, fcm_token)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     similarProductList.postValue(response.body())
