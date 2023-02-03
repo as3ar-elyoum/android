@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.as3arelyoum.R
 import com.as3arelyoum.databinding.FragmentProductsBinding
 import com.as3arelyoum.ui.main.BaseFragment
+import com.as3arelyoum.ui.main.MainActivity
 import com.as3arelyoum.ui.product.adapter.ProductsAdapter
 import com.as3arelyoum.ui.product.viewmodel.ProductsViewModel
 
@@ -41,13 +40,7 @@ class ProductsFragment : BaseFragment() {
     }
 
     private fun initToolbar() {
-        val activity = activity as AppCompatActivity
-        activity.supportActionBar?.apply {
-            requireActivity().title = arguments.category.name
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_ios_back)
-        }
+        (activity as MainActivity).supportActionBar?.title = arguments.category.name
     }
 
     private fun initRefresh() {
