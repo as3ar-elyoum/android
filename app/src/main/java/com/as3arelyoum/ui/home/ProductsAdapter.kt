@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 class ProductsAdapter(
     private val onItemClicked: (position: Int) -> Unit
 ) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
-
     var productList: List<ProductDTO> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")

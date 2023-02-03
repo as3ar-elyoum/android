@@ -40,7 +40,7 @@ class ProductsFragment : BaseFragment() {
     }
 
     private fun initToolbar() {
-        (activity as MainActivity).supportActionBar?.title = arguments.category.name
+        (activity as MainActivity).supportActionBar?.title = arguments.categoryName
     }
 
     private fun initRefresh() {
@@ -63,7 +63,7 @@ class ProductsFragment : BaseFragment() {
             hideProgressBar(it)
         }
 
-        productsViewModel.getAllProducts(arguments.category.id, getUserToken())
+        productsViewModel.getAllProducts(arguments.categoryId, getUserToken())
     }
 
     private fun initRecyclerView() {

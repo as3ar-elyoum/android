@@ -8,12 +8,16 @@ import com.as3arelyoum.utils.helper.Constants.PRODUCTS
 import com.as3arelyoum.utils.helper.Constants.PRODUCT_DETAILS
 import com.as3arelyoum.utils.helper.Constants.SEARCH
 import com.google.gson.JsonObject
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface AssarApiService {
     @GET(CATEGORIES)
     suspend fun getAllCategories(): Response<List<CategoryDTO>>
+
+    @GET("products/home")
+    fun getHomeData(): Call<List<CategoryDTO>>
 
     @GET(PRODUCTS)
     suspend fun getAllProducts(
