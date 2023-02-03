@@ -68,7 +68,7 @@ class SearchFragment : BaseFragment() {
 
     private fun performSearch(query: String?) {
         if (query!!.length > 3) {
-            searchViewModel.search(query, deviceId)
+            searchViewModel.search(query, getUserToken())
             searchViewModel.searchList.observe(viewLifecycleOwner) { productList ->
                 searchAdapter.differ.submitList(productList)
                 hideProgressBar()
