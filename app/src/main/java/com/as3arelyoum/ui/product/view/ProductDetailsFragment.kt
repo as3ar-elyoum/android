@@ -51,15 +51,15 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
     private val productDetailsViewModel: ProductDetailsViewModel by viewModels()
     private val similarProductsViewModel: SimilarProductsViewModel by viewModels()
     private val categoryViewModel: CategoryViewModel by viewModels()
-    private val similarProductAdapter =
-        SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
+    private val similarProductAdapter = SimilarProductAdapter(similarList) { position -> onProductClicked(position) }
+    private var lineDataSet: LineDataSet? = null
+    private var behavior: BottomSheetBehavior<*>? = null
     private lateinit var productDTOInstance: ProductDTO
     private lateinit var categoryDTOList: List<CategoryDTO>
     private lateinit var lineList: ArrayList<String>
     private lateinit var entries: ArrayList<Entry>
     private lateinit var lineData: LineData
-    private var lineDataSet: LineDataSet? = null
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,21 +78,23 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         initProductSheet()
     }
 
+
     private fun initProductSheet() {
         val bottomSheet =
             dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        val behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
+        behavior = BottomSheetBehavior.from(bottomSheet!!).apply {
             state = BottomSheetBehavior.STATE_EXPANDED
             isHideable = true
-            skipCollapsed = true
         }
 
         val layoutParams = bottomSheet.layoutParams
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         bottomSheet.layoutParams = layoutParams
 
-        binding.productPopupBack.setOnClickListener {
-            behavior.state = BottomSheetBehavior.STATE_HIDDEN
+        binding.apply {
+            closeProductDetails.setOnClickListener {
+                behavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            }
         }
     }
 
@@ -208,7 +210,7 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         }
 
         categoryViewModel.loading.observe(viewLifecycleOwner) {}
-        categoryViewModel.getAllCategories()
+        categoryViewModel.getAllCategories(getUserToken())
     }
 
     private fun setLineChart(prices: List<List<String>>) {
@@ -276,8 +278,13 @@ class ProductDetailsFragment : BottomSheetDialogFragment() {
         val filtersEnabled = requireContext().resources.getBoolean(R.bool.ENABLE_FILTERS)
         if (!filtersEnabled) {
             binding.apply {
-                spinnerLayout.visibility = View.GONE
-                updateProductBtn.visibility = View.GONE
+                debugLayout.isVisible = false
+            }
+        }
+
+        binding.debugMode.setOnClickListener {
+            binding.apply {
+                debugLayout.isVisible = false
             }
         }
     }

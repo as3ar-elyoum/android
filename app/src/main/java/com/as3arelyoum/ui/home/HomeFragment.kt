@@ -43,6 +43,7 @@ class HomeFragment : BaseFragment() {
             binding.progressBar.isVisible = false
             setUpRecyclerView()
         }
+        homeViewModel.getHomeData(getUserToken())
     }
 
     private fun setUpRecyclerView() {

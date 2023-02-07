@@ -12,14 +12,9 @@ import retrofit2.Response
 class HomeViewModel : ViewModel() {
     private val repository = AssarRepository()
     val categoriesList = MutableLiveData<List<CategoryDTO>>()
-//    var productsLists = MutableLiveData<List<ProductDTO>>()
 
-    init {
-        getHomeData()
-    }
-
-    private fun getHomeData() {
-        repository.getHomeData().enqueue(object : Callback<List<CategoryDTO>> {
+    fun getHomeData(fcmToken: String) {
+        repository.getHomeData(fcmToken).enqueue(object : Callback<List<CategoryDTO>> {
             override fun onResponse(
                 call: Call<List<CategoryDTO>>,
                 response: Response<List<CategoryDTO>>

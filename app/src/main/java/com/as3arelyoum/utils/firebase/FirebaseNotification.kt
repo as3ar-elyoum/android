@@ -24,7 +24,7 @@ class FirebaseNotification : FirebaseMessagingService() {
         super.onNewToken(token)
         initPrefUtil(this)
         if (token.isNotEmpty()) {
-            PrefUtil.saveData("token", token)
+            PrefUtil.saveData("fcm_token", token)
         }
     }
 

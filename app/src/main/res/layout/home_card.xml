@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_margin="@dimen/_1sdp"
-        android:padding="@dimen/_2sdp"
+        android:padding="@dimen/_4sdp"
         android:gravity="right"
         android:orientation="horizontal">
 
@@ -24,15 +23,15 @@
             android:layout_gravity="right|center"
             android:fontFamily="sans-serif-black"
             android:padding="@dimen/_2sdp"
+            android:layout_marginRight="@dimen/_4sdp"
             tools:text="موبايلات"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_10ssp" />
 
         <ImageView
             android:id="@+id/category_image"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:padding="@dimen/_2sdp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             tools:src="@drawable/as3ar_elyoum"/>
 
     </LinearLayout>

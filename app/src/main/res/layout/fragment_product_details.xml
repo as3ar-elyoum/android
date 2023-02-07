@@ -3,67 +3,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/main_bg"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_3sdp"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/_3sdp"
-            android:background="@drawable/rounded_corners"
-            android:backgroundTint="#1C242B" />
-
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_product_details"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_below="@id/view"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             tools:ignore="UseCompoundDrawables">
 
-            <ImageView
-                android:id="@+id/product_popup_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_4sdp"
-                android:padding="@dimen/_6sdp"
-                android:src="@drawable/ic_navigate_up" />
-
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_toStartOf="@+id/close_product_details"
                 android:fontFamily="sans-serif-black"
-                android:gravity="center"
+                android:gravity="right|center"
                 android:text="@string/product_details"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_11ssp" />
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/close_product_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:padding="@dimen/_6sdp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/black" />
 
-        <View
-            android:id="@+id/line_view"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/ll_product_details"
-            android:layout_centerHorizontal="true"
-            android:background="#E1E1E1" />
+        </RelativeLayout>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/line_view"
+            android:layout_below="@id/ll_product_details"
+            android:background="@color/background_bg"
             android:clipToPadding="false"
+            android:paddingTop="@dimen/_4sdp"
             android:scrollbars="none"
             android:scrollingCache="true">
 
@@ -81,31 +68,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <TextView
+                            android:id="@+id/product_source"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_margin="@dimen/_6sdp"
+                            android:fontFamily="sans-serif-black"
+                            android:padding="@dimen/_6sdp"
+                            android:textColor="@color/source_color"
+                            android:textSize="@dimen/_10ssp"
+                            tools:text="من أمازون" />
+
                         <LinearLayout
                             android:id="@+id/product_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/product_source"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="end"
-                                android:layout_margin="@dimen/_6sdp"
-                                android:fontFamily="sans-serif-black"
-                                android:padding="@dimen/_6sdp"
-                                android:textColor="@color/source_color"
-                                android:textSize="@dimen/_11ssp"
-                                tools:text="من أمازون" />
-
                             <ImageView
                                 android:id="@+id/product_image"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/_150sdp"
+                                android:layout_height="@dimen/_110sdp"
                                 android:layout_gravity="center"
                                 android:contentDescription="@string/product_details"
-                                android:padding="@dimen/_10sdp"
+                                android:padding="@dimen/_6sdp"
                                 tools:src="@mipmap/ic_launcher_round" />
 
                             <TextView
@@ -117,49 +105,68 @@
                                 android:padding="@dimen/_4sdp"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/_10ssp"
-                                android:textStyle="bold"
+                                android:textSize="@dimen/_11ssp"
                                 tools:text="Product Name" />
 
                             <LinearLayout
-                                android:id="@+id/spinner_layout"
+                                android:id="@+id/debug_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:weightSum="2">
+                                android:elevation="@dimen/_6sdp"
+                                android:orientation="vertical">
 
-                                <Spinner
-                                    android:id="@+id/status_spinner"
-                                    android:layout_width="0dp"
+                                <ImageButton
+                                    android:id="@+id/debug_mode"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_15sdp"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/spinner"
-                                    android:spinnerMode="dropdown" />
+                                    android:layout_gravity="right"
+                                    android:layout_marginRight="@dimen/_6sdp"
+                                    android:background="?android:selectableItemBackgroundBorderless"
+                                    android:padding="@dimen/_6sdp"
+                                    android:src="@drawable/ic_close"
+                                    tools:ignore="ContentDescription" />
 
-                                <Spinner
-                                    android:id="@+id/category_spinner"
-                                    android:layout_width="0dp"
+                                <LinearLayout
+                                    android:id="@+id/spinner_layout"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_15sdp"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/spinner"
-                                    android:spinnerMode="dropdown" />
+                                    android:orientation="horizontal"
+                                    android:weightSum="2">
+
+                                    <Spinner
+                                        android:id="@+id/status_spinner"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/_15sdp"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/spinner"
+                                        android:spinnerMode="dropdown" />
+
+                                    <Spinner
+                                        android:id="@+id/category_spinner"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/_15sdp"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/spinner"
+                                        android:spinnerMode="dropdown" />
+
+                                </LinearLayout>
+
+                                <Button
+                                    android:id="@+id/update_product_btn"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginRight="@dimen/_16sdp"
+                                    android:backgroundTint="#25313A"
+                                    android:padding="@dimen/_10sdp"
+                                    android:text="@string/update_product"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_10ssp"
+                                    android:textStyle="bold" />
 
                             </LinearLayout>
-
-                            <Button
-                                android:id="@+id/update_product_btn"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginRight="@dimen/_16sdp"
-                                android:backgroundTint="#25313A"
-                                android:padding="@dimen/_10sdp"
-                                android:text="@string/update_product"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_10ssp"
-                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -280,7 +287,7 @@
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/lineChart"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_280sdp"
+                            android:layout_height="@dimen/_250sdp"
                             android:layout_margin="@dimen/_4sdp" />
 
                     </LinearLayout>

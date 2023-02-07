@@ -5,12 +5,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardBackgroundColor="@color/white"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/main_bg"
+    app:cardCornerRadius="@dimen/_4sdp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
         android:orientation="vertical"
         android:padding="@dimen/_6sdp">
 
@@ -20,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:textColor="@color/source_color"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             tools:text="أمازون" />
 
@@ -37,12 +39,13 @@
             android:id="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLength="30"
-            android:padding="@dimen/_2sdp"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:gravity="center"
+            android:maxLength="35"
+            android:maxLines="1"
+            android:padding="@dimen/_2sdp"
             android:textColor="@color/black"
-            android:textSize="@dimen/_9ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             tools:text="معالج كور أي فايف سداسي النواة 12 ثريد" />
 
@@ -50,12 +53,12 @@
             android:id="@+id/price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
-            android:padding="@dimen/_2sdp"
             android:layout_gravity="center"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
+            android:padding="@dimen/_2sdp"
             android:textColor="@color/green"
-            android:textSize="@dimen/_9ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold"
             tools:text="7000.0 جنيه مصري" />
 
@@ -64,11 +67,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_5sdp"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:backgroundTint="@color/background_bg"
+            android:layout_margin="@dimen/_4sdp"
             android:text="@string/product_details_btn"
             android:textColor="@color/black"
-            android:textSize="@dimen/_9ssp"
+            android:textSize="@dimen/_8ssp"
             android:textStyle="bold" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

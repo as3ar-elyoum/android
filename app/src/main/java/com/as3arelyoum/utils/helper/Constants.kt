@@ -1,9 +1,7 @@
 package com.as3arelyoum.utils.helper
 
-import android.content.Context
 import android.view.View
 import androidx.core.widget.NestedScrollView
-import com.google.firebase.messaging.FirebaseMessaging
 
 object Constants {
     const val BASE_URL = "https://price-index.magdi.work/api/"
@@ -13,6 +11,7 @@ object Constants {
     const val CHANNEL_ID = "firebase_channel_id"
     const val PREF_FILE = "pref_file"
     const val SEARCH = "search"
+    const val FCM_TOKEN = "fcmtoken"
     val statusList = listOf("inactive", "active", "disabled", "duplicate")
 
     fun displayProductDetails(str: String, source: String): String {
@@ -41,16 +40,5 @@ object Constants {
 
     fun nestedScrollTo(nested: NestedScrollView, targetView: View) {
         nested.post { nested.scrollTo(500, targetView.top) }
-    }
-
-    fun getToken(context: Context) {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                return@addOnCompleteListener
-            }
-            val token = task.result
-            PrefUtil.initPrefUtil(context)
-            PrefUtil.saveData("token", token)
-        }
     }
 }
