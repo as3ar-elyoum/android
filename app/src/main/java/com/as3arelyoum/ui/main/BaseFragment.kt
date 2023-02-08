@@ -20,6 +20,7 @@ open class BaseFragment:Fragment() {
         FirebaseEvents.sendScreenName(this::class.simpleName.toString())
         appCompactActivity = activity as AppCompatActivity
         bottomNavigationView = activity?.findViewById(R.id.bottomView) as BottomNavigationView
+        PrefUtil.initPrefUtil(requireContext())
         clearGlideMemory()
         navigateUpIcon()
     }
@@ -35,7 +36,7 @@ open class BaseFragment:Fragment() {
     }
 
     fun getUserToken(): String {
-        return PrefUtil.getData("token")
+        return PrefUtil.getData("fcm_token")
     }
 
     fun showToolbar() {

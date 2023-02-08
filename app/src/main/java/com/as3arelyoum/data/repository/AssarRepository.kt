@@ -7,24 +7,24 @@ import com.google.gson.JsonObject
 class AssarRepository {
     private val assarApi = RetrofitInstance.assarApiService
 
-    suspend fun getAllCategories() = assarApi.getAllCategories()
+    suspend fun getAllCategories(fcmToken: String) = assarApi.getAllCategories(fcmToken)
 
-    fun getHomeData() = assarApi.getHomeData()
+    fun getHomeData(fcmToken: String) = assarApi.getHomeData(fcmToken)
 
-    suspend fun getAllProducts(category_id: Int, fcm_token: String) =
-        assarApi.getAllProducts(category_id, fcm_token)
+    suspend fun getAllProducts(category_id: Int, fcmToken: String) =
+        assarApi.getAllProducts(category_id, fcmToken)
 
-    suspend fun getProductDetails(product_id: Int, deviceId: String) =
-        assarApi.getProductDetails(product_id, deviceId)
+    suspend fun getProductDetails(product_id: Int, fcmToken: String) =
+        assarApi.getProductDetails(product_id, fcmToken)
 
-    suspend fun updateProductDetails(product_id: Int, params: JsonObject, fcm_token: String) =
-        assarApi.updateProductDetails(product_id, params, fcm_token)
+    suspend fun updateProductDetails(product_id: Int, params: JsonObject, fcmToken: String) =
+        assarApi.updateProductDetails(product_id, params, fcmToken)
 
-    suspend fun search(query: String, fcm_token: String) = assarApi.search(query, fcm_token)
+    suspend fun search(query: String, fcmToken: String) = assarApi.search(query, fcmToken)
 
-    suspend fun getSimilarProducts(product_id: Int, fcm_token: String) =
-        assarApi.getSimilarProducts(product_id, fcm_token)
+    suspend fun getSimilarProducts(product_id: Int, fcmToken: String) =
+        assarApi.getSimilarProducts(product_id, fcmToken)
 
-    suspend fun sendDevice(userInfoDTO: UserInfoDTO, fcm_token: String) =
-        assarApi.sendDevice(userInfoDTO, fcm_token)
+    suspend fun sendDevice(userInfoDTO: UserInfoDTO, fcmToken: String) =
+        assarApi.sendDevice(userInfoDTO, fcmToken)
 }

@@ -22,9 +22,9 @@ class CategoryViewModel : ViewModel() {
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getAllCategories() {
+    fun getAllCategories(fcmToken: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getAllCategories()
+            val response = repository.getAllCategories(fcmToken)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     categoriesList.postValue(response.body())
@@ -36,9 +36,9 @@ class CategoryViewModel : ViewModel() {
         }
     }
 
-    fun sendDevice(userInfoDTO: UserInfoDTO, deviceId: String) {
+    fun sendDevice(userInfoDTO: UserInfoDTO, fcmToken: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.sendDevice(userInfoDTO, deviceId)
+            val response = repository.sendDevice(userInfoDTO, fcmToken)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     userData.postValue(response.body())

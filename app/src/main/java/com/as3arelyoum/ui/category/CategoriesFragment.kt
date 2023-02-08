@@ -1,6 +1,5 @@
 package com.as3arelyoum.ui.category
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.as3arelyoum.R
-import com.as3arelyoum.data.remote.dto.UserInfoDTO
 import com.as3arelyoum.databinding.FragmentCategoriesBinding
 import com.as3arelyoum.ui.main.BaseFragment
 import com.as3arelyoum.utils.helper.PrefUtil
@@ -36,21 +34,13 @@ class CategoriesFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().title = getString(R.string.categories)
-        sendUserToApi()
     }
 
     private fun initRefresh() {
         binding.refresh.setOnRefreshListener {
             binding.refresh.isRefreshing = false
             initCategoryObserve()
-            sendUserToApi()
         }
-    }
-
-    @SuppressLint("HardwareIds")
-    private fun sendUserToApi() {
-        val userInfoDTO = UserInfoDTO(getUserToken())
-        categoryViewModel.sendDevice(userInfoDTO, getUserToken())
     }
 
     private fun initCategoryObserve() {
@@ -64,7 +54,7 @@ class CategoriesFragment : BaseFragment() {
             hideProgressBar(it)
         }
 
-        categoryViewModel.getAllCategories()
+        categoryViewModel.getAllCategories(getUserToken())
     }
 
     private fun hideProgressBar(it: Boolean) {
