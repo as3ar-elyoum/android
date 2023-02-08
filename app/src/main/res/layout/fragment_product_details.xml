@@ -234,7 +234,8 @@
                             android:padding="@dimen/_4sdp"
                             android:text="@string/product_description"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_13ssp"
+                            android:textSize="@dimen/_11ssp"
+                            android:gravity="right|center"
                             android:textStyle="bold"
                             app:drawableRightCompat="@drawable/ic_info"
                             app:drawableTint="@color/black" />
@@ -259,8 +260,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/description_card"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:layout_marginBottom="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_4sdp"
                     app:cardBackgroundColor="@color/white">
 
                     <LinearLayout
@@ -288,6 +289,7 @@
                             android:id="@+id/lineChart"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_250sdp"
+                            android:paddingBottom="@dimen/_10sdp"
                             android:layout_margin="@dimen/_4sdp" />
 
                     </LinearLayout>
@@ -325,6 +327,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_similar_products"
                             android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:layout_height="wrap_content"
                             android:background="@color/background_bg"
                             tools:listitem="@layout/similar_product_card" />
